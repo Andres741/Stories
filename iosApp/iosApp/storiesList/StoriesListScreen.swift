@@ -16,7 +16,7 @@ struct StoriesListScreen: View {
                     HistoryItem(history: history)
                 }
             }
-            .navigationTitle("Lista de tus historias")
+            .navigationTitle(Strings().get(resId: SharedRes.strings().stories_screen_title))
         }.attach(observer: viewModel)
     }
 }

@@ -25,8 +25,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.stories.SharedRes
 import com.example.stories.android.MyApplicationTheme
 import com.example.stories.android.R
+import com.example.stories.android.resources.getStringResource
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.date.formatNoteDate
@@ -49,7 +51,7 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
                 .padding(padding)
         ) {
             Text(
-                text = "Lista de tus historias",
+                text = getStringResource(resId = SharedRes.strings.stories_screen_title),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(24.dp),
