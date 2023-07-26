@@ -14,7 +14,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +22,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.MyApplicationTheme
 import com.example.stories.android.R
@@ -34,7 +34,7 @@ import com.example.stories.data.domain.model.History
 fun HistoryDetailScreen(
     viewModel: HistoryDetailViewModel
 ) {
-    val history by viewModel.history.collectAsState()
+    val history by viewModel.history.collectAsStateWithLifecycle()
     HistoryDetail(history ?: return)
 }
 
