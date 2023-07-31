@@ -6,7 +6,7 @@ import com.example.stories.viewModel.HistoryDetailCommonViewModel
 
 class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
-    private val commonViewModel = HistoryDetailCommonViewModel(coroutineScope = viewModelScope, historyId = historyId)
+    private val commonViewModel = HistoryDetailCommonViewModel(historyId = historyId, coroutineScope = viewModelScope)
 
-    val history = commonViewModel.history
+    val historyLoadStatus = commonViewModel.historyLoadStatus
 }

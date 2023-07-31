@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="app_title">Historias</string>
-    <string name="stories_screen_title">Tus Historias</string>
+    <string name="stories_screen_title">Historias</string>
+
+    <string name="generic_error_title">Algo ha fallado</string>
+    <string name="generic_error_message">Inténtelo mas tarde o vuelva a abrir la aplicación</string>
+
+    <string name="no_connection_error_title">Sin conexión a internet</string>
+    <string name="no_connection_error_message">Espere hasta que la conexion se restaure o inténtelo más tarde</string>
+
+    <string name="service_unavailable_error_title">Los servidores enstán bajo mantenimiento</string>
+    <string name="service_unavailable_error_message">Por favor, inténtelo más tarde cuando los servidores vuelvan a funcionar</string>
+
+    <string name="accept">Aceptar</string>
 </resources>

@@ -58,4 +58,5 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.6.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }

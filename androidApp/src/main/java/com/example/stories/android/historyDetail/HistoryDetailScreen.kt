@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.MyApplicationTheme
 import com.example.stories.android.R
+import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
@@ -34,8 +35,10 @@ import com.example.stories.data.domain.model.History
 fun HistoryDetailScreen(
     viewModel: HistoryDetailViewModel
 ) {
-    val history by viewModel.history.collectAsStateWithLifecycle()
-    HistoryDetail(history ?: return)
+    val historyLoadStatus by viewModel.historyLoadStatus.collectAsStateWithLifecycle()
+    LoadingDataScreen(loadStatus = historyLoadStatus) { history ->
+        HistoryDetail(history)
+    }
 }
 
 @Composable

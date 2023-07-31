@@ -2,4 +2,15 @@
 <resources>
     <string name="app_title">Stories</string>
     <string name="stories_screen_title">Your Stories</string>
+
+    <string name="generic_error_title">Something has failed</string>
+    <string name="generic_error_message">Try again latter or reboot the application</string>
+
+    <string name="no_connection_error_title">No internet connection</string>
+    <string name="no_connection_error_message">Wait until the connection is restored or try again later</string>
+
+    <string name="service_unavailable_error_title">Server are under maintenance</string>
+    <string name="service_unavailable_error_message">Please, try again later when the server is available again</string>
+
+    <string name="accept">Accept</string>
 </resources>

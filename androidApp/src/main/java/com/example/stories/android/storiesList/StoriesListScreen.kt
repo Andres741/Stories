@@ -25,10 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.example.stories.SharedRes
 import com.example.stories.android.MyApplicationTheme
 import com.example.stories.android.R
-import com.example.stories.android.resources.getStringResource
+import com.example.stories.android.util.resources.getStringResource
+import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.date.formatNoteDate
@@ -38,8 +38,10 @@ fun StoriesListScreen(
     viewModel: StoriesListViewModel,
     onClickItem: (Long) -> Unit,
 ) {
-    val stories by viewModel.stories.collectAsStateWithLifecycle()
-    StoriesList(stories, onClickItem)
+    val storiesLoadStatus by viewModel.storiesLoadStatus.collectAsStateWithLifecycle()
+    LoadingDataScreen(storiesLoadStatus) { stories ->
+        StoriesList(stories, onClickItem)
+    }
 }
 
 @Composable
@@ -51,7 +53,7 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
                 .padding(padding)
         ) {
             Text(
-                text = getStringResource(resId = SharedRes.strings.stories_screen_title),
+                text = getStringResource { stories_screen_title },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(24.dp),

@@ -3,6 +3,7 @@ package com.example.stories.data.domain.mocks
 import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.date.now
+import com.example.stories.infrastructure.loading.LoadStatus
 import kotlinx.datetime.LocalDateTime
 
 class Mocks {
@@ -28,4 +29,6 @@ class Mocks {
             )
         ),
     )
+
+    fun getMockLoadStatusStrings() = LoadStatus.Data(listOf("hello", "world", "kmm"))
 }

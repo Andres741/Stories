@@ -13,12 +13,20 @@ struct HistoryDetailScreen: View {
     }
     
     var body: some View {
-        VStack {
-            if let history = viewModel.history {
+        let historyLoadStatus = viewModel.historyLoadStatus
+            
+        LoadingDataScreen(
+            loadStatus: historyLoadStatus
+        ) { error in
+            DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
+        } loadingContent: {
+            DefaultLoadingScreen()
+        } successContent: { history in
+            VStack {
                 List {
                     Section {
                         Text(history.title).font(.title).padding()
-                        
+                            
                         if let imageURL = history.mainImage {
                             AsyncImage(url: URL(string: imageURL), scale: 3)
                         }

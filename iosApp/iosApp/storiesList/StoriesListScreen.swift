@@ -11,12 +11,24 @@ struct StoriesListScreen: View {
 
 	var body: some View {
         NavigationStack {
-            List($viewModel.stories, id: \.id) { $history in
-                NavigationLink(destination: HistoryDetailScreen(historyId: history.id, historyTitle: history.title)) {
-                    HistoryItem(history: history)
+            let storiesLoadStatus = viewModel.storiesLoadStatus
+            
+            LoadingDataScreen(
+                loadStatus: storiesLoadStatus
+            ) { error in
+                DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
+            } loadingContent: {
+                DefaultLoadingScreen()
+            } successContent: { data in
+                let stories = data.values
+                
+                List(stories, id: \.id) { history in
+                    NavigationLink(destination: HistoryDetailScreen(historyId: history.id, historyTitle: history.title)) {
+                        HistoryItem(history: history)
+                    }
                 }
             }
-            .navigationTitle(Strings().get(resId: SharedRes.strings().stories_screen_title))
+            .navigationTitle(getStringResource(SharedRes.strings().stories_screen_title))
         }.attach(observer: viewModel)
     }
 }

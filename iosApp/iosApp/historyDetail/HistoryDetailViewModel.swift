@@ -7,7 +7,7 @@ extension HistoryDetailScreen {
         let historyId: Int64
         let commonViewModel: HistoryDetailCommonViewModel
         
-        @Published var history: History? = nil
+        @Published var historyLoadStatus: LoadStatus<History>? = nil
 
         init(historyId: Int64) {
             self.historyId = historyId
@@ -15,8 +15,8 @@ extension HistoryDetailScreen {
         }
                 
         func startObserving() {
-            commonViewModel.history.subscribe { history in
-                self.history = history
+            commonViewModel.historyLoadStatus.subscribe { history in
+                self.historyLoadStatus = history
             }
         }
         
