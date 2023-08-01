@@ -8,24 +8,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.example.stories.android.MyApplicationTheme
-import com.example.stories.android.R
+import com.example.stories.android.StoriesTheme
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.Element
@@ -57,7 +53,7 @@ fun HistoryDetail(
                 modifier = Modifier
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.displayMedium
             )
             history.mainImage?.let { mainImage ->
                 AsyncImage(
@@ -85,11 +81,12 @@ fun ElementItem(historyElement: Element) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(5.dp))
             .padding(bottom = 12f.dp)
-            .background(colorResource(R.color.card))
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.medium
+            )
             .padding(12f.dp)
-
     ) {
         when(historyElement) {
             is Element.Image -> ElementImageItem(historyElement)
@@ -115,19 +112,17 @@ fun ElementTextItem(text: Element.Text) {
         text = text.text,
         modifier = Modifier
             .fillMaxWidth(),
-        textAlign = TextAlign.Start,
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.bodyLarge
     )
 }
-
 
 @Preview
 @Composable
 fun StoriesList_preview() {
-    MyApplicationTheme {
+    StoriesTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
+            color = MaterialTheme.colorScheme.background
         ) {
             HistoryDetail(
                 history = Mocks().getMockStories()[1],

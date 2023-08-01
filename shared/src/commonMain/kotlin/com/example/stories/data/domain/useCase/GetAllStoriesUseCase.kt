@@ -12,16 +12,17 @@ import kotlinx.coroutines.flow.flow
 class GetAllStoriesUseCase {
 
     companion object {
+        const val delayTime = 100L
         val mockStoriesFlow = MutableStateFlow(Mocks().getMockStories())
     }
 
     operator fun invoke(): Flow<LoadStatus<List<History>>> = flow {
-        delay(1000)
+        delay(delayTime)
         emit(LoadStatus.Error(LoadingError.GenericError))
-        delay(1000)
+        delay(delayTime)
         mockStoriesFlow.collect {
             emit(LoadStatus.Loading)
-            delay(1000)
+            delay(delayTime)
             emit(LoadStatus.Data(it))
         }
     }

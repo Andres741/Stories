@@ -8,25 +8,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.example.stories.android.MyApplicationTheme
-import com.example.stories.android.R
+import com.example.stories.android.StoriesTheme
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
@@ -58,11 +54,11 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
                     .fillMaxWidth()
                     .padding(24.dp),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.displayMedium
             )
 
             LazyColumn {
-                items(stories) {history ->
+                items(stories, key = { it.id }) {history ->
                     HistoryItem(history, onClickItem)
                 }
             }
@@ -74,11 +70,13 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
 fun HistoryItem(history: History, onClickItem: (Long) -> Unit) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 16f.dp)
-            .padding(bottom = 12f.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(5.dp))
-            .background(colorResource(R.color.card))
+            .padding(bottom = 12f.dp)
+            .padding(horizontal = 16f.dp)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = MaterialTheme.shapes.medium
+            )
             .clickable { onClickItem(history.id) }
     ) {
 
@@ -89,7 +87,7 @@ fun HistoryItem(history: History, onClickItem: (Long) -> Unit) {
                 .padding(top = 16.dp)
                 .padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h5
+            style = MaterialTheme.typography.headlineMedium
         )
 
         history.mainImage?.let { mainImage ->
@@ -110,7 +108,7 @@ fun HistoryItem(history: History, onClickItem: (Long) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12f.dp),
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.labelLarge
         )
     }
 }
@@ -118,10 +116,10 @@ fun HistoryItem(history: History, onClickItem: (Long) -> Unit) {
 @Preview
 @Composable
 fun StoriesList_preview() {
-    MyApplicationTheme {
+    StoriesTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
+            color = MaterialTheme.colorScheme.background
         ) {
             StoriesList(
                 stories = Mocks().getMockStories(),
@@ -134,7 +132,7 @@ fun StoriesList_preview() {
 @Preview
 @Composable
 fun HistoryItem_preview() {
-    MyApplicationTheme {
+    StoriesTheme {
         HistoryItem(
             history = Mocks().getMockStories()[1],
             onClickItem = {}
