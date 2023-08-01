@@ -1,4 +1,4 @@
-package com.example.stories.android
+package com.example.stories.android.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

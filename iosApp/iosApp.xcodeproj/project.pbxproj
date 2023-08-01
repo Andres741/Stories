@@ -94,9 +94,8 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				CC65C9642A6D52CB001166A1 /* historyDetail */,
+				CC19CA822A79B0E60044C140 /* ui */,
 				CC6BAAA02A6C3C3C000DFD55 /* util */,
-				CC6BAA9D2A6C3317000DFD55 /* storiesList */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
@@ -110,6 +109,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CC19CA822A79B0E60044C140 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				CC6BAA9D2A6C3317000DFD55 /* storiesList */,
+				CC65C9642A6D52CB001166A1 /* historyDetail */,
+			);
+			path = ui;
 			sourceTree = "<group>";
 		};
 		CC502F102A769BCB00AFB821 /* ui */ = {

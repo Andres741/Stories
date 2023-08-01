@@ -1,4 +1,4 @@
-package com.example.stories.android.historyDetail
+package com.example.stories.android.ui.historyDetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.example.stories.android.StoriesTheme
+import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.Element

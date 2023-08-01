@@ -1,4 +1,4 @@
-package com.example.stories.android.storiesList
+package com.example.stories.android.ui.storiesList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.example.stories.SharedRes
-import com.example.stories.android.StoriesTheme
+import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getString
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.resources.sharedPainterResource

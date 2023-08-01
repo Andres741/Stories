@@ -1,4 +1,4 @@
-package com.example.stories.android.historyDetail
+package com.example.stories.android.ui.historyDetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
