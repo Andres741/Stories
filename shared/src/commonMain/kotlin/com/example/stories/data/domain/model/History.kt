@@ -5,23 +5,20 @@ import kotlinx.datetime.LocalDateTime
 data class History(
     val id: Long,
     val title: String,
-    val mainImage: String?,
     val date: LocalDateTime,
-    val elements: List<Element>
+    val mainElement: Element,
+    val elements: List<Element>,
 )
 
 sealed class Element {
-    abstract val id: String
+    abstract val id: Long
 
     data class Text(
-        val text: String
-    ) : Element() {
-        override val id get() = text
-    }
+        override val id: Long,
+        val text: String,
+    ) : Element()
     data class Image(
-        val imageResource: String
-    ) : Element() {
-        override val id get() = imageResource
-    }
-
+        override val id: Long,
+        val imageResource: String,
+    ) : Element()
 }

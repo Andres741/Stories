@@ -1,7 +1,7 @@
 package com.example.stories.android.ui.storiesList
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,16 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getStringResource
+import com.example.stories.android.util.ui.AsyncItemImage
+import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
+import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.date.formatNoteDate
 
@@ -52,7 +53,9 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
                 text = getStringResource { stories_screen_title },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
+                    .padding(top = 24.dp)
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 12.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.displayMedium
             )
@@ -68,46 +71,37 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
 
 @Composable
 fun HistoryItem(history: History, onClickItem: (Long) -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12f.dp)
-            .padding(horizontal = 16f.dp)
-            .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = MaterialTheme.shapes.medium
-            )
-            .clickable { onClickItem(history.id) }
+    ItemCard(
+        modifier = Modifier.clickable { onClickItem(history.id) }
     ) {
 
         Text(
             text = history.title,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
-                .padding(horizontal = 16.dp),
+                .padding(top = 8.dp)
+                .padding(horizontal = 6.dp),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium
         )
 
-        history.mainImage?.let { mainImage ->
-            AsyncImage(
-                model = mainImage,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp)
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .padding(horizontal = 6.dp)
+        ) {
+            when (val mainItem = history.mainElement) {
+                is Element.Image -> AsyncItemImage(mainItem.imageResource)
+                is Element.Text -> Text(text = mainItem.text)
+            }
         }
 
         Text(
             text = remember(history.date) {
                 history.date.formatNoteDate()
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12f.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             style = MaterialTheme.typography.labelLarge
         )
     }

@@ -26,24 +26,12 @@ struct HistoryDetailScreen: View {
                 List {
                     Section {
                         Text(history.title).font(.title).padding()
-                            
-                        if let imageURL = history.mainImage {
-                            AsyncImage(url: URL(string: imageURL), scale: 3)
-                        }
+                        ElementItem(historyElement: history.mainElement)
                     }
 
                     Section {
                         ForEach(history.elements, id: \.id) { element in
-                            switch element {
-                            case let text as Element.Text:
-                                Text(text.text)
-                            case let image as Element.Image:
-                                AsyncImage(url: URL(string: image.imageResource), scale: 3)
-                                    .aspectRatio(contentMode: .fill)
-                                    .clipped()
-                            default:
-                                EmptyView()
-                            }
+                            ElementItem(historyElement: element)
                         }
                     }
                 }
@@ -56,5 +44,16 @@ struct HistoryDetailScreen: View {
 struct HistoryDetailScreen_Previews: PreviewProvider {
     static var previews: some View {
         HistoryDetailScreen(historyId: 0, historyTitle: "Viaje a Java")
+    }
+}
+
+@ViewBuilder func ElementItem(historyElement: Element) -> some View {
+    switch historyElement {
+    case let text as Element.Text:
+        Text(text.text)
+    case let image as Element.Image:
+        AsyncItemImage(url: image.imageResource)
+    default:
+        EmptyView()
     }
 }
