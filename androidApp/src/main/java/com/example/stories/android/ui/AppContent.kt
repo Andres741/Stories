@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,7 +14,6 @@ import androidx.navigation.navArgument
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.storiesList.StoriesListScreen
-import com.example.stories.android.ui.storiesList.StoriesListViewModel
 
 @Composable
 fun AppContent() {
@@ -28,7 +27,7 @@ fun AppContent() {
             NavHost(navController = navController, startDestination = Routes.STORIES.toString()) {
                 composable(route = Routes.STORIES.toString()) {
                     StoriesListScreen(
-                        viewModel = remember { StoriesListViewModel() },
+                        viewModel = viewModel(),
                         onClickItem = {
                             navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute("${it}L"))
                         }
@@ -45,7 +44,7 @@ fun AppContent() {
                 ) { backStackEntry ->
                     val historyId = backStackEntry.arguments?.getLong(Routes.HISTORY_DETAIL.params) ?: -1L
                     HistoryDetailScreen(
-                        viewModel = remember(historyId) { HistoryDetailViewModel(historyId) }
+                        viewModel = viewModel(factory = HistoryDetailViewModel.Factory(historyId))
                     )
                 }
             }
