@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".StoriesApplication"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -16,4 +17,4 @@
             </intent-filter>
         </activity>
     </application>
-</manifest> 
+</manifest>
