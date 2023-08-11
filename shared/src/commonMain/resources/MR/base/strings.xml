@@ -13,4 +13,7 @@
     <string name="service_unavailable_error_message">Please, try again later when the server is available again</string>
 
     <string name="accept">Accept</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
 </resources>

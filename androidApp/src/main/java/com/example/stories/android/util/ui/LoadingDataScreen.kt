@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import com.example.stories.SharedRes
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getString
 import com.example.stories.android.util.resources.getStringResource
@@ -91,7 +90,7 @@ fun DefaultErrorScreen(
                 contentColor = MaterialTheme.colorScheme.onError
             )
         ) {
-            Text(text = getStringResource(SharedRes.strings.accept))
+            Text(text = getStringResource { accept })
         }
     }
 }

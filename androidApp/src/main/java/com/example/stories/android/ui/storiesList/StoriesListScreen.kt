@@ -60,7 +60,7 @@ fun StoriesList(stories: List<History>, onClickItem: (Long) -> Unit) {
                 style = MaterialTheme.typography.displayMedium
             )
 
-            LazyColumn {
+            LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
                 items(stories, key = { it.id }) {history ->
                     HistoryItem(history, onClickItem)
                 }

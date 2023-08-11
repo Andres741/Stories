@@ -19,10 +19,9 @@ class GetHistoryByIdUseCase {
         delay(delayTime)
         emit(LoadStatus.Error(LoadingError.GenericError))
         delay(delayTime)
+        emit(LoadStatus.Loading)
+        delay(delayTime)
         getData(id).collect { history ->
-            emit(LoadStatus.Loading)
-            delay(delayTime)
-
             history?.let {
                 emit(LoadStatus.Data(history))
             } ?: emit(LoadStatus.Error(LoadingError.GenericError))

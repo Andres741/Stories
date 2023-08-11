@@ -27,12 +27,11 @@ fun ItemCard(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(bottom = 12f.dp)
-            .padding(horizontal = 16f.dp)
+            .then(modifier)
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = MaterialTheme.shapes.medium
             )
-            .then(modifier)
             .padding(12f.dp),
         content = content
     )

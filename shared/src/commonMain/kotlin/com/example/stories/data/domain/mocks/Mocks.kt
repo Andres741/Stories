@@ -39,6 +39,15 @@ class Mocks {
                 Element.Image(id = id++, imageResource = "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/95/10/33.jpg"),
             ),
         ),
+        History(
+            id = id++,
+            title = "Visita a Kuala Lumpur",
+            date = LocalDateTime.now(),
+            mainElement = Element.Text(id = id++, text = "Estuve una semana en Kuala Lumpur, la capital de Malasia."),
+            elements = listOf(
+                Element.Image(id = id++, imageResource = "https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg"),
+            ),
+        ),
     )
 
     fun getMockLoadStatusStrings() = LoadStatus.Data(listOf("hello", "world", "kmm"))
