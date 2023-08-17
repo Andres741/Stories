@@ -12,18 +12,16 @@ import androidx.compose.runtime.remember
 fun actionableFloatAnimation(
     isActive: Boolean,
     disabledValue: Float,
-    initialValue: Float,
-    targetValue: Float,
+    values: List<Float>,
     animationSpec: AnimationSpec<Float> = tween()
 ): State<Float> {
     val animation = remember { Animatable(disabledValue) }
 
     LaunchedEffect(key1 = isActive) {
-        while (isActive) {
-            animation.animateTo(initialValue, animationSpec)
-            animation.animateTo(targetValue, animationSpec)
+        if (isActive) sequence { while (true) yieldAll(values) }.forEach {
+            animation.animateTo(it, animationSpec)
         }
-        animation.animateTo(disabledValue, animationSpec)
+        else animation.animateTo(disabledValue, animationSpec)
     }
 
     return animation.asState()

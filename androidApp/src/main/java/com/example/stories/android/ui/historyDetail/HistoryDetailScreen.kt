@@ -111,8 +111,7 @@ fun HistoryDetail(
             val rotation = actionableFloatAnimation(
                 isActive = editMode,
                 disabledValue = 0f,
-                initialValue = 0.4f,
-                targetValue = -0.4f,
+                values = remember { listOf(.4f, -.4f) },
                 animationSpec = tween(
                     durationMillis = 60,
                 )
