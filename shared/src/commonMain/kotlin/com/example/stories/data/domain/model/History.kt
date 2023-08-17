@@ -1,11 +1,11 @@
 package com.example.stories.data.domain.model
 
-import kotlinx.datetime.LocalDateTime
+import com.example.stories.infrastructure.date.LocalDateRange
 
 data class History(
     val id: Long,
     val title: String,
-    val date: LocalDateTime,
+    val dateRange: LocalDateRange,
     val mainElement: Element,
     val elements: List<Element>,
 )

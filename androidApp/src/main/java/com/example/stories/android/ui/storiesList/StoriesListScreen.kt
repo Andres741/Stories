@@ -28,7 +28,7 @@ import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
-import com.example.stories.infrastructure.date.formatNoteDate
+import com.example.stories.infrastructure.date.format
 
 @Composable
 fun StoriesListScreen(
@@ -98,8 +98,8 @@ fun HistoryItem(history: History, onClickItem: (Long) -> Unit) {
         }
 
         Text(
-            text = remember(history.date) {
-                history.date.formatNoteDate()
+            text = remember(history.dateRange.format()) {
+                history.dateRange.format()
             },
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             style = MaterialTheme.typography.labelLarge

@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.historyDetail.editPopUp.EditElementPopUp
+import com.example.stories.android.ui.historyDetail.editPopUp.EditTitlePopUp
 import com.example.stories.android.util.resources.sharedPainterResource
 import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.ItemCard
@@ -39,7 +41,7 @@ import com.example.stories.android.util.ui.actionableFloatAnimation
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
-import com.example.stories.infrastructure.date.formatNoteDate
+import com.example.stories.infrastructure.date.format
 
 @Composable
 fun HistoryDetailScreen(
@@ -175,7 +177,7 @@ fun HistoryDetail(
                 }
                 item {
                     Text(
-                        text = history.date.formatNoteDate(),
+                        text = history.dateRange.format(),
                         style = MaterialTheme.typography.labelLarge,
                         modifier = Modifier
                             .height(75.dp)
