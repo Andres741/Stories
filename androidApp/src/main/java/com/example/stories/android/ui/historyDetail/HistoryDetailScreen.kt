@@ -3,6 +3,7 @@ package com.example.stories.android.ui.historyDetail
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.historyDetail.editPopUp.EditDatePopUp
 import com.example.stories.android.ui.historyDetail.editPopUp.EditElementPopUp
 import com.example.stories.android.ui.historyDetail.editPopUp.EditTitlePopUp
 import com.example.stories.android.util.resources.sharedPainterResource
@@ -41,6 +43,7 @@ import com.example.stories.android.util.ui.actionableFloatAnimation
 import com.example.stories.data.domain.mocks.Mocks
 import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
+import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.format
 
 @Composable
@@ -57,6 +60,7 @@ fun HistoryDetailScreen(
             editMode = editMode,
             saveElement = viewModel::saveItem,
             saveTitle = viewModel::saveTitle,
+            saveDateRange = viewModel::saveDates,
             inverseEditHistory =
                 if (editMode) viewModel::cancelEdit
                 else viewModel::enableEditMode,
@@ -71,6 +75,7 @@ fun HistoryDetail(
     editMode: Boolean,
     saveElement: (Element) -> Unit,
     saveTitle: (newTitle: String) -> Unit,
+    saveDateRange: (newDateRange: LocalDateRange) -> Unit,
     inverseEditHistory: () -> Unit,
     saveEditingHistory: () -> Unit,
 ) {
@@ -153,6 +158,21 @@ fun HistoryDetail(
                 )
             }
 
+            var editingDateRange by remember { mutableStateOf(null as LocalDateRange?) }
+
+            editingDateRange?.let {
+                EditDatePopUp(
+                    dateRange = it,
+                    onConfirm = { newDateRange ->
+                        saveDateRange(newDateRange)
+                        editingDateRange = null
+                    },
+                    onDismiss = {
+                        editingDateRange = null
+                    }
+                )
+            }
+
             LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
@@ -176,13 +196,15 @@ fun HistoryDetail(
                     }
                 }
                 item {
-                    Text(
-                        text = history.dateRange.format(),
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier
-                            .height(75.dp)
-                            .graphicsLayer { rotationZ = rotation() }
-                    )
+                    Box(modifier = Modifier.height(75.dp)) {
+                        Text(
+                            text = history.dateRange.format(),
+                            style = MaterialTheme.typography.labelLarge,
+                            modifier = Modifier
+                                .clickable(enabled = editMode) { editingDateRange = history.dateRange }
+                                .graphicsLayer { rotationZ = rotation() }
+                        )
+                    }
                 }
             }
         }
@@ -231,6 +253,7 @@ fun StoriesList_preview() {
                 editMode = editMode,
                 saveElement = {},
                 saveTitle = {},
+                saveDateRange = {},
                 inverseEditHistory = { editMode = !editMode },
                 saveEditingHistory = { editMode = false}
             )

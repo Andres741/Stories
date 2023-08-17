@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.stories.data.domain.model.Element
+import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.viewModel.HistoryDetailCommonViewModel
 
 class HistoryDetailViewModel(historyId: Long) : ViewModel() {
@@ -23,6 +24,8 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
     fun saveItem(element: Element) = commonViewModel.saveItem(element)
 
     fun saveTitle(newTitle: String) = commonViewModel.saveTitle(newTitle)
+
+    fun saveDates(newDateRange: LocalDateRange) = commonViewModel.saveDates(newDateRange)
 
     fun saveEditingHistory() = commonViewModel.saveEditingHistory()
 

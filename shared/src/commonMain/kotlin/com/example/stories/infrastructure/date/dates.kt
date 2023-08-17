@@ -1,12 +1,17 @@
 package com.example.stories.infrastructure.date
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 
 fun LocalDate.Companion.now(): LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
+fun LocalDate.Companion.from(timeMillis: Long) = Instant.fromEpochMilliseconds(timeMillis).toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+fun LocalDate.toMilliseconds(): Long = atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 
 fun LocalDate.add(year: Int = 0, monthNumber: Int = 0, dayOfMonth: Int = 0) = LocalDate(
     year = this.year + year,

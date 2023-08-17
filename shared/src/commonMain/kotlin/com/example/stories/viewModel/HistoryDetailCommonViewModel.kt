@@ -6,6 +6,7 @@ import com.example.stories.data.domain.useCase.EditHistoryUseCase
 import com.example.stories.data.domain.useCase.GetHistoryByIdUseCase
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
+import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.loading.LoadStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,6 +57,12 @@ class HistoryDetailCommonViewModel(
     fun saveTitle(newTitle: String) {
         _editingHistory.update {
             it?.copy(title = newTitle)
+        }
+    }
+
+    fun saveDates(newDateRange: LocalDateRange) {
+        _editingHistory.update {
+            it?.copy(dateRange = newDateRange.first to if (newDateRange.run { first == second } ) null else newDateRange.second)
         }
     }
 
