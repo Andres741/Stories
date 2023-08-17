@@ -51,4 +51,6 @@ class Mocks {
     )
 
     fun getMockLoadStatusStrings() = LoadStatus.Data(listOf("hello", "world", "kmm"))
+    fun getHistoryElementText() = Element.Text(id = id++, text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java.")
+    fun getHistoryElementImage() = Element.Image(id = id++, imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
 }

@@ -23,13 +23,16 @@ struct StoriesListScreen: View {
                 let stories = data.values
                 
                 List(stories, id: \.id) { history in
-                    NavigationLink(destination: HistoryDetailScreen(historyId: history.id, historyTitle: history.title)) {
+                    NavigationLink(
+                        destination: HistoryDetailScreen(historyId: history.id)
+                    ) {
                         HistoryItem(history: history)
                     }
                 }
             }
-            .navigationTitle(getStringResource(SharedRes.strings().stories_screen_title))
-        }.attach(observer: viewModel)
+            .navigationTitle(getStringResource(path: \.stories_screen_title))
+        }
+        .attach(observer: viewModel)
     }
 }
 
