@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,7 +33,6 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
@@ -218,13 +216,13 @@ fun HistoryDetail(
                             text = history.dateRange.format(),
                             style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
-                                .offset {
-                                    IntOffset(x = 0, y = topOffset().roundToPx())
+                                .graphicsLayer {
+                                    rotationZ = rotation()
+                                    translationY = topOffset().toPx()
                                 }
                                 .drawBehind {
                                     drawOutline(dateShape.createOutline(size, layoutDirection, this), color())
                                 }
-                                .graphicsLayer { rotationZ = rotation() }
                                 .clickable(enabled = editMode) { editingDateRange = history.dateRange }
                                 .padding(vertical = 5.dp)
                         )

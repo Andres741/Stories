@@ -9,9 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.stories.infrastructure.date.LocalDateRange
-import com.example.stories.infrastructure.date.endDate
 import com.example.stories.infrastructure.date.from
-import com.example.stories.infrastructure.date.startDate
+import com.example.stories.infrastructure.date.range
 import com.example.stories.infrastructure.date.toMilliseconds
 import kotlinx.datetime.LocalDate
 
@@ -36,7 +35,7 @@ fun EditDatePopUp(
         onConfirm = {
             val startDate = LocalDate.from(timeMillis = state.selectedStartDateMillis ?: return@BaseEditElementPopUp)
             val endDate = run { LocalDate.from(timeMillis = state.selectedEndDateMillis ?: return@run null) }
-            onConfirm(startDate to endDate)
+            onConfirm(startDate range endDate)
         },
         isOnConfirmEnabled = state.selectedStartDateMillis != null,
         modifier = Modifier.height(600.dp),

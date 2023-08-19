@@ -62,7 +62,7 @@ class HistoryDetailCommonViewModel(
 
     fun saveDates(newDateRange: LocalDateRange) {
         _editingHistory.update {
-            it?.copy(dateRange = newDateRange.first to if (newDateRange.run { first == second } ) null else newDateRange.second)
+            it?.copy(dateRange = newDateRange)
         }
     }
 

@@ -27,13 +27,25 @@ fun LocalDate.format(): String {
     return "$day $month $year"
 }
 
-typealias LocalDateRange = Pair<LocalDate, LocalDate?>
+data class LocalDateRange(
+    val startDate: LocalDate,
+    val endDate: LocalDate,
+) {
 
-val LocalDateRange.startDate: LocalDate get() = first
+    val isMoreThanOneDay get() = startDate != endDate
 
-val LocalDateRange.endDate: LocalDate get() = second ?: first
+    companion object {
+        fun create(startDate: LocalDate, endDate: LocalDate?) = LocalDateRange(
+            startDate = startDate,
+            endDate = endDate?.takeIf { it > startDate } ?: startDate,
+        )
+    }
 
-val LocalDateRange.isMoreThanOneDay get() = second != null
+}
+
+infix fun LocalDate.range(endDate: LocalDate?) = LocalDateRange.create(startDate = this, endDate = endDate)
+
+fun LocalDate.toRange() = LocalDateRange(this, this)
 
 fun LocalDateRange.format(): String = buildString {
     append(startDate.format())
