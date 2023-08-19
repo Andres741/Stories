@@ -1,6 +1,8 @@
 package com.example.stories.android.ui.historyDetail
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,9 +29,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
@@ -195,13 +201,32 @@ fun HistoryDetail(
                     }
                 }
                 item {
-                    Box(modifier = Modifier.height(75.dp)) {
+                    val color = animateColorAsState(
+                        targetValue =
+                            if (editMode) MaterialTheme.colorScheme.surfaceVariant
+                            else MaterialTheme.colorScheme.background,
+                    ).run { { value } }
+
+                    val topOffset = animateDpAsState(
+                        targetValue = if (editMode) 6.dp else 0.dp,
+                    ).run { { value } }
+
+                    val dateShape = MaterialTheme.shapes.small
+
+                    Box(modifier = Modifier.height(65.dp)) {
                         Text(
                             text = history.dateRange.format(),
                             style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
-                                .clickable(enabled = editMode) { editingDateRange = history.dateRange }
+                                .offset {
+                                    IntOffset(x = 0, y = topOffset().roundToPx())
+                                }
+                                .drawBehind {
+                                    drawOutline(dateShape.createOutline(size, layoutDirection, this), color())
+                                }
                                 .graphicsLayer { rotationZ = rotation() }
+                                .clickable(enabled = editMode) { editingDateRange = history.dateRange }
+                                .padding(vertical = 5.dp)
                         )
                     }
                 }
