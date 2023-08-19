@@ -11,6 +11,10 @@ fun LocalDate.Companion.now(): LocalDate = Clock.System.now().toLocalDateTime(Ti
 
 fun LocalDate.Companion.from(timeMillis: Long) = Instant.fromEpochMilliseconds(timeMillis).toLocalDateTime(TimeZone.currentSystemDefault()).date
 
+object LocalDateFactory {
+    fun from(timeMillis: Long) = LocalDate.from(timeMillis)
+}
+
 fun LocalDate.toMilliseconds(): Long = atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 
 fun LocalDate.add(year: Int = 0, monthNumber: Int = 0, dayOfMonth: Int = 0) = LocalDate(

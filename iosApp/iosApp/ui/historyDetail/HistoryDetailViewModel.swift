@@ -32,6 +32,10 @@ extension HistoryDetailScreen {
             commonViewModel.saveTitle(newTitle: newTitle)
         }
         
+        func saveDates(newDateRange: LocalDateRange) {
+            commonViewModel.saveDates(newDateRange: newDateRange)
+        }
+
         func saveEditingHistory() {
             commonViewModel.saveEditingHistory()
         }

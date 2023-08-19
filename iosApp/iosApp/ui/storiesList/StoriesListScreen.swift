@@ -45,8 +45,7 @@ struct StoriesListScreen_Previews: PreviewProvider {
 @ViewBuilder func HistoryItem(history: History) -> some View {
     VStack(alignment: .leading) {
         Text(history.title).font(.title2)
-        Spacer(minLength: 2)
-        Text(history.date.formatNoteDate()).font(.footnote)
+        Text(history.dateRange.format()).font(.footnote)
         Spacer(minLength: 5)
         switch history.mainElement {
         case let text as Element.Text:

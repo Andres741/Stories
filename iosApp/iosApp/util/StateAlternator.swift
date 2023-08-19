@@ -9,11 +9,7 @@ class StateAlternator<T>: ObservableObject {
     
     @Published private(set) var currentState: T
     
-    private var alternatingTask: Task<(), Never>? = nil {
-        willSet {
-            alternatingTask?.cancel()
-        }
-    }
+    private var alternatingTask: Task<(), Never>? = nil
     
     init(duration: UInt64, defaultState: T, alternatingStates: [T]) {
         self.duration = duration
@@ -24,6 +20,11 @@ class StateAlternator<T>: ObservableObject {
     }
     
     func startAlternating() {
+        
+        if alternatingTask != nil {
+            return
+        }
+        
         alternatingTask = Task {
             var index = 0
             currentState = alternatingStates[step(index: &index)]
@@ -52,6 +53,6 @@ class StateAlternator<T>: ObservableObject {
     }
     
     deinit {
-        alternatingTask = nil
+        alternatingTask?.cancel()
     }
 }

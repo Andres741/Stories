@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
-import com.example.stories.infrastructure.collections.asInfiniteSequence
 
 @Composable
 fun actionableFloatAnimation(
@@ -19,10 +18,10 @@ fun actionableFloatAnimation(
     val animation = remember { Animatable(disabledValue) }
 
     LaunchedEffect(key1 = isActive) {
-        if (isActive) values.asInfiniteSequence().forEach {
+        while (isActive) values.forEach {
             animation.animateTo(it, animationSpec)
         }
-        else animation.animateTo(disabledValue, animationSpec)
+        animation.animateTo(disabledValue, animationSpec)
     }
 
     return animation.asState()

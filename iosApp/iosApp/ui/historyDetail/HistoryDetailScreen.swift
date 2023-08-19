@@ -9,8 +9,11 @@ struct HistoryDetailScreen: View {
     @StateObject private var viewModel: HistoryDetailViewModel
         
     @State var editingElement: Element? = nil
-    @State var isEditingTitle: Bool = false
+    @State var isEditingTitle = false
+    @State var isEditingLocalDateRange = false
     
+    @State var titleBottomPadding = 0.0
+
     @StateObject private var stateAlternator = StateAlternator(
         duration: HistoryDetailScreen.SAKE_DURATION_NANOS,
         defaultState: Angle.degrees(0),
@@ -37,15 +40,27 @@ struct HistoryDetailScreen: View {
             
             let history = viewModel.editingHistory ?? $0
             
-            VStack(alignment: .leading) {
-                Text(history.title)
-                    .font(.title)
-                    .padding()
-                    .onTapGesture {
-                        if editMode {
-                            isEditingTitle = true
+            VStack {
+                VStack(alignment: .leading) {
+                    Text(history.title)
+                        .font(.title)
+                        .onTapGesture {
+                            if editMode {
+                                isEditingTitle = true
+                            }
                         }
-                    }.rotationEffect(inclinationAngle)
+                        .rotationEffect(inclinationAngle)
+                        .padding(.bottom, titleBottomPadding)
+                    
+                    HStack {
+                        Text(history.dateRange.format())
+                            .rotationEffect(inclinationAngle)
+                            .onTapGesture {
+                                if editMode { isEditingLocalDateRange = true }
+                            }
+                        Spacer()
+                    }
+                }.padding()
                 
                 List {
                     Section {
@@ -101,6 +116,25 @@ struct HistoryDetailScreen: View {
                     onDismiss: { editingElement = nil }
                 )
             }
+            .sheet(isPresented: $isEditingLocalDateRange) {
+                let (initDate, endDate) = history.dateRange.toDateTouple()
+                EditDateRange(
+                    initDate: initDate,
+                    endDate: endDate,
+                    onConfirm: { newStart, newEnd in
+                        viewModel.saveDates(
+                            newDateRange: datesToDateRange(startDate: newStart, endDate: newEnd)
+                        )
+                        isEditingLocalDateRange = false
+                    },
+                    onDismiss: {
+                        isEditingLocalDateRange = false
+                        stateAlternator.startAlternating()
+                    }
+                )
+                .onAppear { stateAlternator.stopAlternating() }
+                .onDisappear { stateAlternator.startAlternating() }
+            }
             .onChange(of: stateAlternator.currentState) { angle in
                 withAnimation(
                     Animation.easeIn(duration: HistoryDetailScreen.SAKE_MOVEMENT_DURATION_SECONDS)
@@ -113,6 +147,12 @@ struct HistoryDetailScreen: View {
                     stateAlternator.stopAlternating()
                 } else {
                     stateAlternator.startAlternating()
+                }
+            }
+            .onChange(of: viewModel.editingHistory) { newValue in
+                withAnimation {
+                    let editMode = newValue != nil
+                    titleBottomPadding = editMode ? 6 : 0
                 }
             }
         }
