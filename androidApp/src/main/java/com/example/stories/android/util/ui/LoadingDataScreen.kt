@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -103,15 +104,16 @@ fun DefaultErrorScreen_preview() {
             color = MaterialTheme.colorScheme.background
         ) {
             val context = LocalContext.current
+            val toast = remember {
+                Toast.makeText(
+                    context,
+                    "Can do nothing bro, this is just a preview",
+                    Toast.LENGTH_LONG
+                )
+            }
             DefaultErrorScreen(
                 loadingError = LoadingError.GenericError,
-                onClickButton = {
-                    Toast.makeText(
-                        context,
-                        "Can do nothing bro, this is just a preview",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                onClickButton = toast::show
             )
         }
     }
