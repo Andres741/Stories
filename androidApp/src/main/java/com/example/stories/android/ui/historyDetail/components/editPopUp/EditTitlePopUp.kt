@@ -1,4 +1,4 @@
-package com.example.stories.android.ui.historyDetail.editPopUp
+package com.example.stories.android.ui.historyDetail.components.editPopUp
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

@@ -12,7 +12,7 @@ import kotlinx.datetime.LocalDate
 class Mocks {
 
     companion object {
-        private var id = 0L
+        var id = 0L
     }
     fun getMockStories() = listOf(
         History(

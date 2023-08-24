@@ -1,4 +1,4 @@
-package com.example.stories.android.ui.historyDetail.editPopUp
+package com.example.stories.android.ui.historyDetail.components.editPopUp
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,19 +15,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
-import com.example.stories.data.domain.model.Element
 
 @Composable
 fun EditTextElementPopUp(
-    textElement: Element.Text,
-    onConfirm: (textElement: Element.Text) -> Unit,
+    text: String,
+    onConfirm: (text: String) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var inputText by remember { mutableStateOf(textElement.text) }
+    var inputText by remember { mutableStateOf(text) }
     val isTextValid by remember { derivedStateOf { inputText.isNotBlank() } }
 
     BaseEditElementPopUp(
-        onConfirm = { onConfirm(textElement.copy(text = inputText)) },
+        onConfirm = { onConfirm(inputText) },
         isOnConfirmEnabled = isTextValid,
         modifier = Modifier.height(300.dp),
         onDismiss = onDismiss,
@@ -45,15 +44,15 @@ fun EditTextElementPopUp(
 
 @Composable
 fun EditImageElementPopUp(
-    imageElement: Element.Image,
-    onConfirm: (imageElement: Element.Image) -> Unit,
+    imageUrl: String,
+    onConfirm: (imageUrl: String) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var inputText by remember { mutableStateOf(imageElement.imageResource) }
+    var inputText by remember { mutableStateOf(imageUrl) }
     var isTextValid by remember { mutableStateOf(false) }
 
     BaseEditElementPopUp(
-        onConfirm = { onConfirm(imageElement.copy(imageResource = inputText)) },
+        onConfirm = { onConfirm(inputText) },
         isOnConfirmEnabled = isTextValid,
         modifier = Modifier.height(600.dp),
         onDismiss = onDismiss,
@@ -74,17 +73,5 @@ fun EditImageElementPopUp(
             modifier = Modifier.fillMaxWidth(),
             maxLines = 15,
         )
-    }
-}
-
-@Composable
-fun EditElementPopUp(
-    historyElement: Element,
-    onConfirm: (historyElement: Element) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    when (historyElement) {
-        is Element.Text -> EditTextElementPopUp(historyElement, onConfirm, onDismiss)
-        is Element.Image -> EditImageElementPopUp(historyElement, onConfirm, onDismiss)
     }
 }

@@ -19,4 +19,9 @@
 
     <string name="init_date">Initial date</string>
     <string name="end_date">End date</string>
+
+    <string name="add_item">Add</string>
+    <string name="add_text">Add text</string>
+    <string name="add_image">Add image</string>
+
 </resources>

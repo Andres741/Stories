@@ -11,14 +11,14 @@ data class History(
 )
 
 sealed class Element {
-    abstract val id: Long?
+    abstract val id: Long
 
     data class Text(
-        override val id: Long?,
+        override val id: Long,
         val text: String,
     ) : Element()
     data class Image(
-        override val id: Long?,
+        override val id: Long,
         val imageResource: String,
     ) : Element()
 }

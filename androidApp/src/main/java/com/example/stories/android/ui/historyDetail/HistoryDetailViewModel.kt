@@ -21,13 +21,17 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun cancelEdit() = commonViewModel.cancelEdit()
 
-    fun saveItem(element: Element) = commonViewModel.saveItem(element)
+    fun editItem(element: Element) = commonViewModel.editItem(element)
 
-    fun saveTitle(newTitle: String) = commonViewModel.saveTitle(newTitle)
+    fun editTitle(newTitle: String) = commonViewModel.editTitle(newTitle)
 
-    fun saveDates(newDateRange: LocalDateRange) = commonViewModel.saveDates(newDateRange)
+    fun editDates(newDateRange: LocalDateRange) = commonViewModel.editDates(newDateRange)
 
     fun saveEditingHistory() = commonViewModel.saveEditingHistory()
+
+    fun createTextElement(text: String) = commonViewModel.createTextElement(text)
+
+    fun createImageElement(imageUrl: String) = commonViewModel.createImageElement(imageUrl)
 
     class Factory(private val historyId: Long) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = HistoryDetailViewModel(historyId) as T

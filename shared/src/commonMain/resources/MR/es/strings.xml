@@ -19,4 +19,9 @@
 
     <string name="init_date">Fecha de inicio</string>
     <string name="end_date">Fecha final</string>
+
+    <string name="add_item">Añadir</string>
+    <string name="add_text">Añadir texto</string>
+    <string name="add_image">Añadir imagen</string>
+
 </resources>
