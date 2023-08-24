@@ -31,6 +31,9 @@ import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.format
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 fun ElementsListBody(
@@ -39,6 +42,7 @@ fun ElementsListBody(
     rotation: () -> Float,
     onEditElement: (Element) -> Unit,
     onEditDateRange: (LocalDateRange) -> Unit,
+    swapElements: (fromId: Long, toId: Long) -> Unit,
 ) {
 
     var editingElement by remember { mutableStateOf(null as Element?) }
@@ -64,7 +68,22 @@ fun ElementsListBody(
         }
     }
 
-    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+    val state = rememberReorderableLazyListState(
+        onMove = swap@{ from, to ->
+            swapElements(
+                from.key as? Long ?: return@swap,
+                to.key as? Long ?: return@swap,
+            )
+        }
+    )
+
+    LazyColumn(
+        state = state.listState,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .reorderable(state)
+            .detectReorderAfterLongPress(state)
+    ) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
         }

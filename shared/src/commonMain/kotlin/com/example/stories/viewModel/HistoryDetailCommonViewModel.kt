@@ -10,6 +10,7 @@ import com.example.stories.data.domain.useCase.CreateEditingHistoryUseCase
 import com.example.stories.data.domain.useCase.CreateImageElementUseCase
 import com.example.stories.data.domain.useCase.CreateTextElementUseCase
 import com.example.stories.data.domain.useCase.GetHistoryByIdUseCase
+import com.example.stories.data.domain.useCase.SwapElementsUseCase
 import com.example.stories.data.domain.useCase.UpdateHistoryElementUseCase
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
@@ -38,6 +39,7 @@ class HistoryDetailCommonViewModel(
     private val updateHistoryDateRangeUseCase = UpdateHistoryDateRangeUseCase()
     private val createTextElementUseCase = CreateTextElementUseCase()
     private val createImageElementUseCase = CreateImageElementUseCase()
+    private val swapElementsUseCase = SwapElementsUseCase()
 
     val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase.invoke(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), LoadStatus.Loading
@@ -84,6 +86,12 @@ class HistoryDetailCommonViewModel(
     fun createImageElement(imageUrl: String) {
         launchWithHistoryId { historyId ->
             createImageElementUseCase(historyId, imageUrl)
+        }
+    }
+
+    fun swapElements(fromId: Long, toId: Long) {
+        launchWithHistoryId { historyId ->
+            swapElementsUseCase(historyId, fromId, toId)
         }
     }
 

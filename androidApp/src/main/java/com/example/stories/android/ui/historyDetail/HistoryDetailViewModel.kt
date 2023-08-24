@@ -33,6 +33,8 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun createImageElement(imageUrl: String) = commonViewModel.createImageElement(imageUrl)
 
+    fun swapElements(fromId: Long, toId: Long) = commonViewModel.swapElements(fromId, toId)
+
     class Factory(private val historyId: Long) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = HistoryDetailViewModel(historyId) as T
     }
