@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.AsyncItemImage
+import com.example.stories.android.util.ui.EmptyScreen
 import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.data.domain.mocks.Mocks
@@ -65,7 +66,6 @@ fun StoriesListScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StoriesList(
     stories: List<History>,
@@ -112,38 +112,56 @@ fun StoriesList(
                 style = MaterialTheme.typography.displayMedium
             )
 
-            var deletingHistoryId by remember { mutableStateOf(null as Long?) }
-
-            deletingHistoryId?.let { id ->
-                AlertDialog(
-                    onDismissRequest = { deletingHistoryId = null },
-                    title = { Text(getStringResource { delete_history_pop_up_title }) },
-                    text = { Text(getStringResource { delete_history_pop_up_text }) },
-                    confirmButton = {
-                        TextButton(onClick = { deleteHistory(id); deletingHistoryId = null }) {
-                            Text(getStringResource { accept })
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { deletingHistoryId = null }) {
-                            Text(getStringResource { dismiss })
-                        }
-                    },
-                )
-            }
-
-            LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-                items(stories, key = { it.id }) {history ->
-                    HistoryItem(
-                        history = history,
-                        onClickItem = navigateDetail,
-                        onClickDelete = { deletingHistoryId = it },
-                        modifier = Modifier.animateItemPlacement()
-                    )
-                }
-                item { Spacer(modifier = Modifier.height(80.dp)) }
-            }
+            StoriesList(stories, navigateDetail, deleteHistory)
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun StoriesList(
+    stories: List<History>,
+    navigateDetail: (Long) -> Unit,
+    deleteHistory: (Long) -> Unit,
+) {
+
+    if (stories.isEmpty()) {
+        EmptyScreen(
+            title = getStringResource { empty_history_list_title },
+            text = getStringResource { empty_history_list_text },
+        )
+        return
+    }
+
+    var deletingHistoryId by remember { mutableStateOf(null as Long?) }
+    deletingHistoryId?.let { id ->
+        AlertDialog(
+            onDismissRequest = { deletingHistoryId = null },
+            title = { Text(getStringResource { delete_history_pop_up_title }) },
+            text = { Text(getStringResource { delete_history_pop_up_text }) },
+            confirmButton = {
+                TextButton(onClick = { deleteHistory(id); deletingHistoryId = null }) {
+                    Text(getStringResource { accept })
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { deletingHistoryId = null }) {
+                    Text(getStringResource { dismiss })
+                }
+            },
+        )
+    }
+
+    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+        items(stories, key = { it.id }) {history ->
+            HistoryItem(
+                history = history,
+                onClickItem = navigateDetail,
+                onClickDelete = { deletingHistoryId = it },
+                modifier = Modifier.animateItemPlacement()
+            )
+        }
+        item { Spacer(modifier = Modifier.height(80.dp)) }
     }
 }
 

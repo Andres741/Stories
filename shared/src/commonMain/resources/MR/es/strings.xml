@@ -29,4 +29,7 @@
 
     <string name="basic_history_title">Tu nueva historia</string>
     <string name="basic_history_text">Y en ese momento me sentí mas lejos que nunca...</string>
+
+    <string name="empty_history_list_title">No tienes historias todavía</string>
+    <string name="empty_history_list_text">Cuéntanos una de tus historias pulsando el botón de añadir o sal fuera y deja que las cosas pasen</string>
 </resources>
