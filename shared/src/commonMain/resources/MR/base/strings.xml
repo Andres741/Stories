@@ -24,4 +24,6 @@
     <string name="add_text">Add text</string>
     <string name="add_image">Add image</string>
 
+    <string name="delete_history_pop_up_title">Are you sure?</string>
+    <string name="delete_history_pop_up_text">You won\'t be able to recover deleted histories</string>
 </resources>

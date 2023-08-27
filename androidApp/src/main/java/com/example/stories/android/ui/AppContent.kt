@@ -28,7 +28,7 @@ fun AppContent() {
                 composable(route = Routes.STORIES.toString()) {
                     StoriesListScreen(
                         viewModel = viewModel(),
-                        onClickItem = {
+                        navigateDetail = {
                             navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute("${it}L"))
                         }
                     )
