@@ -35,6 +35,8 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun swapElements(fromId: Long, toId: Long) = commonViewModel.swapElements(fromId, toId)
 
+    fun deleteElement(element: Element) = commonViewModel.deleteElement(element)
+
     class Factory(private val historyId: Long) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = HistoryDetailViewModel(historyId) as T
     }

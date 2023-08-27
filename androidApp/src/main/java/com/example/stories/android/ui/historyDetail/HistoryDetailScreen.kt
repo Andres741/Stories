@@ -63,7 +63,8 @@ fun HistoryDetailScreen(
             saveEditingHistory = viewModel::saveEditingHistory,
             createTextElement = viewModel::createTextElement,
             createImageElement = viewModel::createImageElement,
-            swapElements = viewModel::swapElements
+            swapElements = viewModel::swapElements,
+            deleteElement = viewModel::deleteElement
         )
     }
 }
@@ -80,6 +81,7 @@ fun HistoryDetail(
     createTextElement: (text: String) -> Unit,
     createImageElement: (imageUrl: String) -> Unit,
     swapElements: (fromId: Long, toId: Long) -> Unit,
+    deleteElement: (element: Element) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -102,7 +104,7 @@ fun HistoryDetail(
 
             Column(modifier = Modifier.align(Alignment.TopCenter)) {
                 TitleHeader(history.title, editMode, rotation, editTitle)
-                ElementsListBody(history, editMode, rotation, editElement, editDateRange, swapElements)
+                ElementsListBody(history, editMode, rotation, editElement, editDateRange, swapElements, deleteElement)
             }
 
             AddElementFooter(
@@ -195,7 +197,8 @@ fun StoriesList_preview() {
                 saveEditingHistory = { editMode = false},
                 createTextElement = {},
                 createImageElement = {},
-                swapElements = { _, _ -> }
+                swapElements = { _, _ -> },
+                deleteElement = {}
             )
         }
     }

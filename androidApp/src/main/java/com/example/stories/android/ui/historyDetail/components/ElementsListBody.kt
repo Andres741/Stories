@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
@@ -50,6 +52,7 @@ fun ElementsListBody(
     onEditElement: (Element) -> Unit,
     onEditDateRange: (LocalDateRange) -> Unit,
     swapElements: (fromId: Long, toId: Long) -> Unit,
+    deleteElement: (element: Element) -> Unit,
 ) {
 
     var editingElement by remember { mutableStateOf(null as Element?) }
@@ -75,6 +78,8 @@ fun ElementsListBody(
         }
     }
 
+    val numElements = history.elements.size
+
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -97,6 +102,7 @@ fun ElementsListBody(
                 moveElementDown = history.elements.getOrNull(index + 1)?.let { nextElement ->
                     { swapElements(historyElement.id, nextElement.id) }
                 },
+                deleteElement = deleteElement.takeIf { numElements > 1 }
             )
         }
 
@@ -113,6 +119,7 @@ fun ElementItem(
     modifier: Modifier = Modifier,
     moveElementUp: (() -> Unit)?,
     moveElementDown: (() -> Unit)?,
+    deleteElement: ((element: Element) -> Unit)?,
 ) {
     ItemCard(modifier = modifier) {
         when(historyElement) {
@@ -120,12 +127,21 @@ fun ElementItem(
             is Element.Text -> ElementTextItem(historyElement)
         }
         AnimatedVisibility(visible = editMode) {
-            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                IconButton(onClick = moveElementUp ?: {}, enabled = moveElementUp != null) {
-                    Icon(Icons.Filled.ArrowForward, "", Modifier.rotate(-90f))
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.align(Alignment.Center)) {
+                    IconButton(onClick = moveElementUp ?: {}, enabled = moveElementUp != null) {
+                        Icon(Icons.Filled.ArrowForward, "", Modifier.rotate(-90f))
+                    }
+                    IconButton(onClick = moveElementDown ?: {}, enabled = moveElementDown != null) {
+                        Icon(Icons.Filled.ArrowForward, "", Modifier.rotate(90f))
+                    }
                 }
-                IconButton(onClick = moveElementDown ?: {}, enabled = moveElementDown != null) {
-                    Icon(Icons.Filled.ArrowForward, "", Modifier.rotate(90f))
+                IconButton(
+                    onClick = { deleteElement?.invoke(historyElement) },
+                    enabled = deleteElement != null,
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                ) {
+                    Icon(Icons.Filled.Delete, "")
                 }
             }
         }
