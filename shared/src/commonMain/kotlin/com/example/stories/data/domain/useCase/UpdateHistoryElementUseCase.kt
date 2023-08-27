@@ -7,9 +7,7 @@ class UpdateHistoryElementUseCase {
 
     suspend operator fun invoke(newElement: Element) {
         CreateEditingHistoryUseCase.editingHistory.update { oldHistory ->
-            if (oldHistory == null) null
-            else if (oldHistory.mainElement.id == newElement.id) oldHistory.copy(mainElement = newElement)
-            else oldHistory.copy(
+            oldHistory?.copy(
                 elements = oldHistory.elements.map {
                     if (it.id == newElement.id) newElement
                     else it

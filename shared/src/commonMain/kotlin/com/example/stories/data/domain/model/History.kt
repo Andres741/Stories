@@ -6,9 +6,10 @@ data class History(
     val id: Long,
     val title: String,
     val dateRange: LocalDateRange,
-    val mainElement: Element,
     val elements: List<Element>,
-)
+) {
+    val mainElement get() = elements.first()
+}
 
 sealed class Element {
     abstract val id: Long
