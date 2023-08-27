@@ -2,7 +2,6 @@ package com.example.stories.android.ui.historyDetail.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -12,7 +11,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -43,7 +42,6 @@ import com.example.stories.android.ui.historyDetail.components.editPopUp.EditIma
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.util.resources.getStringResource
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AddElementFooter(
     editMode: Boolean,
@@ -104,10 +102,10 @@ fun AddElementFooter(
                 targetState = showNewElementPicker,
                 transitionSpec = {
                     if (showNewElementPicker) {
-                        slideInVertically { height -> -height } + fadeIn() with
+                        slideInVertically { height -> -height } + fadeIn() togetherWith
                                 slideOutVertically { height -> height } + fadeOut()
                     } else {
-                        slideInVertically { height -> height } + fadeIn() with
+                        slideInVertically { height -> height } + fadeIn() togetherWith
                                 slideOutVertically { height -> -height } + fadeOut()
                     }
                 },
