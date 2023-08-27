@@ -12,7 +12,9 @@ class StoriesListViewModel : ViewModel() {
     private val commonViewModel = NoteListCommonViewModel(viewModelScope)
 
     val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = commonViewModel.storiesLoadStatus
+    val newHistory = commonViewModel.newHistory
 
     fun deleteHistory(historyId: Long) = commonViewModel.deleteHistory(historyId)
-
+    fun createBasicHistory(title: String, text: String) = commonViewModel.createBasicHistory(title, text)
+    fun onNewHistoryConsumed() = commonViewModel.onNewHistoryConsumed()
 }

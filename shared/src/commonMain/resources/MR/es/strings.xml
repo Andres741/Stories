@@ -26,4 +26,7 @@
 
     <string name="delete_history_pop_up_title">¿Estás seguro?</string>
     <string name="delete_history_pop_up_text">No podrás recuperar historias eliminadas</string>
+
+    <string name="basic_history_title">Tu nueva historia</string>
+    <string name="basic_history_text">Y en ese momento me sentí mas lejos que nunca...</string>
 </resources>

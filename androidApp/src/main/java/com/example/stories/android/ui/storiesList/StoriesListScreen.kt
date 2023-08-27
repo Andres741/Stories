@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,10 +53,14 @@ fun StoriesListScreen(
 ) {
     val storiesLoadStatus by viewModel.storiesLoadStatus.collectAsStateWithLifecycle()
     LoadingDataScreen(storiesLoadStatus) { stories ->
+        val navigateHistory by viewModel.newHistory.collectAsStateWithLifecycle()
         StoriesList(
             stories = stories,
-            onClickItem = navigateDetail,
+            navigateHistory = navigateHistory,
+            navigateDetail = navigateDetail,
             deleteHistory = viewModel::deleteHistory,
+            createBasicHistory = viewModel::createBasicHistory,
+            onNewHistoryConsumed = viewModel::onNewHistoryConsumed,
         )
     }
 }
@@ -61,10 +69,33 @@ fun StoriesListScreen(
 @Composable
 fun StoriesList(
     stories: List<History>,
-    onClickItem: (Long) -> Unit,
+    navigateHistory: History?,
+    navigateDetail: (Long) -> Unit,
     deleteHistory: (Long) -> Unit,
+    createBasicHistory: (title: String, text: String) -> Unit,
+    onNewHistoryConsumed: () -> Unit,
 ) {
-    Scaffold { padding ->
+    val basicHistoryTitle = getStringResource { basic_history_title }
+    val basicHistoryText = getStringResource { basic_history_text }
+
+    LaunchedEffect(key1 = navigateHistory) {
+        navigateHistory?.id?.let { newId ->
+            navigateDetail(newId)
+            onNewHistoryConsumed()
+        }
+    }
+
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    createBasicHistory(basicHistoryTitle, basicHistoryText)
+                }
+            ) {
+                Icon(Icons.Filled.Add, "")
+            }
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -105,11 +136,12 @@ fun StoriesList(
                 items(stories, key = { it.id }) {history ->
                     HistoryItem(
                         history = history,
-                        onClickItem = onClickItem,
+                        onClickItem = navigateDetail,
                         onClickDelete = { deletingHistoryId = it },
                         modifier = Modifier.animateItemPlacement()
                     )
                 }
+                item { Spacer(modifier = Modifier.height(80.dp)) }
             }
         }
     }
@@ -176,8 +208,11 @@ fun StoriesList_preview() {
         ) {
             StoriesList(
                 stories = Mocks().getMockStories(),
-                onClickItem = {},
+                navigateHistory = null,
+                navigateDetail = {},
                 deleteHistory = {},
+                createBasicHistory = { _, _ -> },
+                onNewHistoryConsumed = {},
             )
         }
     }

@@ -26,4 +26,7 @@
 
     <string name="delete_history_pop_up_title">Are you sure?</string>
     <string name="delete_history_pop_up_text">You won\'t be able to recover deleted histories</string>
+
+    <string name="basic_history_title">Your new history</string>
+    <string name="basic_history_text">And in that point I felt I was further than ever...</string>
 </resources>
