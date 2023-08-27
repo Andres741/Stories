@@ -49,10 +49,10 @@ class HistoryDetailCommonViewModel(
         viewModelScope, SharingStarted.WhileSubscribed(1000), null
     ).toCommonStateFlow()
 
-    private val currentHistoryId get() = historyLoadStatus.value.dataOrNull()?.id
+    private val currentHistory get() = historyLoadStatus.value.dataOrNull()
 
     fun setEditMode() {
-        createEditingHistoryUseCase(currentHistoryId ?: return)
+        createEditingHistoryUseCase(currentHistory?.id ?: return)
     }
 
     fun cancelEdit() {
@@ -105,7 +105,7 @@ class HistoryDetailCommonViewModel(
     }
 
     private inline fun launchWithHistoryId(crossinline action: suspend (historyId: Long) -> Unit) {
-        val historyId = currentHistoryId ?: return
+        val historyId = currentHistory?.id ?: return
         viewModelScope.launch { action(historyId) }
     }
 }
