@@ -7,6 +7,8 @@ struct HistoryDetailScreen: View {
     static let SAKE_MOVEMENT_DURATION_SECONDS = Double(SAKE_DURATION_NANOS) / 1_500_000_000
 
     @StateObject private var viewModel: HistoryDetailViewModel
+    
+    @State var editMode = false
         
     @State var editingElement: Element? = nil
     @State var isEditingTitle = false
@@ -17,18 +19,20 @@ struct HistoryDetailScreen: View {
     @StateObject private var stateAlternator = StateAlternator(
         duration: HistoryDetailScreen.SAKE_DURATION_NANOS,
         defaultState: Angle.degrees(0),
-        alternatingStates: [Angle.degrees(1.0), Angle.degrees(-1.0)]
+        alternatingStates: [Angle.degrees(0.5), Angle.degrees(-0.5)]
     )
 
     @State var inclinationAngle: Angle = .degrees(0.0)
     
+    @State var showCreateNewTextPopUp = false
+    @State var showCreateNewImagePopUp = false
+
     init(historyId: Int64) {
         _viewModel = StateObject(wrappedValue: HistoryDetailViewModel(historyId: historyId))
     }
     
     var body: some View {
         let historyLoadStatus = viewModel.historyLoadStatus
-        let editMode = viewModel.editingHistory != nil
             
         LoadingDataScreen(
             loadStatus: historyLoadStatus
@@ -40,41 +44,60 @@ struct HistoryDetailScreen: View {
             
             let history = viewModel.editingHistory ?? $0
             
-            VStack {
-                VStack(alignment: .leading) {
-                    Text(history.title)
-                        .font(.title)
-                        .onTapGesture {
-                            if editMode {
-                                isEditingTitle = true
-                            }
-                        }
-                        .rotationEffect(inclinationAngle)
-                        .padding(.bottom, titleBottomPadding)
-                    
-                    HStack {
-                        Text(history.dateRange.format())
-                            .rotationEffect(inclinationAngle)
+            ZStack {
+                VStack {
+                    VStack(alignment: .leading) {
+                        Text(history.title)
+                            .font(.title)
                             .onTapGesture {
-                                if editMode { isEditingLocalDateRange = true }
+                                if editMode {
+                                    isEditingTitle = true
+                                }
                             }
-                        Spacer()
-                    }
-                }.padding()
-                
-                List {
-                    Section {
-                        ElementItem(
-                            historyElement: history.mainElement,
-                            onClick: { if editMode { editingElement = $0 } }
-                        ).rotationEffect(inclinationAngle)
-                        ForEach(history.elements, id: \.id) { element in
-                            ElementItem(
-                                historyElement: element,
-                                onClick: { if editMode { editingElement = $0 } }
-                            ).rotationEffect(inclinationAngle)
+                            .rotationEffect(inclinationAngle)
+                            .padding(.bottom, titleBottomPadding)
+                        
+                        HStack {
+                            Text(history.dateRange.format())
+                                .rotationEffect(inclinationAngle)
+                                .onTapGesture {
+                                    if editMode { isEditingLocalDateRange = true }
+                                }
+                            Spacer()
                         }
                     }
+                    .padding()
+                    
+                    List {
+                        Section {
+                            ForEach(history.elements, id: \.id) { element in
+                                ElementItem(
+                                    historyElement: element,
+                                    onClick: { if editMode { editingElement = $0 } }
+                                )
+                                .rotationEffect(inclinationAngle)
+                            }
+                        }
+                    }
+                }
+                
+                if editMode {
+                    VStack {
+                        Spacer()
+                        
+                        Menu {
+                            Button(action: { showCreateNewImagePopUp = true }) {
+                                Label(getStringResource(path: \.add_image), systemImage: "plus")
+                            }
+                            Button(action: { showCreateNewTextPopUp = true }) {
+                                Label(getStringResource(path: \.add_text), systemImage: "plus")
+                            }
+                        } label: {
+                            Button(getStringResource(path: \.add_item), action: {})
+                                .buttonStyle(.borderedProminent)
+                        }
+                    }
+                    .transition(.scale)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -98,7 +121,7 @@ struct HistoryDetailScreen: View {
                 EditTitle(
                     inputText: history.title,
                     onConfirm: { newTitle in
-                        viewModel.saveTitle(newTitle: newTitle)
+                        viewModel.editTitle(newTitle: newTitle)
                         isEditingTitle = false
                     },
                     onDismiss: {
@@ -110,7 +133,7 @@ struct HistoryDetailScreen: View {
                 EditElementSheet(
                     element: element,
                     onConfirm: { newElement in
-                        viewModel.saveItem(newElement: newElement)
+                        viewModel.editElement(newElement: newElement)
                         editingElement = nil
                     },
                     onDismiss: { editingElement = nil }
@@ -122,7 +145,7 @@ struct HistoryDetailScreen: View {
                     initDate: initDate,
                     endDate: endDate,
                     onConfirm: { newStart, newEnd in
-                        viewModel.saveDates(
+                        viewModel.editDates(
                             newDateRange: datesToDateRange(startDate: newStart, endDate: newEnd)
                         )
                         isEditingLocalDateRange = false
@@ -134,6 +157,30 @@ struct HistoryDetailScreen: View {
                 )
                 .onAppear { stateAlternator.stopAlternating() }
                 .onDisappear { stateAlternator.startAlternating() }
+            }
+            .sheet(isPresented: $showCreateNewTextPopUp) {
+                EditTextElementSheet(
+                    text: "",
+                    onConfirm: { newText in
+                        viewModel.createTextElement(text: newText)
+                        showCreateNewTextPopUp = false
+                    },
+                    onDismiss: {
+                        showCreateNewTextPopUp = false
+                    }
+                )
+            }
+            .sheet(isPresented: $showCreateNewImagePopUp) {
+                EditImageElementSheet(
+                    imageUrl: "",
+                    onConfirm: { newImageUrl in
+                        viewModel.createImageElement(imageUrl: newImageUrl)
+                        showCreateNewImagePopUp = false
+                    },
+                    onDismiss: {
+                        showCreateNewImagePopUp = false
+                    }
+                )
             }
             .onChange(of: stateAlternator.currentState) { angle in
                 withAnimation(
@@ -154,6 +201,9 @@ struct HistoryDetailScreen: View {
                     let editMode = newValue != nil
                     titleBottomPadding = editMode ? 6 : 0
                 }
+            }
+            .onChange(of: viewModel.editingHistory) { newValue in
+                editMode = newValue != nil
             }
         }
         .attach(observer: viewModel)

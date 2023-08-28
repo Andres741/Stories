@@ -5,8 +5,7 @@ struct EditImageElementSheet: View {
     
     @StateObject private var imageLoader = ImageLoader()
     
-    let imageElement: Element.Image
-    let onConfirm: (Element.Image) -> Void
+    let onConfirm: (String) -> Void
     let onDismiss: () -> Void
     
     @State var inputText: String
@@ -14,15 +13,14 @@ struct EditImageElementSheet: View {
     @State var deletemeText = "deleteme"
     
     init(
-        imageElement: Element.Image,
-        onConfirm: @escaping (Element.Image) -> Void,
+        imageUrl: String,
+        onConfirm: @escaping (String) -> Void,
         onDismiss: @escaping () -> Void
     ) {
-        self.imageElement = imageElement
         self.onConfirm = onConfirm
         self.onDismiss = onDismiss
         
-        self.inputText = imageElement.imageResource
+        self.inputText = imageUrl
     }
     
     var body: some View {
@@ -53,8 +51,7 @@ struct EditImageElementSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(getStringResource(path: \.save)) {
-                        let newTextElement = imageElement.updateImageResource(new: inputText)
-                        onConfirm(newTextElement)
+                        onConfirm(inputText)
                     }
                     .disabled(imageLoader.phase.imageOrNil == nil)
                 }
@@ -76,7 +73,7 @@ struct EditImageElementSheet: View {
 struct EditImageElementSheet_Previews: PreviewProvider {
     static var previews: some View {
         EditImageElementSheet(
-            imageElement: Mocks().getHistoryElementImage(),
+            imageUrl: "https://media.traveler.es/photos/613766f572cad4b2dbd5d8a9/16:9/w_1280,c_limit/159690.jpg",
             onConfirm: { _ in },
             onDismiss: { }
         )

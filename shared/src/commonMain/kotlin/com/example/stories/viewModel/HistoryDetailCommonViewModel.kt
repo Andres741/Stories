@@ -61,7 +61,7 @@ class HistoryDetailCommonViewModel(
         deleteEditingHistoryUseCase()
     }
 
-    fun editItem(newElement: Element) {
+    fun editElement(newElement: Element) {
         viewModelScope.launch {
             updateHistoryElementUseCase(newElement)
         }

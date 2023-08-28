@@ -3,22 +3,20 @@ import shared
 
 struct EditTextElementSheet: View {
     
-    let textElement: Element.Text
-    let onConfirm: (Element.Text) -> Void
+    let onConfirm: (String) -> Void
     let onDismiss: () -> Void
     
     @State var inputText: String
 
     init(
-        textElement: Element.Text,
-        onConfirm: @escaping (Element.Text) -> Void,
+        text: String,
+        onConfirm: @escaping (String) -> Void,
         onDismiss: @escaping () -> Void
     ) {
-        self.textElement = textElement
         self.onConfirm = onConfirm
         self.onDismiss = onDismiss
         
-        self.inputText = textElement.text
+        self.inputText = text
     }
 
 
@@ -33,8 +31,7 @@ struct EditTextElementSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(getStringResource(path: \.save)) {
-                        let newTextElement = textElement.updateText(new: inputText)
-                        onConfirm(newTextElement)
+                        onConfirm(inputText)
                     }
                     .disabled(inputText.isBlank())
                 }
@@ -46,7 +43,7 @@ struct EditTextElementSheet: View {
 struct EditTextElementSheet_Previews: PreviewProvider {
     static var previews: some View {
         EditTextElementSheet(
-            textElement: Mocks().getHistoryElementText(),
+            text: "Viaje a Ijen",
             onConfirm: { _ in },
             onDismiss: { }
         )

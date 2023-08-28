@@ -21,7 +21,7 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun cancelEdit() = commonViewModel.cancelEdit()
 
-    fun editItem(element: Element) = commonViewModel.editItem(element)
+    fun editItem(element: Element) = commonViewModel.editElement(element)
 
     fun editTitle(newTitle: String) = commonViewModel.editTitle(newTitle)
 

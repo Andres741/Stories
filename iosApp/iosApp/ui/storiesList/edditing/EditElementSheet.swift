@@ -21,14 +21,18 @@ struct EditElementSheet: View {
     var body: some View {
         if let textElement = element as? Element.Text {
             EditTextElementSheet(
-                textElement: textElement,
-                onConfirm: onConfirm,
+                text: textElement.text,
+                onConfirm: { newText in
+                    onConfirm(textElement.updateText(new: newText))
+                },
                 onDismiss: onDismiss
             )
         } else if let imageElement = element as? Element.Image {
             EditImageElementSheet(
-                imageElement: imageElement,
-                onConfirm: onConfirm,
+                imageUrl: imageElement.imageResource,
+                onConfirm: { newImageUrl in
+                    onConfirm(imageElement.updateImageResource(new: newImageUrl))
+                },
                 onDismiss: onDismiss
             )
         }

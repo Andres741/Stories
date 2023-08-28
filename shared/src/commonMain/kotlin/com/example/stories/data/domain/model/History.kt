@@ -11,15 +11,15 @@ data class History(
     val mainElement get() = elements.first()
 }
 
-sealed interface Element {
-    val id: Long
+sealed class Element {
+    abstract val id: Long
 
     data class Text(
         override val id: Long,
         val text: String,
-    ) : Element
+    ) : Element()
     data class Image(
         override val id: Long,
         val imageResource: String,
-    ) : Element
+    ) : Element()
 }

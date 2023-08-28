@@ -24,16 +24,32 @@ extension HistoryDetailScreen {
             commonViewModel.cancelEdit()
         }
         
-        func saveItem(newElement: Element) {
-            commonViewModel.saveItem(newElement: newElement)
+        func editElement(newElement: Element) {
+            commonViewModel.editElement(newElement: newElement)
         }
 
-        func saveTitle(newTitle: String) {
-            commonViewModel.saveTitle(newTitle: newTitle)
+        func editTitle(newTitle: String) {
+            commonViewModel.editTitle(newTitle: newTitle)
         }
         
-        func saveDates(newDateRange: LocalDateRange) {
-            commonViewModel.saveDates(newDateRange: newDateRange)
+        func editDates(newDateRange: LocalDateRange) {
+            commonViewModel.editDates(newDateRange: newDateRange)
+        }
+        
+        func createTextElement(text: String) {
+            commonViewModel.createTextElement(text: text)
+        }
+
+        func createImageElement(imageUrl: String) {
+            commonViewModel.createImageElement(imageUrl: imageUrl)
+        }
+
+        func swapElements(fromId: Int64, toId: Int64) {
+            commonViewModel.swapElements(fromId: fromId, toId: toId)
+        }
+
+        func deleteElement(element: Element) {
+            commonViewModel.deleteElement(element: element)
         }
 
         func saveEditingHistory() {
