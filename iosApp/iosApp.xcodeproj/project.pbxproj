@@ -30,6 +30,7 @@
 		CCBFE7302A705C0F007C6BB5 /* imageResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBFE72F2A705C0F007C6BB5 /* imageResources.swift */; };
 		CCC0583D2A782E8A009BCA6E /* colorResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC0583C2A782E8A009BCA6E /* colorResources.swift */; };
 		CCC744302A8B684300D221B2 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC7442F2A8B684300D221B2 /* ImageLoader.swift */; };
+		CCE233C12A9E7B7B00965D80 /* collectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE233C02A9E7B7B00965D80 /* collectionExtensions.swift */; };
 		CCE7AF1C2A87FB32002DCB8A /* EditTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7AF1B2A87FB32002DCB8A /* EditTitle.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		CCBFE72F2A705C0F007C6BB5 /* imageResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageResources.swift; sourceTree = "<group>"; };
 		CCC0583C2A782E8A009BCA6E /* colorResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colorResources.swift; sourceTree = "<group>"; };
 		CCC7442F2A8B684300D221B2 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		CCE233C02A9E7B7B00965D80 /* collectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = collectionExtensions.swift; sourceTree = "<group>"; };
 		CCE7AF1B2A87FB32002DCB8A /* EditTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTitle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,6 +200,7 @@
 				CC902B732A883C4500B4B45D /* StringExtensions.swift */,
 				CC7B11052A8C17F3003B611E /* StateAlternator.swift */,
 				CC04501E2A912DB100996A61 /* LocalDateExtensions.swift */,
+				CCE233C02A9E7B7B00965D80 /* collectionExtensions.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				CC902B7D2A897A7800B4B45D /* ViewExtensions.swift in Sources */,
 				CC6BAAA42A6C3CC9000DFD55 /* ViewLifeCycleObserver.swift in Sources */,
 				CC40D5CE2A7D73CE0016FEE3 /* AsyncItemImage.swift in Sources */,
+				CCE233C12A9E7B7B00965D80 /* collectionExtensions.swift in Sources */,
 				CC502F182A76D1A800AFB821 /* textResources.swift in Sources */,
 				CCBFE7302A705C0F007C6BB5 /* imageResources.swift in Sources */,
 				CCC744302A8B684300D221B2 /* ImageLoader.swift in Sources */,

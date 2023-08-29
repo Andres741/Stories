@@ -9,9 +9,7 @@ struct EditImageElementSheet: View {
     let onDismiss: () -> Void
     
     @State var inputText: String
-    
-    @State var deletemeText = "deleteme"
-    
+
     init(
         imageUrl: String,
         onConfirm: @escaping (String) -> Void,

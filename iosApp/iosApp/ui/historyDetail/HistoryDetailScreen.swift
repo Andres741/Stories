@@ -8,6 +8,7 @@ struct HistoryDetailScreen: View {
 
     @StateObject private var viewModel: HistoryDetailViewModel
     
+    @State var elementsEnumerated = [EnumeratedSequence<[Element]>.Element]()
     @State var editMode = false
         
     @State var editingElement: Element? = nil
@@ -70,10 +71,20 @@ struct HistoryDetailScreen: View {
                     
                     List {
                         Section {
-                            ForEach(history.elements, id: \.id) { element in
+                            ForEach(elementsEnumerated, id: \.element.id) { index, element in
                                 ElementItem(
                                     historyElement: element,
-                                    onClick: { if editMode { editingElement = $0 } }
+                                    editMode: editMode,
+                                    onClick: { if editMode { editingElement = $0 } },
+                                    moveElementUp: history.elements[safe: index-1].map { prev in {
+                                        viewModel.swapElements(fromId: element.id, toId: prev.id)
+                                    }},
+                                    moveElementDown: history.elements[safe: index+1].map { next in {
+                                        viewModel.swapElements(fromId: element.id, toId: next.id)
+                                    }},
+                                    deleteElement: (history.elements.count > 1) ? { element in
+                                        viewModel.deleteElement(element: element)
+                                    } : nil
                                 )
                                 .rotationEffect(inclinationAngle)
                             }
@@ -205,19 +216,60 @@ struct HistoryDetailScreen: View {
             .onChange(of: viewModel.editingHistory) { newValue in
                 editMode = newValue != nil
             }
+            .onChange(of: viewModel.showingElements) { elements in
+                withAnimation {
+                    elementsEnumerated = elements.map { Array($0.enumerated()) } ?? []
+                }
+            }
         }
         .attach(observer: viewModel)
     }
 }
 
-@ViewBuilder func ElementItem(historyElement: Element, onClick: @escaping (Element) -> Void) -> some View {
-    switch historyElement {
-    case let text as Element.Text:
-        Text(text.text).onTapGesture { onClick(text) }
-    case let image as Element.Image:
-        AsyncItemImage(url: image.imageResource).onTapGesture { onClick(image) }
-    default:
-        EmptyView()
+@ViewBuilder func ElementItem(
+    historyElement: Element,
+    editMode: Bool,
+    onClick: @escaping (Element) -> Void,
+    moveElementUp: (() -> Void)?,
+    moveElementDown: (() -> Void)?,
+    deleteElement: ((Element) -> Void)?
+) -> some View {
+    VStack {
+        switch historyElement {
+        case let text as Element.Text:
+            Text(text.text).onTapGesture { onClick(text) }
+        case let image as Element.Image:
+            AsyncItemImage(url: image.imageResource).onTapGesture { onClick(image) }
+        default:
+            EmptyView()
+        }
+        if editMode {
+            ZStack {
+                HStack {
+                    Button(action: moveElementUp ?? {}) {
+                        Image(systemName: "arrow.up")
+                    }
+                    .buttonStyle(.borderless)
+                    .disabled(moveElementUp == nil)
+                    
+                    Button(action: moveElementDown ?? {}) {
+                        Image(systemName: "arrow.down")
+                    }
+                    .buttonStyle(.borderless)
+                    .disabled(moveElementDown == nil)
+                }
+                HStack {
+                    Spacer()
+                    Button(action: { deleteElement?(historyElement) }) {
+                        Image(systemName: "trash")
+                    }
+                    .buttonStyle(.borderless)
+                    .disabled(deleteElement == nil)
+                }
+            }
+            .transition(.opacity)
+            .padding()
+        }
     }
 }
 

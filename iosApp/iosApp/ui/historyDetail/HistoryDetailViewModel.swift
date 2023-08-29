@@ -6,8 +6,22 @@ extension HistoryDetailScreen {
         
         private let commonViewModel: HistoryDetailCommonViewModel
         
-        @Published private(set) var historyLoadStatus: LoadStatus<History>
-        @Published private(set) var editingHistory: History?
+        @Published private(set) var historyLoadStatus: LoadStatus<History> {
+            didSet {
+                Task {
+                    showingElements = historyLoadStatus.dataOrNull()?.elements
+                }
+            }
+        }
+        @Published private(set) var editingHistory: History?{
+            didSet {
+                Task {
+                    showingElements = (editingHistory ?? historyLoadStatus.dataOrNull())?.elements
+                }
+            }
+        }
+        
+        @Published private(set) var showingElements: [Element]? = nil
         
 
         init(historyId: Int64) {
