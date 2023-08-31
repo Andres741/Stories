@@ -32,4 +32,6 @@
 
     <string name="empty_history_list_title">No tienes historias todavía</string>
     <string name="empty_history_list_text">Cuéntanos una de tus historias pulsando el botón de añadir o sal fuera y deja que las cosas pasen</string>
+
+    <string name="create_history">Crear</string>
 </resources>

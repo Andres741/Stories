@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class NoteListCommonViewModel(
+class StoriesListCommonViewModel(
     coroutineScope: CoroutineScope? = null
 ) {
 

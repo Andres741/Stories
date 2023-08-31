@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
-import com.example.stories.viewModel.NoteListCommonViewModel
+import com.example.stories.viewModel.StoriesListCommonViewModel
 
 class StoriesListViewModel : ViewModel() {
 
-    private val commonViewModel = NoteListCommonViewModel(viewModelScope)
+    private val commonViewModel = StoriesListCommonViewModel(viewModelScope)
 
     val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = commonViewModel.storiesLoadStatus
     val newHistory = commonViewModel.newHistory
