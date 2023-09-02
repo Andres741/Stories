@@ -32,10 +32,18 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // Kotlin
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
                 api("dev.icerock.moko:resources:0.23.0")
+
+                implementation("io.insert-koin:koin-core:3.3.3")
+                api("dev.icerock.moko:mvvm-core:0.16.1")
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation("io.insert-koin:koin-androidx-compose:3.4.2")
             }
         }
         val commonTest by getting {

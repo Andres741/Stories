@@ -25,7 +25,7 @@ extension HistoryDetailScreen {
         
 
         init(historyId: Int64) {
-            self.commonViewModel = HistoryDetailCommonViewModel(historyId: historyId, coroutineScope: nil)
+            self.commonViewModel = HistoryDetailCommonViewModel(historyId: historyId)
             self.historyLoadStatus = self.commonViewModel.historyLoadStatus.value!
             self.editingHistory = self.commonViewModel.editingHistory.value
         }

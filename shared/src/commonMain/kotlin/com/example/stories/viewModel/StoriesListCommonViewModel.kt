@@ -1,5 +1,6 @@
 package com.example.stories.viewModel
 
+import com.example.stories.Component
 import com.example.stories.data.domain.model.History
 import com.example.stories.data.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.data.domain.useCase.DeleteHistoryUseCase
@@ -14,16 +15,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.koin.core.component.get
 
 class StoriesListCommonViewModel(
-    coroutineScope: CoroutineScope? = null
+    coroutineScope: CoroutineScope? = null,
+    getAllStoriesUseCase: GetAllStoriesUseCase = Component.get(),
+    private val deleteHistoryUseCase: DeleteHistoryUseCase = Component.get(),
+    private val createBasicHistoryUseCase: CreateBasicHistoryUseCase = Component.get(),
 ) {
 
-    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
+    constructor(): this(coroutineScope = null)
 
-    private val getAllStoriesUseCase = GetAllStoriesUseCase()
-    private val deleteHistoryUseCase = DeleteHistoryUseCase()
-    private val createBasicHistoryUseCase = CreateBasicHistoryUseCase()
+    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
     val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = getAllStoriesUseCase.invoke().stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000), LoadStatus.Loading

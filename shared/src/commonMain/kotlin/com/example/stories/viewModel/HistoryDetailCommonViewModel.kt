@@ -1,5 +1,6 @@
 package com.example.stories.viewModel
 
+import com.example.stories.Component
 import com.example.stories.data.domain.model.Element
 import com.example.stories.data.domain.model.History
 import com.example.stories.data.domain.useCase.DeleteEditingHistoryUseCase
@@ -23,25 +24,27 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.koin.core.component.get
 
 class HistoryDetailCommonViewModel(
     historyId: Long,
-    coroutineScope: CoroutineScope? = null,
+    coroutineScope: CoroutineScope?,
+    getHistoryByIdUseCase: GetHistoryByIdUseCase = Component.get(),
+    private val editHistoryUseCase: EditHistoryUseCase = Component.get(),
+    private val createEditingHistoryUseCase: CreateEditingHistoryUseCase = Component.get(),
+    private val deleteEditingHistoryUseCase: DeleteEditingHistoryUseCase = Component.get(),
+    private val updateHistoryTitleUseCase: UpdateHistoryTitleUseCase = Component.get(),
+    private val updateHistoryElementUseCase: UpdateHistoryElementUseCase = Component.get(),
+    private val updateHistoryDateRangeUseCase: UpdateHistoryDateRangeUseCase = Component.get(),
+    private val createTextElementUseCase: CreateTextElementUseCase = Component.get(),
+    private val createImageElementUseCase: CreateImageElementUseCase = Component.get(),
+    private val swapElementsUseCase: SwapElementsUseCase = Component.get(),
+    private val deleteElementUseCase: DeleteElementUseCase = Component.get(),
 ) {
 
-    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
+    constructor(historyId: Long): this(historyId = historyId, coroutineScope = null)
 
-    private val getHistoryByIdUseCase = GetHistoryByIdUseCase()
-    private val editHistoryUseCase = EditHistoryUseCase()
-    private val createEditingHistoryUseCase = CreateEditingHistoryUseCase()
-    private val deleteEditingHistoryUseCase = DeleteEditingHistoryUseCase()
-    private val updateHistoryTitleUseCase = UpdateHistoryTitleUseCase()
-    private val updateHistoryElementUseCase = UpdateHistoryElementUseCase()
-    private val updateHistoryDateRangeUseCase = UpdateHistoryDateRangeUseCase()
-    private val createTextElementUseCase = CreateTextElementUseCase()
-    private val createImageElementUseCase = CreateImageElementUseCase()
-    private val swapElementsUseCase = SwapElementsUseCase()
-    private val deleteElementUseCase = DeleteElementUseCase()
+    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
     val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase.invoke(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), LoadStatus.Loading
