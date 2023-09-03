@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("dev.icerock.mobile.multiplatform-resources")
+    id("io.realm.kotlin")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -39,6 +40,9 @@ kotlin {
 
                 implementation("io.insert-koin:koin-core:3.3.3")
                 api("dev.icerock.moko:mvvm-core:0.16.1")
+
+                implementation("io.realm.kotlin:library-base:1.10.0")
+                implementation("io.realm.kotlin:library-sync:1.10.0")
             }
         }
         val androidMain by getting {
