@@ -22,7 +22,7 @@ struct LoadingDataScreen<Data: AnyObject, Content, ErrorContent, LoadingContent>
 struct LoadingDataScreen_Previews: PreviewProvider {
     static var previews: some View {
         LoadingDataScreen(
-            loadStatus: Mocks().getMockLoadStatusStrings()
+            loadStatus: HistoryMocks().getMockLoadStatusStrings()
         ) { error in
             DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
         } loadingContent: {

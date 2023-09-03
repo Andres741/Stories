@@ -50,7 +50,7 @@ struct EditDateRange: View {
 
 struct EditDateRange_Previews: PreviewProvider {
     static var previews: some View {
-        let (initDate, endDate) = Mocks().getDateRange().toDateTouple()
+        let (initDate, endDate) = HistoryMocks().getDateRange().toDateTouple()
         EditDateRange(
             initDate: initDate,
             endDate: endDate,

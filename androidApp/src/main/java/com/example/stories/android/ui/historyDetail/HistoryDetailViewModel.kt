@@ -3,7 +3,7 @@ package com.example.stories.android.ui.historyDetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.stories.data.domain.model.Element
+import com.example.stories.data.repository.history.model.HistoryElement
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.viewModel.HistoryDetailCommonViewModel
 
@@ -21,7 +21,7 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun cancelEdit() = commonViewModel.cancelEdit()
 
-    fun editItem(element: Element) = commonViewModel.editElement(element)
+    fun editItem(element: HistoryElement) = commonViewModel.editElement(element)
 
     fun editTitle(newTitle: String) = commonViewModel.editTitle(newTitle)
 
@@ -35,7 +35,7 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun swapElements(fromId: Long, toId: Long) = commonViewModel.swapElements(fromId, toId)
 
-    fun deleteElement(element: Element) = commonViewModel.deleteElement(element)
+    fun deleteElement(element: HistoryElement) = commonViewModel.deleteElement(element)
 
     class Factory(private val historyId: Long) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = HistoryDetailViewModel(historyId) as T

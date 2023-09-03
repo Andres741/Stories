@@ -1,8 +1,8 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
-import com.example.stories.data.domain.model.Element
-import com.example.stories.data.domain.model.History
+import com.example.stories.data.repository.history.model.HistoryElement
+import com.example.stories.data.repository.history.model.History
 import com.example.stories.data.domain.useCase.DeleteEditingHistoryUseCase
 import com.example.stories.data.domain.useCase.UpdateHistoryDateRangeUseCase
 import com.example.stories.data.domain.useCase.UpdateHistoryTitleUseCase
@@ -64,7 +64,7 @@ class HistoryDetailCommonViewModel(
         deleteEditingHistoryUseCase()
     }
 
-    fun editElement(newElement: Element) {
+    fun editElement(newElement: HistoryElement) {
         viewModelScope.launch {
             updateHistoryElementUseCase(newElement)
         }
@@ -100,7 +100,7 @@ class HistoryDetailCommonViewModel(
         }
     }
 
-    fun deleteElement(element: Element) {
+    fun deleteElement(element: HistoryElement) {
         viewModelScope.launch {
             deleteElementUseCase(element)
         }

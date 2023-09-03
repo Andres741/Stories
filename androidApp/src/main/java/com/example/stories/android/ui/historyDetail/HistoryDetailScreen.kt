@@ -37,9 +37,9 @@ import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTit
 import com.example.stories.android.util.resources.sharedPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.android.util.ui.actionableFloatAnimation
-import com.example.stories.data.domain.mocks.Mocks
-import com.example.stories.data.domain.model.Element
-import com.example.stories.data.domain.model.History
+import com.example.stories.data.repository.history.model.HistoryMocks
+import com.example.stories.data.repository.history.model.HistoryElement
+import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.date.LocalDateRange
 
 @Composable
@@ -73,7 +73,7 @@ fun HistoryDetailScreen(
 fun HistoryDetail(
     history: History,
     editMode: Boolean,
-    editElement: (Element) -> Unit,
+    editElement: (HistoryElement) -> Unit,
     editTitle: (newTitle: String) -> Unit,
     editDateRange: (newDateRange: LocalDateRange) -> Unit,
     inverseEditHistory: () -> Unit,
@@ -81,7 +81,7 @@ fun HistoryDetail(
     createTextElement: (text: String) -> Unit,
     createImageElement: (imageUrl: String) -> Unit,
     swapElements: (fromId: Long, toId: Long) -> Unit,
-    deleteElement: (element: Element) -> Unit,
+    deleteElement: (element: HistoryElement) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -188,7 +188,7 @@ fun StoriesList_preview() {
         ) {
             var editMode by remember { mutableStateOf(false) }
             HistoryDetail(
-                history = if (editMode) Mocks().getMockStories()[2] else Mocks().getMockStories()[1],
+                history = if (editMode) HistoryMocks().getMockStories()[2] else HistoryMocks().getMockStories()[1],
                 editMode = editMode,
                 editElement = {},
                 editTitle = {},

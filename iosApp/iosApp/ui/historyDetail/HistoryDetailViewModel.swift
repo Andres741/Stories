@@ -21,7 +21,7 @@ extension HistoryDetailScreen {
             }
         }
         
-        @Published private(set) var showingElements: [Element]? = nil
+        @Published private(set) var showingElements: [HistoryElement]? = nil
         
 
         init(historyId: Int64) {
@@ -38,7 +38,7 @@ extension HistoryDetailScreen {
             commonViewModel.cancelEdit()
         }
         
-        func editElement(newElement: Element) {
+        func editElement(newElement: HistoryElement) {
             commonViewModel.editElement(newElement: newElement)
         }
 
@@ -62,7 +62,7 @@ extension HistoryDetailScreen {
             commonViewModel.swapElements(fromId: fromId, toId: toId)
         }
 
-        func deleteElement(element: Element) {
+        func deleteElement(element: HistoryElement) {
             commonViewModel.deleteElement(element: element)
         }
 

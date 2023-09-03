@@ -2,7 +2,7 @@ package com.example.stories.android.ui.storiesList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stories.data.domain.model.History
+import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.viewModel.StoriesListCommonViewModel

@@ -38,8 +38,8 @@ import com.example.stories.android.ui.historyDetail.components.editPopUp.EditIma
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.ItemCard
-import com.example.stories.data.domain.model.Element
-import com.example.stories.data.domain.model.History
+import com.example.stories.data.repository.history.model.HistoryElement
+import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.format
 
@@ -49,17 +49,17 @@ fun ElementsListBody(
     history: History,
     editMode: Boolean,
     rotation: () -> Float,
-    onEditElement: (Element) -> Unit,
+    onEditElement: (HistoryElement) -> Unit,
     onEditDateRange: (LocalDateRange) -> Unit,
     swapElements: (fromId: Long, toId: Long) -> Unit,
-    deleteElement: (element: Element) -> Unit,
+    deleteElement: (element: HistoryElement) -> Unit,
 ) {
 
-    var editingElement by remember { mutableStateOf(null as Element?) }
+    var editingElement by remember { mutableStateOf(null as HistoryElement?) }
 
     editingElement?.let { element ->
         when (element) {
-            is Element.Text -> EditTextElementPopUp(
+            is HistoryElement.Text -> EditTextElementPopUp(
                 text = element.text,
                 onConfirm = {
                     onEditElement(element.copy(text = it))
@@ -67,7 +67,7 @@ fun ElementsListBody(
                 },
                 onDismiss = { editingElement = null }
             )
-            is Element.Image -> EditImageElementPopUp(
+            is HistoryElement.Image -> EditImageElementPopUp(
                 imageUrl = element.imageResource,
                 onConfirm = {
                     onEditElement(element.copy(imageResource = it))
@@ -114,17 +114,17 @@ fun ElementsListBody(
 
 @Composable
 fun ElementItem(
-    historyElement: Element,
+    historyElement: HistoryElement,
     editMode: Boolean,
     modifier: Modifier = Modifier,
     moveElementUp: (() -> Unit)?,
     moveElementDown: (() -> Unit)?,
-    deleteElement: ((element: Element) -> Unit)?,
+    deleteElement: ((element: HistoryElement) -> Unit)?,
 ) {
     ItemCard(modifier = modifier) {
         when(historyElement) {
-            is Element.Image -> ElementImageItem(historyElement)
-            is Element.Text -> ElementTextItem(historyElement)
+            is HistoryElement.Image -> ElementImageItem(historyElement)
+            is HistoryElement.Text -> ElementTextItem(historyElement)
         }
         AnimatedVisibility(visible = editMode) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -149,12 +149,12 @@ fun ElementItem(
 }
 
 @Composable
-fun ElementImageItem(image: Element.Image) {
+fun ElementImageItem(image: HistoryElement.Image) {
     AsyncItemImage(image.imageResource)
 }
 
 @Composable
-fun ElementTextItem(text: Element.Text) {
+fun ElementTextItem(text: HistoryElement.Text) {
     Text(
         text = text.text,
         modifier = Modifier

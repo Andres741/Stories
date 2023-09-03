@@ -109,9 +109,9 @@ struct StoriesListScreen_Previews: PreviewProvider {
         
         Spacer(minLength: 5)
         switch history.mainElement {
-        case let text as Element.Text:
+        case let text as HistoryElement.Text:
             Text(text.text).font(.subheadline)
-        case let image as Element.Image:
+        case let image as HistoryElement.Image:
             AsyncItemImage(url: image.imageResource)
         default:
             EmptyView()
@@ -122,7 +122,7 @@ struct StoriesListScreen_Previews: PreviewProvider {
 struct HistoryItem_Previews: PreviewProvider {
     static var previews: some View {
         HistoryItem(
-            history: Mocks().getMockStories()[1],
+            history: HistoryMocks().getMockStories()[1],
             onClickDelete: { _ in }
         )
     }

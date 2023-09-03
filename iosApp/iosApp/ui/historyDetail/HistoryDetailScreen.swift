@@ -8,10 +8,10 @@ struct HistoryDetailScreen: View {
 
     @StateObject private var viewModel: HistoryDetailViewModel
     
-    @State var elementsEnumerated = [EnumeratedSequence<[Element]>.Element]()
+    @State var elementsEnumerated = [EnumeratedSequence<[HistoryElement]>.Element]()
     @State var editMode = false
         
-    @State var editingElement: Element? = nil
+    @State var editingElement: HistoryElement? = nil
     @State var isEditingTitle = false
     @State var isEditingLocalDateRange = false
     
@@ -227,18 +227,18 @@ struct HistoryDetailScreen: View {
 }
 
 @ViewBuilder func ElementItem(
-    historyElement: Element,
+    historyElement: HistoryElement,
     editMode: Bool,
-    onClick: @escaping (Element) -> Void,
+    onClick: @escaping (HistoryElement) -> Void,
     moveElementUp: (() -> Void)?,
     moveElementDown: (() -> Void)?,
-    deleteElement: ((Element) -> Void)?
+    deleteElement: ((HistoryElement) -> Void)?
 ) -> some View {
     VStack {
         switch historyElement {
-        case let text as Element.Text:
+        case let text as HistoryElement.Text:
             Text(text.text).onTapGesture { onClick(text) }
-        case let image as Element.Image:
+        case let image as HistoryElement.Image:
             AsyncItemImage(url: image.imageResource).onTapGesture { onClick(image) }
         default:
             EmptyView()

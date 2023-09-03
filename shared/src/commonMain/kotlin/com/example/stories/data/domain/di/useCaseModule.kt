@@ -17,18 +17,18 @@ import com.example.stories.data.domain.useCase.UpdateHistoryTitleUseCase
 import org.koin.dsl.module
 
 val useCasesModule = module {
-    single { CreateBasicHistoryUseCase() }
-    single { CreateEditingHistoryUseCase() }
-    single { CreateImageElementUseCase() }
-    single { CreateTextElementUseCase() }
-    single { DeleteEditingHistoryUseCase() }
-    single { DeleteElementUseCase() }
-    single { DeleteHistoryUseCase() }
-    single { EditHistoryUseCase() }
-    single { GetAllStoriesUseCase() }
-    single { GetHistoryByIdUseCase() }
-    single { SwapElementsUseCase() }
-    single { UpdateHistoryDateRangeUseCase() }
-    single { UpdateHistoryElementUseCase() }
-    single { UpdateHistoryTitleUseCase() }
+    single { CreateBasicHistoryUseCase(get()) }
+    single { CreateEditingHistoryUseCase(get()) }
+    single { CreateImageElementUseCase(get()) }
+    single { CreateTextElementUseCase(get()) }
+    single { DeleteEditingHistoryUseCase(get()) }
+    single { DeleteElementUseCase(get()) }
+    single { DeleteHistoryUseCase(get()) }
+    single { EditHistoryUseCase(get()) }
+    single { GetAllStoriesUseCase(get()) }
+    single { GetHistoryByIdUseCase(get()) }
+    single { SwapElementsUseCase(get()) }
+    single { UpdateHistoryDateRangeUseCase(get()) }
+    single { UpdateHistoryElementUseCase(get()) }
+    single { UpdateHistoryTitleUseCase(get()) }
 }

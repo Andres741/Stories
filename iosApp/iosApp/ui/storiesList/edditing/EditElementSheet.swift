@@ -3,13 +3,13 @@ import shared
 
 struct EditElementSheet: View {
     
-    let element: Element
-    let onConfirm: (Element) -> Void
+    let element: HistoryElement
+    let onConfirm: (HistoryElement) -> Void
     let onDismiss: () -> Void
         
     init(
-        element: Element,
-        onConfirm: @escaping (Element) -> Void,
+        element: HistoryElement,
+        onConfirm: @escaping (HistoryElement) -> Void,
         onDismiss: @escaping () -> Void
     ) {
         self.element = element
@@ -19,7 +19,7 @@ struct EditElementSheet: View {
 
     
     var body: some View {
-        if let textElement = element as? Element.Text {
+        if let textElement = element as? HistoryElement.Text {
             EditTextElementSheet(
                 text: textElement.text,
                 onConfirm: { newText in
@@ -27,7 +27,7 @@ struct EditElementSheet: View {
                 },
                 onDismiss: onDismiss
             )
-        } else if let imageElement = element as? Element.Image {
+        } else if let imageElement = element as? HistoryElement.Image {
             EditImageElementSheet(
                 imageUrl: imageElement.imageResource,
                 onConfirm: { newImageUrl in

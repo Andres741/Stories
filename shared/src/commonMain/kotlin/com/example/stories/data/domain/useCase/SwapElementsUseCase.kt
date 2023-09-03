@@ -1,9 +1,11 @@
 package com.example.stories.data.domain.useCase
 
+import com.example.stories.data.repository.history.HistoryRepository
 import kotlinx.coroutines.flow.update
 
-class SwapElementsUseCase {
-
+class SwapElementsUseCase(
+    private val historyRepository: HistoryRepository
+) {
     suspend operator fun invoke(historyId: Long, fromId: Long, toId: Long) {
         CreateEditingHistoryUseCase.editingHistory.update { oldHistory -> oldHistory ?: return@update null
 

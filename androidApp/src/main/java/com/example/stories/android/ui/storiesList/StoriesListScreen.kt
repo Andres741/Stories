@@ -42,9 +42,9 @@ import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.EmptyScreen
 import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.LoadingDataScreen
-import com.example.stories.data.domain.mocks.Mocks
-import com.example.stories.data.domain.model.Element
-import com.example.stories.data.domain.model.History
+import com.example.stories.data.repository.history.model.HistoryMocks
+import com.example.stories.data.repository.history.model.HistoryElement
+import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.date.format
 
 @Composable
@@ -193,8 +193,8 @@ fun HistoryItem(
                 .padding(horizontal = 6.dp)
         ) {
             when (val mainItem = history.mainElement) {
-                is Element.Image -> AsyncItemImage(mainItem.imageResource)
-                is Element.Text -> Text(text = mainItem.text)
+                is HistoryElement.Image -> AsyncItemImage(mainItem.imageResource)
+                is HistoryElement.Text -> Text(text = mainItem.text)
             }
         }
 
@@ -225,7 +225,7 @@ fun StoriesList_preview() {
             color = MaterialTheme.colorScheme.background
         ) {
             StoriesList(
-                stories = Mocks().getMockStories(),
+                stories = HistoryMocks().getMockStories(),
                 navigateHistory = null,
                 navigateDetail = {},
                 deleteHistory = {},
@@ -241,7 +241,7 @@ fun StoriesList_preview() {
 fun HistoryItem_preview() {
     StoriesTheme {
         HistoryItem(
-            history = Mocks().getMockStories()[1],
+            history = HistoryMocks().getMockStories()[1],
             onClickItem = {},
             onClickDelete = {}
         )

@@ -1,7 +1,7 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
-import com.example.stories.data.domain.model.History
+import com.example.stories.data.repository.history.model.History
 import com.example.stories.data.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.data.domain.useCase.DeleteHistoryUseCase
 import com.example.stories.data.domain.useCase.GetAllStoriesUseCase
