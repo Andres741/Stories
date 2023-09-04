@@ -78,7 +78,7 @@ struct StoriesListScreen_Previews: PreviewProvider {
 
 @ViewBuilder func HistoryItem(
     history: History,
-    onClickDelete: @escaping (Int64) -> Void
+    onClickDelete: @escaping (String) -> Void
 ) -> some View {
     VStack(alignment: .leading) {
         HStack {

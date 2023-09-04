@@ -28,7 +28,7 @@ struct HistoryDetailScreen: View {
     @State var showCreateNewTextPopUp = false
     @State var showCreateNewImagePopUp = false
 
-    init(historyId: Int64) {
+    init(historyId: String) {
         _viewModel = StateObject(wrappedValue: HistoryDetailViewModel(historyId: historyId))
     }
     
@@ -275,6 +275,6 @@ struct HistoryDetailScreen: View {
 
 struct HistoryDetailScreen_Previews: PreviewProvider {
     static var previews: some View {
-        HistoryDetailScreen(historyId: 1)
+        HistoryDetailScreen(historyId: "1")
     }
 }

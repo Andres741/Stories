@@ -24,7 +24,7 @@ extension HistoryDetailScreen {
         @Published private(set) var showingElements: [HistoryElement]? = nil
         
 
-        init(historyId: Int64) {
+        init(historyId: String) {
             self.commonViewModel = HistoryDetailCommonViewModel(historyId: historyId)
             self.historyLoadStatus = self.commonViewModel.historyLoadStatus.value!
             self.editingHistory = self.commonViewModel.editingHistory.value
@@ -58,7 +58,7 @@ extension HistoryDetailScreen {
             commonViewModel.createImageElement(imageUrl: imageUrl)
         }
 
-        func swapElements(fromId: Int64, toId: Int64) {
+        func swapElements(fromId: String, toId: String) {
             commonViewModel.swapElements(fromId: fromId, toId: toId)
         }
 

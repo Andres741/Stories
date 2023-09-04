@@ -9,7 +9,7 @@ extension StoriesListScreen {
         @Published var storiesLoadStatus: LoadStatus<ReferenceList<History>>? = nil
         @Published var newHistory: History? = nil
         
-        func deleteHistory(historyId: Int64) {
+        func deleteHistory(historyId: String) {
             commonViewModel.deleteHistory(historyId: historyId)
         }
 
