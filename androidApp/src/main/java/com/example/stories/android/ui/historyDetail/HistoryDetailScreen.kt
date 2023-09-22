@@ -80,7 +80,7 @@ fun HistoryDetail(
     saveEditingHistory: () -> Unit,
     createTextElement: (text: String) -> Unit,
     createImageElement: (imageUrl: String) -> Unit,
-    swapElements: (fromId: Long, toId: Long) -> Unit,
+    swapElements: (fromId: String, toId: String) -> Unit,
     deleteElement: (element: HistoryElement) -> Unit,
 ) {
     Scaffold(

@@ -43,8 +43,11 @@ data class LocalDateRange(
             startDate = startDate,
             endDate = endDate?.takeIf { it > startDate } ?: startDate,
         )
+        fun from(millisStart: Long, millisEnd: Long?) = create(
+            startDate = LocalDate.from(millisStart),
+            endDate = millisEnd?.let(LocalDate::from),
+        )
     }
-
 }
 
 infix fun LocalDate.range(endDate: LocalDate?) = LocalDateRange.create(startDate = this, endDate = endDate)

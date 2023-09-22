@@ -51,7 +51,7 @@ fun ElementsListBody(
     rotation: () -> Float,
     onEditElement: (HistoryElement) -> Unit,
     onEditDateRange: (LocalDateRange) -> Unit,
-    swapElements: (fromId: Long, toId: Long) -> Unit,
+    swapElements: (fromId: String, toId: String) -> Unit,
     deleteElement: (element: HistoryElement) -> Unit,
 ) {
 

@@ -7,7 +7,7 @@ import com.example.stories.data.repository.history.model.HistoryElement
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.viewModel.HistoryDetailCommonViewModel
 
-class HistoryDetailViewModel(historyId: Long) : ViewModel() {
+class HistoryDetailViewModel(historyId: String) : ViewModel() {
 
     private val commonViewModel = HistoryDetailCommonViewModel(
         historyId = historyId,
@@ -33,11 +33,11 @@ class HistoryDetailViewModel(historyId: Long) : ViewModel() {
 
     fun createImageElement(imageUrl: String) = commonViewModel.createImageElement(imageUrl)
 
-    fun swapElements(fromId: Long, toId: Long) = commonViewModel.swapElements(fromId, toId)
+    fun swapElements(fromId: String, toId: String) = commonViewModel.swapElements(fromId, toId)
 
     fun deleteElement(element: HistoryElement) = commonViewModel.deleteElement(element)
 
-    class Factory(private val historyId: Long) : ViewModelProvider.NewInstanceFactory() {
+    class Factory(private val historyId: String) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = HistoryDetailViewModel(historyId) as T
     }
 }

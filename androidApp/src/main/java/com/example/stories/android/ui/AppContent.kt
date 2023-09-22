@@ -31,7 +31,7 @@ fun AppContent() {
                     StoriesListScreen(
                         viewModel = viewModel(),
                         navigateDetail = {
-                            navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute("${it}L"))
+                            navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it))
                         }
                     )
                 }
@@ -39,12 +39,12 @@ fun AppContent() {
                     route = Routes.HISTORY_DETAIL.getRoute(),
                     arguments = listOf(
                         navArgument(name = Routes.HISTORY_DETAIL.params!!) {
-                            type = NavType.LongType
-                            defaultValue = -1L
+                            type = NavType.StringType
+                            defaultValue = ""
                         }
                     )
                 ) { backStackEntry ->
-                    val historyId = backStackEntry.arguments?.getLong(Routes.HISTORY_DETAIL.params) ?: -1L
+                    val historyId = backStackEntry.arguments?.getString(Routes.HISTORY_DETAIL.params) ?: ""
                     HistoryDetailScreen(
                         viewModel = viewModel(factory = HistoryDetailViewModel.Factory(historyId))
                     )

@@ -35,7 +35,7 @@ class StoriesListCommonViewModel(
     private val _newHistory = MutableStateFlow(null as History?)
     val newHistory = _newHistory.toCommonStateFlow()
 
-    fun deleteHistory(historyId: Long) {
+    fun deleteHistory(historyId: String) {
         viewModelScope.launch {
             deleteHistoryUseCase(historyId)
         }

@@ -50,7 +50,7 @@ import com.example.stories.infrastructure.date.format
 @Composable
 fun StoriesListScreen(
     viewModel: StoriesListViewModel,
-    navigateDetail: (Long) -> Unit,
+    navigateDetail: (String) -> Unit,
 ) {
     val storiesLoadStatus by viewModel.storiesLoadStatus.collectAsStateWithLifecycle()
     LoadingDataScreen(storiesLoadStatus) { stories ->
@@ -70,8 +70,8 @@ fun StoriesListScreen(
 fun StoriesList(
     stories: List<History>,
     navigateHistory: History?,
-    navigateDetail: (Long) -> Unit,
-    deleteHistory: (Long) -> Unit,
+    navigateDetail: (String) -> Unit,
+    deleteHistory: (String) -> Unit,
     createBasicHistory: (title: String, text: String) -> Unit,
     onNewHistoryConsumed: () -> Unit,
 ) {
@@ -121,8 +121,8 @@ fun StoriesList(
 @Composable
 fun StoriesList(
     stories: List<History>,
-    navigateDetail: (Long) -> Unit,
-    deleteHistory: (Long) -> Unit,
+    navigateDetail: (String) -> Unit,
+    deleteHistory: (String) -> Unit,
 ) {
 
     if (stories.isEmpty()) {
@@ -133,7 +133,7 @@ fun StoriesList(
         return
     }
 
-    var deletingHistoryId by remember { mutableStateOf(null as Long?) }
+    var deletingHistoryId by remember { mutableStateOf(null as String?) }
     deletingHistoryId?.let { id ->
         AlertDialog(
             onDismissRequest = { deletingHistoryId = null },
@@ -168,8 +168,8 @@ fun StoriesList(
 @Composable
 fun HistoryItem(
     history: History,
-    onClickItem: (Long) -> Unit,
-    onClickDelete: (Long) -> Unit,
+    onClickItem: (String) -> Unit,
+    onClickDelete: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ItemCard(

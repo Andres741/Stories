@@ -1,16 +1,17 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
+import com.example.stories.data.domain.useCase.CommitChangesUseCase
 import com.example.stories.data.repository.history.model.HistoryElement
 import com.example.stories.data.repository.history.model.History
 import com.example.stories.data.domain.useCase.DeleteEditingHistoryUseCase
 import com.example.stories.data.domain.useCase.UpdateHistoryDateRangeUseCase
 import com.example.stories.data.domain.useCase.UpdateHistoryTitleUseCase
-import com.example.stories.data.domain.useCase.EditHistoryUseCase
 import com.example.stories.data.domain.useCase.CreateEditingHistoryUseCase
 import com.example.stories.data.domain.useCase.CreateImageElementUseCase
 import com.example.stories.data.domain.useCase.CreateTextElementUseCase
 import com.example.stories.data.domain.useCase.DeleteElementUseCase
+import com.example.stories.data.domain.useCase.GetEditingHistoryUseCase
 import com.example.stories.data.domain.useCase.GetHistoryByIdUseCase
 import com.example.stories.data.domain.useCase.SwapElementsUseCase
 import com.example.stories.data.domain.useCase.UpdateHistoryElementUseCase
@@ -27,10 +28,10 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.get
 
 class HistoryDetailCommonViewModel(
-    historyId: Long,
+    private val historyId: String,
     coroutineScope: CoroutineScope?,
     getHistoryByIdUseCase: GetHistoryByIdUseCase = Component.get(),
-    private val editHistoryUseCase: EditHistoryUseCase = Component.get(),
+    getEditingHistoryUseCase: GetEditingHistoryUseCase = Component.get(),
     private val createEditingHistoryUseCase: CreateEditingHistoryUseCase = Component.get(),
     private val deleteEditingHistoryUseCase: DeleteEditingHistoryUseCase = Component.get(),
     private val updateHistoryTitleUseCase: UpdateHistoryTitleUseCase = Component.get(),
@@ -40,28 +41,33 @@ class HistoryDetailCommonViewModel(
     private val createImageElementUseCase: CreateImageElementUseCase = Component.get(),
     private val swapElementsUseCase: SwapElementsUseCase = Component.get(),
     private val deleteElementUseCase: DeleteElementUseCase = Component.get(),
+    private val commitChangesUseCase: CommitChangesUseCase = Component.get(),
 ) {
 
-    constructor(historyId: Long): this(historyId = historyId, coroutineScope = null)
+    constructor(historyId: String): this(historyId = historyId, coroutineScope = null)
 
     private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
-    val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase.invoke(historyId).stateIn(
+    val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), LoadStatus.Loading
     ).toCommonStateFlow()
 
-    val editingHistory: CommonStateFlow<History?> = deleteEditingHistoryUseCase().stateIn(
+    val editingHistory: CommonStateFlow<History?> = getEditingHistoryUseCase(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), null
     ).toCommonStateFlow()
 
     private val currentHistory get() = historyLoadStatus.value.dataOrNull()
 
     fun setEditMode() {
-        createEditingHistoryUseCase(currentHistory?.id ?: return)
+        viewModelScope.launch {
+            createEditingHistoryUseCase(currentHistory?.id ?: return@launch)
+        }
     }
 
     fun cancelEdit() {
-        deleteEditingHistoryUseCase()
+        viewModelScope.launch {
+            deleteEditingHistoryUseCase(historyId)
+        }
     }
 
     fun editElement(newElement: HistoryElement) {
@@ -71,31 +77,31 @@ class HistoryDetailCommonViewModel(
     }
 
     fun editTitle(newTitle: String) {
-        launchWithHistoryId { historyId ->
+        viewModelScope.launch {
             updateHistoryTitleUseCase(historyId , newTitle)
         }
     }
 
     fun editDates(newDateRange: LocalDateRange) {
-        launchWithHistoryId { historyId ->
+        viewModelScope.launch {
             updateHistoryDateRangeUseCase(historyId, newDateRange)
         }
     }
 
     fun createTextElement(text: String) {
-        launchWithHistoryId { historyId ->
+        viewModelScope.launch {
             createTextElementUseCase(historyId, text)
         }
     }
 
     fun createImageElement(imageUrl: String) {
-        launchWithHistoryId { historyId ->
+        viewModelScope.launch {
             createImageElementUseCase(historyId, imageUrl)
         }
     }
 
-    fun swapElements(fromId: Long, toId: Long) {
-        launchWithHistoryId { historyId ->
+    fun swapElements(fromId: String, toId: String) {
+        viewModelScope.launch {
             swapElementsUseCase(historyId, fromId, toId)
         }
     }
@@ -107,16 +113,12 @@ class HistoryDetailCommonViewModel(
     }
 
     fun saveEditingHistory() {
-        editHistoryUseCase(newHistory = editingHistory.value ?: return)
-        deleteEditingHistoryUseCase()
+        viewModelScope.launch {
+            commitChangesUseCase(historyId)
+        }
     }
 
     fun dispose() {
         viewModelScope.cancel()
-    }
-
-    private inline fun launchWithHistoryId(crossinline action: suspend (historyId: Long) -> Unit) {
-        val historyId = currentHistory?.id ?: return
-        viewModelScope.launch { action(historyId) }
     }
 }
