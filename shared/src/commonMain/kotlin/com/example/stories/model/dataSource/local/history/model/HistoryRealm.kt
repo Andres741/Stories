@@ -1,4 +1,4 @@
-package com.example.stories.model.localDataSource.history.model
+package com.example.stories.model.dataSource.local.history.model
 
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.model.domain.model.History

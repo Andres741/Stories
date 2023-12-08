@@ -1,7 +1,7 @@
 package com.example.stories
 
+import com.example.stories.model.dataSource.di.localDataSourceModule
 import com.example.stories.model.domain.di.useCasesModule
-import com.example.stories.model.localDataSource.di.localDataSourceModule
 import com.example.stories.model.repository.di.repositoryModule
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin

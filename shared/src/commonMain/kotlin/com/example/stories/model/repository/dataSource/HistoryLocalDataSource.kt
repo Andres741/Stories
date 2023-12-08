@@ -1,7 +1,7 @@
 package com.example.stories.model.repository.dataSource
 
-import com.example.stories.model.localDataSource.history.model.HistoryElementRealm
-import com.example.stories.model.localDataSource.history.model.HistoryRealm
+import com.example.stories.model.dataSource.local.history.model.HistoryElementRealm
+import com.example.stories.model.dataSource.local.history.model.HistoryRealm
 import kotlinx.coroutines.flow.Flow
 import org.mongodb.kbson.ObjectId
 

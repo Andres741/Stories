@@ -1,11 +1,11 @@
-package com.example.stories.model.localDataSource.history
+package com.example.stories.model.dataSource.local.history
 
-import com.example.stories.model.localDataSource.history.model.HistoryData
-import com.example.stories.model.localDataSource.history.model.HistoryElementRealm
-import com.example.stories.model.localDataSource.history.model.HistoryRealm
-import com.example.stories.model.localDataSource.history.model.ImageElementRealm
-import com.example.stories.model.localDataSource.history.model.TextElementRealm
-import com.example.stories.model.localDataSource.history.model.copy
+import com.example.stories.model.dataSource.local.history.model.HistoryData
+import com.example.stories.model.dataSource.local.history.model.HistoryElementRealm
+import com.example.stories.model.dataSource.local.history.model.HistoryRealm
+import com.example.stories.model.dataSource.local.history.model.ImageElementRealm
+import com.example.stories.model.dataSource.local.history.model.TextElementRealm
+import com.example.stories.model.dataSource.local.history.model.copy
 import com.example.stories.model.repository.dataSource.HistoryLocalDataSource
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.parent

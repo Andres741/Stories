@@ -2,9 +2,9 @@ package com.example.stories.model.repository.history
 
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
+import com.example.stories.model.dataSource.local.history.model.dataToDomain
+import com.example.stories.model.dataSource.local.history.model.toDomainFlow
 import com.example.stories.model.domain.repository.HistoryRepository
-import com.example.stories.model.localDataSource.history.model.dataToDomain
-import com.example.stories.model.localDataSource.history.model.toDomainFlow
 import com.example.stories.model.repository.dataSource.HistoryLocalDataSource
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement

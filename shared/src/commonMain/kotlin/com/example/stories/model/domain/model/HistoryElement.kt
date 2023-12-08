@@ -1,8 +1,8 @@
 package com.example.stories.model.domain.model
 
-import com.example.stories.model.localDataSource.history.model.HistoryElementRealm
-import com.example.stories.model.localDataSource.history.model.ImageElementRealm
-import com.example.stories.model.localDataSource.history.model.TextElementRealm
+import com.example.stories.model.dataSource.local.history.model.HistoryElementRealm
+import com.example.stories.model.dataSource.local.history.model.ImageElementRealm
+import com.example.stories.model.dataSource.local.history.model.TextElementRealm
 import org.mongodb.kbson.BsonObjectId
 
 sealed class HistoryElement {

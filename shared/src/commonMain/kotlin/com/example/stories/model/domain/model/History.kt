@@ -2,7 +2,7 @@ package com.example.stories.model.domain.model
 
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
-import com.example.stories.model.localDataSource.history.model.HistoryRealm
+import com.example.stories.model.dataSource.local.history.model.HistoryRealm
 import io.realm.kotlin.ext.realmListOf
 import org.mongodb.kbson.ObjectId
 
