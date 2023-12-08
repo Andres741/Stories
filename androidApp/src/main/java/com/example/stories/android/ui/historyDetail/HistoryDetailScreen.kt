@@ -37,10 +37,10 @@ import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTit
 import com.example.stories.android.util.resources.sharedPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.android.util.ui.actionableFloatAnimation
-import com.example.stories.data.repository.history.model.HistoryMocks
-import com.example.stories.data.repository.history.model.HistoryElement
-import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.date.LocalDateRange
+import com.example.stories.model.domain.model.History
+import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.HistoryMocks
 
 @Composable
 fun HistoryDetailScreen(

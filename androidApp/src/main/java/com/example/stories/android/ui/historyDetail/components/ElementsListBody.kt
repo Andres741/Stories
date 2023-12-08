@@ -38,10 +38,10 @@ import com.example.stories.android.ui.historyDetail.components.editPopUp.EditIma
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.ItemCard
-import com.example.stories.data.repository.history.model.HistoryElement
-import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.format
+import com.example.stories.model.domain.model.History
+import com.example.stories.model.domain.model.HistoryElement
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

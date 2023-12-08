@@ -3,8 +3,8 @@ package com.example.stories.android.ui.historyDetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.stories.data.repository.history.model.HistoryElement
 import com.example.stories.infrastructure.date.LocalDateRange
+import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.viewModel.HistoryDetailCommonViewModel
 
 class HistoryDetailViewModel(historyId: String) : ViewModel() {

@@ -42,10 +42,10 @@ import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.EmptyScreen
 import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.LoadingDataScreen
-import com.example.stories.data.repository.history.model.HistoryMocks
-import com.example.stories.data.repository.history.model.HistoryElement
-import com.example.stories.data.repository.history.model.History
 import com.example.stories.infrastructure.date.format
+import com.example.stories.model.domain.model.History
+import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.HistoryMocks
 
 @Composable
 fun StoriesListScreen(

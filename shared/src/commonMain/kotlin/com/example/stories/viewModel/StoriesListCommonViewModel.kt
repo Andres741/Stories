@@ -1,13 +1,13 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
-import com.example.stories.data.repository.history.model.History
-import com.example.stories.data.domain.useCase.CreateBasicHistoryUseCase
-import com.example.stories.data.domain.useCase.DeleteHistoryUseCase
-import com.example.stories.data.domain.useCase.GetAllStoriesUseCase
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.model.domain.useCase.CreateBasicHistoryUseCase
+import com.example.stories.model.domain.useCase.DeleteHistoryUseCase
+import com.example.stories.model.domain.useCase.GetAllStoriesUseCase
+import com.example.stories.model.domain.model.History
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
