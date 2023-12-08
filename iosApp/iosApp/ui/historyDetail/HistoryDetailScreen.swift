@@ -47,68 +47,13 @@ struct HistoryDetailScreen: View {
             
             ZStack {
                 VStack {
-                    VStack(alignment: .leading) {
-                        Text(history.title)
-                            .font(.title)
-                            .onTapGesture {
-                                if editMode {
-                                    isEditingTitle = true
-                                }
-                            }
-                            .rotationEffect(inclinationAngle)
-                            .padding(.bottom, titleBottomPadding)
-                        
-                        HStack {
-                            Text(history.dateRange.format())
-                                .rotationEffect(inclinationAngle)
-                                .onTapGesture {
-                                    if editMode { isEditingLocalDateRange = true }
-                                }
-                            Spacer()
-                        }
-                    }
-                    .padding()
+                    Header(history: history)
                     
-                    List {
-                        Section {
-                            ForEach(elementsEnumerated, id: \.element.id) { index, element in
-                                ElementItem(
-                                    historyElement: element,
-                                    editMode: editMode,
-                                    onClick: { if editMode { editingElement = $0 } },
-                                    moveElementUp: history.elements[safe: index-1].map { prev in {
-                                        viewModel.swapElements(fromId: element.id, toId: prev.id)
-                                    }},
-                                    moveElementDown: history.elements[safe: index+1].map { next in {
-                                        viewModel.swapElements(fromId: element.id, toId: next.id)
-                                    }},
-                                    deleteElement: (history.elements.count > 1) ? { element in
-                                        viewModel.deleteElement(element: element)
-                                    } : nil
-                                )
-                                .rotationEffect(inclinationAngle)
-                            }
-                        }
-                    }
+                    BodyList(history: history)
                 }
                 
                 if editMode {
-                    VStack {
-                        Spacer()
-                        
-                        Menu {
-                            Button(action: { showCreateNewImagePopUp = true }) {
-                                Label(getStringResource(path: \.add_image), systemImage: "plus")
-                            }
-                            Button(action: { showCreateNewTextPopUp = true }) {
-                                Label(getStringResource(path: \.add_text), systemImage: "plus")
-                            }
-                        } label: {
-                            Button(getStringResource(path: \.add_item), action: {})
-                                .buttonStyle(.borderedProminent)
-                        }
-                    }
-                    .transition(.scale)
+                    EditMenu()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -223,6 +168,73 @@ struct HistoryDetailScreen: View {
             }
         }
         .attach(observer: viewModel)
+    }
+    
+    @ViewBuilder func Header(history: History) -> some View {
+        VStack(alignment: .leading) {
+            Text(history.title)
+                .font(.title)
+                .onTapGesture {
+                    if editMode {
+                        isEditingTitle = true
+                    }
+                }
+                .rotationEffect(inclinationAngle)
+                .padding(.bottom, titleBottomPadding)
+            
+            HStack {
+                Text(history.dateRange.format())
+                    .rotationEffect(inclinationAngle)
+                    .onTapGesture {
+                        if editMode { isEditingLocalDateRange = true }
+                    }
+                Spacer()
+            }
+        }
+        .padding()
+    }
+    
+    @ViewBuilder func BodyList(history: History) -> some View {
+        List {
+            Section {
+                ForEach(elementsEnumerated, id: \.element.id) { index, element in
+                    ElementItem(
+                        historyElement: element,
+                        editMode: editMode,
+                        onClick: { if editMode { editingElement = $0 } },
+                        moveElementUp: history.elements[safe: index-1].map { prev in {
+                            viewModel.swapElements(fromId: element.id, toId: prev.id)
+                        }},
+                        moveElementDown: history.elements[safe: index+1].map { next in {
+                            viewModel.swapElements(fromId: element.id, toId: next.id)
+                        }},
+                        deleteElement: (history.elements.count > 1) ? { element in
+                            viewModel.deleteElement(element: element)
+                        } : nil
+                    )
+                    .rotationEffect(inclinationAngle)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder func EditMenu() -> some View {
+        VStack {
+            Spacer()
+            
+            Menu {
+                Button(action: { showCreateNewImagePopUp = true }) {
+                    Label(getStringResource(path: \.add_image), systemImage: "plus")
+                }
+                Button(action: { showCreateNewTextPopUp = true }) {
+                    Label(getStringResource(path: \.add_text), systemImage: "plus")
+                }
+            } label: {
+                Button(getStringResource(path: \.add_item), action: {})
+                    .buttonStyle(.borderedProminent)
+            }
+        }
+        .transition(.scale)
     }
 }
 
