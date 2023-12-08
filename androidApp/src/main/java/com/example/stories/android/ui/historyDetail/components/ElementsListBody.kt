@@ -189,10 +189,12 @@ fun DateRangeFooter(
         targetValue =
         if (editMode) MaterialTheme.colorScheme.surfaceVariant
         else MaterialTheme.colorScheme.background,
+        label = "",
     ).run { { value } }
 
     val topOffset = animateDpAsState(
         targetValue = if (editMode) 6.dp else 0.dp,
+        label = "",
     ).run { { value } }
 
     val dateShape = MaterialTheme.shapes.small

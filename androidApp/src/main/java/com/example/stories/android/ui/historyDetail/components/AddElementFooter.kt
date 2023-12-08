@@ -58,8 +58,8 @@ fun AddElementFooter(
         Box {
             var showNewElementPicker by remember { mutableStateOf(false) }
 
-            val upSpace = animateDpAsState(targetValue = if (showNewElementPicker) 100.dp else 0.dp).run { { value } }
-            val scale = animateFloatAsState(targetValue = if (showNewElementPicker) 30f else 0f, tween(1000)).run { { value } }
+            val upSpace = animateDpAsState(targetValue = if (showNewElementPicker) 100.dp else 0.dp, label = "").run { { value } }
+            val scale = animateFloatAsState(targetValue = if (showNewElementPicker) 30f else 0f, tween(1000), label = "").run { { value } }
 
             Canvas(
                 modifier = Modifier
@@ -112,7 +112,8 @@ fun AddElementFooter(
                 modifier = Modifier
                     .graphicsLayer {
                         translationY = -upSpace().toPx()
-                    }
+                    },
+                label = "",
             ) { showPicker  ->
                 if (showPicker) {
                     NewElementPicker(

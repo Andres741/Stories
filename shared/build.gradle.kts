@@ -37,7 +37,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // Kotlin
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
                 api("dev.icerock.moko:resources:0.23.0")
@@ -64,7 +64,7 @@ kotlin {
 
 android {
     namespace = "com.example.stories"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 28
     }

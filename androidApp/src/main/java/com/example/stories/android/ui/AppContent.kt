@@ -1,6 +1,5 @@
 package com.example.stories.android.ui
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,7 +15,6 @@ import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.storiesList.StoriesListScreen
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppContent() {
     StoriesTheme {
