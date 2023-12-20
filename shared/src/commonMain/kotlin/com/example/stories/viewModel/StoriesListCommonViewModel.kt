@@ -8,6 +8,7 @@ import com.example.stories.model.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.model.domain.useCase.DeleteHistoryUseCase
 import com.example.stories.model.domain.useCase.GetAllStoriesUseCase
 import com.example.stories.model.domain.model.History
+import com.example.stories.model.domain.useCase.GetClaudMockUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -22,6 +23,7 @@ class StoriesListCommonViewModel(
     getAllStoriesUseCase: GetAllStoriesUseCase = Component.get(),
     private val deleteHistoryUseCase: DeleteHistoryUseCase = Component.get(),
     private val createBasicHistoryUseCase: CreateBasicHistoryUseCase = Component.get(),
+    private val getClaudMockUseCase: GetClaudMockUseCase = Component.get(),
 ) {
 
     constructor(): this(coroutineScope = null)
@@ -54,4 +56,6 @@ class StoriesListCommonViewModel(
     fun dispose() {
         viewModelScope.cancel()
     }
+
+    suspend fun getMock() = getClaudMockUseCase()
 }

@@ -1,6 +1,6 @@
 package com.example.stories
 
-import com.example.stories.model.dataSource.di.localDataSourceModule
+import com.example.stories.model.dataSource.di.dataSourceModule
 import com.example.stories.model.domain.di.useCasesModule
 import com.example.stories.model.repository.di.repositoryModule
 import org.koin.core.component.KoinComponent
@@ -12,7 +12,7 @@ expect fun getPlatformModule(): Module
 fun initKoin() = startKoin {
     modules(
         getPlatformModule(),
-        localDataSourceModule,
+        dataSourceModule,
         repositoryModule,
         useCasesModule,
     )

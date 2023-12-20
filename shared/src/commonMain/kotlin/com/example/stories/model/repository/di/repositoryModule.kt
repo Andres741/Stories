@@ -5,5 +5,5 @@ import com.example.stories.model.repository.history.HistoryRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<HistoryRepository> { HistoryRepositoryImpl(get()) }
+    single<HistoryRepository> { HistoryRepositoryImpl(get(), get()) }
 }

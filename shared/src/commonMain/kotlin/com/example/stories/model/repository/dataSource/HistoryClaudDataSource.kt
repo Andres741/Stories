@@ -1,3 +1,7 @@
 package com.example.stories.model.repository.dataSource
 
-interface HistoryClaudDataSource
+import com.example.stories.model.dataSource.remote.history.model.HistoryResponse
+
+interface HistoryClaudDataSource {
+    suspend fun getMock(): List<HistoryResponse>
+}

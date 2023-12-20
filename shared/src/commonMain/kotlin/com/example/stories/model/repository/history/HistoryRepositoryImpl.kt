@@ -4,11 +4,13 @@ import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
 import com.example.stories.model.dataSource.local.history.model.dataToDomain
 import com.example.stories.model.dataSource.local.history.model.toDomainFlow
+import com.example.stories.model.dataSource.remote.history.model.toDomain
 import com.example.stories.model.domain.repository.HistoryRepository
 import com.example.stories.model.repository.dataSource.HistoryLocalDataSource
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.toRealm
+import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -18,7 +20,8 @@ import kotlinx.coroutines.flow.flowOf
 import org.mongodb.kbson.ObjectId
 
 class HistoryRepositoryImpl(
-    private val historyLocalDataSource: HistoryLocalDataSource
+    private val historyLocalDataSource: HistoryLocalDataSource,
+    private val historyClaudDataSource: HistoryClaudDataSource,
 ) : HistoryRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -97,4 +100,6 @@ class HistoryRepositoryImpl(
     override suspend fun swapElements(historyId: String, fromId: String, toId: String) {
         historyLocalDataSource.swapElements(ObjectId(historyId), ObjectId(fromId), ObjectId(toId))
     }
+
+    override suspend fun getClaudMock() = historyClaudDataSource.getMock().map { it.toDomain() }
 }
