@@ -59,4 +59,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     implementation("io.insert-koin:koin-androidx-compose:3.4.2")
+
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
