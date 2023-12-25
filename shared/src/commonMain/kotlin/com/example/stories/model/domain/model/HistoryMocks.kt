@@ -46,8 +46,8 @@ class HistoryMocks {
             title = "Visita a Kuala Lumpur",
             dateRange = LocalDate(2023, 8, 5) range LocalDate.now(),
             elements = listOf(
-                HistoryElement.Text(id = getNewId(), text = "Estuve una semana en Kuala Lumpur, la capital de Malasia."),
                 HistoryElement.Image(id = getNewId(), imageResource = "https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg"),
+                HistoryElement.Text(id = getNewId(), text = "Estuve una semana en Kuala Lumpur, la capital de Malasia."),
             ),
         ),
     )
@@ -63,4 +63,21 @@ class HistoryMocks {
     )
 
     fun getDateRange() = LocalDate.now().add(dayOfMonth = -7) range LocalDate.now()
+
+    fun getMockUsers() = listOf(
+        User(
+            id = "0",
+            name = "Nemo",
+            description = "I am literally nobody",
+            profileImage = "",
+            stories = getMockStories()
+        ),
+        User(
+            id = "1",
+            name = "Innominado",
+            description = "Perdí mi nombre, no recuerdo cuando.",
+            profileImage = null,
+            stories = emptyList()
+        ),
+    )
 }

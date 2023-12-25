@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
+import com.example.stories.android.ui.home.HomeScreen
 import com.example.stories.android.ui.storiesList.StoriesListScreen
 
 @Composable
@@ -24,13 +25,31 @@ fun AppContent() {
         ) {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = Routes.STORIES.toString()) {
-                composable(route = Routes.STORIES.toString()) {
+            NavHost(navController = navController, startDestination = Routes.HOME.toString()) {
+                composable(route = Routes.HOME.getRoute()) {
+                    HomeScreen(
+                        homeViewModel = viewModel(),
+                        navigateToStories = {
+                            navController.navigate(Routes.STORIES.getDestinationRoute(it))
+                        },
+                    )
+                }
+                composable(
+                    route = Routes.STORIES.getRoute(),
+                    arguments = listOf(
+                        navArgument(name = Routes.STORIES.params!!) {
+                            type = NavType.StringType
+                            nullable = true
+                            defaultValue = null
+                        },
+                    ),
+                ) { backStackEntry ->
+                    val userId = backStackEntry.arguments?.getString(Routes.STORIES.params) // TODO: use user id to show its stories
                     StoriesListScreen(
                         viewModel = viewModel(),
                         navigateDetail = {
                             navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it))
-                        }
+                        },
                     )
                 }
                 composable(
@@ -39,8 +58,8 @@ fun AppContent() {
                         navArgument(name = Routes.HISTORY_DETAIL.params!!) {
                             type = NavType.StringType
                             defaultValue = ""
-                        }
-                    )
+                        },
+                    ),
                 ) { backStackEntry ->
                     val historyId = backStackEntry.arguments?.getString(Routes.HISTORY_DETAIL.params) ?: ""
                     HistoryDetailScreen(
@@ -53,7 +72,7 @@ fun AppContent() {
 }
 
 enum class Routes(val params: String?) {
-    STORIES(null), HISTORY_DETAIL("historyId");
+    HOME(null), STORIES("userId"), HISTORY_DETAIL("historyId");
 
     fun getDestinationRoute(arg: Any?) = "$this/$arg"
     fun getRoute() = "$this${if (params == null) "" else "/{$params}"}"
