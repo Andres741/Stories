@@ -1,4 +1,4 @@
-package com.example.stories.model.dataSource.remote.history.model
+package com.example.stories.model.dataSource.remote.user.model
 
 import kotlinx.serialization.Serializable
 

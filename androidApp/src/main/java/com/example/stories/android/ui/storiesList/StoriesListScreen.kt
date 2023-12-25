@@ -1,24 +1,14 @@
 package com.example.stories.android.ui.storiesList
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -30,21 +20,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.components.StoriesColumn
 import com.example.stories.android.util.resources.getStringResource
-import com.example.stories.android.util.ui.AsyncItemImage
-import com.example.stories.android.util.ui.EmptyScreen
-import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.LoadingDataScreen
-import com.example.stories.infrastructure.date.format
 import com.example.stories.model.domain.model.History
-import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.HistoryMocks
 
 @Composable
@@ -112,106 +97,31 @@ fun StoriesList(
                 style = MaterialTheme.typography.displayMedium
             )
 
-            StoriesList(stories, navigateDetail, deleteHistory)
-        }
-    }
-}
+            var deletingHistoryId by remember { mutableStateOf(null as String?) }
+            deletingHistoryId?.let { id ->
+                AlertDialog(
+                    onDismissRequest = { deletingHistoryId = null },
+                    title = { Text(getStringResource { delete_history_pop_up_title }) },
+                    text = { Text(getStringResource { delete_history_pop_up_text }) },
+                    confirmButton = {
+                        TextButton(onClick = { deleteHistory(id); deletingHistoryId = null }) {
+                            Text(getStringResource { accept })
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { deletingHistoryId = null }) {
+                            Text(getStringResource { dismiss })
+                        }
+                    },
+                )
+            }
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun StoriesList(
-    stories: List<History>,
-    navigateDetail: (String) -> Unit,
-    deleteHistory: (String) -> Unit,
-) {
-
-    if (stories.isEmpty()) {
-        EmptyScreen(
-            title = getStringResource { empty_history_list_title },
-            text = getStringResource { empty_history_list_text },
-        )
-        return
-    }
-
-    var deletingHistoryId by remember { mutableStateOf(null as String?) }
-    deletingHistoryId?.let { id ->
-        AlertDialog(
-            onDismissRequest = { deletingHistoryId = null },
-            title = { Text(getStringResource { delete_history_pop_up_title }) },
-            text = { Text(getStringResource { delete_history_pop_up_text }) },
-            confirmButton = {
-                TextButton(onClick = { deleteHistory(id); deletingHistoryId = null }) {
-                    Text(getStringResource { accept })
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { deletingHistoryId = null }) {
-                    Text(getStringResource { dismiss })
-                }
-            },
-        )
-    }
-
-    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-        items(stories, key = { it.id }) {history ->
-            HistoryItem(
-                history = history,
-                onClickItem = navigateDetail,
+            StoriesColumn(
+                stories = stories,
+                navigateDetail = navigateDetail,
                 onClickDelete = { deletingHistoryId = it },
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
-        }
-        item { Spacer(modifier = Modifier.height(80.dp)) }
-    }
-}
-
-@Composable
-fun HistoryItem(
-    history: History,
-    onClickItem: (String) -> Unit,
-    onClickDelete: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    ItemCard(
-        modifier = modifier.clickable { onClickItem(history.id) }
-    ) {
-
-        Text(
-            text = history.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-                .padding(horizontal = 6.dp),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-                .padding(horizontal = 6.dp)
-        ) {
-            when (val mainItem = history.mainElement) {
-                is HistoryElement.Image -> AsyncItemImage(mainItem.imageResource)
-                is HistoryElement.Text -> Text(text = mainItem.text)
-            }
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = remember(history.dateRange.format()) {
-                    history.dateRange.format()
-                },
-                modifier = Modifier.padding(top = 8.dp),
-                style = MaterialTheme.typography.labelLarge
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            IconButton(onClick = { onClickDelete(history.id) }) {
-                Icon(Icons.Filled.Delete, "")
-            }
         }
     }
 }
@@ -233,17 +143,5 @@ fun StoriesList_preview() {
                 onNewHistoryConsumed = {},
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun HistoryItem_preview() {
-    StoriesTheme {
-        HistoryItem(
-            history = HistoryMocks().getMockStories()[1],
-            onClickItem = {},
-            onClickDelete = {}
-        )
     }
 }

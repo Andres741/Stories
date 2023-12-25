@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.stories.android.ui.communityStories.CommunityStoriesListScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.home.HomeScreen
@@ -44,13 +45,21 @@ fun AppContent() {
                         },
                     ),
                 ) { backStackEntry ->
-                    val userId = backStackEntry.arguments?.getString(Routes.STORIES.params) // TODO: use user id to show its stories
-                    StoriesListScreen(
-                        viewModel = viewModel(),
-                        navigateDetail = {
-                            navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it))
-                        },
-                    )
+                    val userId = backStackEntry.arguments?.getString(Routes.STORIES.params)
+
+                    if (userId == null) {
+                        StoriesListScreen(
+                            viewModel = viewModel(),
+                            navigateDetail = {
+                                navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it))
+                            },
+                        )
+                    } else {
+                        CommunityStoriesListScreen(
+                            viewModel = viewModel(),
+                            navigateDetail = { /* TODO */ }
+                        )
+                    }
                 }
                 composable(
                     route = Routes.HISTORY_DETAIL.getRoute(),

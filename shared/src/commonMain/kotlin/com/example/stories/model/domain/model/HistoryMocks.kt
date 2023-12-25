@@ -69,7 +69,7 @@ class HistoryMocks {
             id = "0",
             name = "Nemo",
             description = "I am literally nobody",
-            profileImage = "",
+            profileImage = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-512.png",
         ),
         User(
             id = "1",

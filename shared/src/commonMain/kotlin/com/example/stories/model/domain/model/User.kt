@@ -1,6 +1,6 @@
 package com.example.stories.model.domain.model
 
-import com.example.stories.model.dataSource.remote.history.model.UserResponse
+import com.example.stories.model.dataSource.remote.user.model.UserResponse
 
 data class User(
     val id: String,

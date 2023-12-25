@@ -1,6 +1,6 @@
-package com.example.stories.model.dataSource.remote.history
+package com.example.stories.model.dataSource.remote.user
 
-import com.example.stories.model.dataSource.remote.history.model.UserResponse
+import com.example.stories.model.dataSource.remote.user.model.UserResponse
 import com.example.stories.model.repository.dataSource.UserClaudDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -12,6 +12,6 @@ class UserApi(private val client: HttpClient) : UserClaudDataSource {
     }
 
     override suspend fun getAllUsers(): List<UserResponse> {
-        return client.get("${USERS_API}/all").body()
+        return client.get("$USERS_API/all").body()
     }
 }
