@@ -1,14 +1,12 @@
 package com.example.stories.android.ui.home
 
 import androidx.lifecycle.ViewModel
-import com.example.stories.infrastructure.loading.LoadStatus
-import com.example.stories.model.domain.model.User
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
+import com.example.stories.viewModel.HomeCommonViewModel
 
 class HomeViewModel : ViewModel() {
 
-    // TODO: implement common view model
+    private val commonViewModel = HomeCommonViewModel(viewModelScope)
 
-    val users: StateFlow<LoadStatus<List<User>>> = MutableStateFlow(LoadStatus.Data(emptyList()))
+    val users = commonViewModel.users
 }

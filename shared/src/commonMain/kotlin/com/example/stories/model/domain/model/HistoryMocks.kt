@@ -70,14 +70,12 @@ class HistoryMocks {
             name = "Nemo",
             description = "I am literally nobody",
             profileImage = "",
-            stories = getMockStories()
         ),
         User(
             id = "1",
             name = "Innominado",
             description = "Perdí mi nombre, no recuerdo cuando.",
             profileImage = null,
-            stories = emptyList()
         ),
     )
 }

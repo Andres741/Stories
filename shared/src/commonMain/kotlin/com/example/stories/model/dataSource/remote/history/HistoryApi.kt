@@ -9,7 +9,7 @@ import io.ktor.client.request.get
 class HistoryApi(private val client: HttpClient) : HistoryClaudDataSource {
 
     companion object {
-        private const val HISTORY_API = "http://192.168.38.55:8080/api/history"
+        private const val HISTORY_API = "http://192.168.38.55:8080/api/history/v1"
     }
 
     override suspend fun getMock(): List<HistoryResponse> {

@@ -20,7 +20,6 @@ import com.example.stories.model.domain.useCase.UpdateHistoryTitleUseCase
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -42,11 +41,9 @@ class HistoryDetailCommonViewModel(
     private val swapElementsUseCase: SwapElementsUseCase = Component.get(),
     private val deleteElementUseCase: DeleteElementUseCase = Component.get(),
     private val commitChangesUseCase: CommitChangesUseCase = Component.get(),
-) {
+) : BaseCommonViewModel(coroutineScope) {
 
     constructor(historyId: String): this(historyId = historyId, coroutineScope = null)
-
-    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
 
     val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), LoadStatus.Loading

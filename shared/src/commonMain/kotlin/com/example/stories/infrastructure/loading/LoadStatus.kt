@@ -28,6 +28,17 @@ sealed class LoadStatus<out D: Any> {
             is Loading -> this
         }
     }
+
+    fun<T: Any> Result<T>.toLoadStatus(exceptionMapper: ((Exception) -> LoadingError)? = null) = fold(
+        onSuccess = { Data(it) },
+        onFailure = { throwable ->
+            if (throwable is kotlin.Error) throw throwable
+            if (throwable is Exception && exceptionMapper != null) {
+                return@fold Error(exceptionMapper(throwable))
+            }
+            Error(LoadingError.GenericError)
+        },
+    )
 }
 
 fun<T: Any> loadStatusOf(data: T) = LoadStatus.Data(data)

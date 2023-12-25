@@ -10,7 +10,6 @@ import com.example.stories.model.domain.useCase.GetAllStoriesUseCase
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.useCase.GetClaudMockUseCase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,13 +23,11 @@ class StoriesListCommonViewModel(
     private val deleteHistoryUseCase: DeleteHistoryUseCase = Component.get(),
     private val createBasicHistoryUseCase: CreateBasicHistoryUseCase = Component.get(),
     private val getClaudMockUseCase: GetClaudMockUseCase = Component.get(),
-) {
+) : BaseCommonViewModel(coroutineScope) {
 
     constructor(): this(coroutineScope = null)
 
-    private val viewModelScope = coroutineScope ?: CoroutineScope(Dispatchers.Main)
-
-    val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = getAllStoriesUseCase.invoke().stateIn(
+    val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = getAllStoriesUseCase().stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000), LoadStatus.Loading
     ).toCommonStateFlow()
 
