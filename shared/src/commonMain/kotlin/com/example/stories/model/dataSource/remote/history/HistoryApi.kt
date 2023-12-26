@@ -19,4 +19,8 @@ class HistoryApi(private val client: HttpClient) : HistoryClaudDataSource {
     override suspend fun getUserStories(userId: String): List<HistoryResponse>  {
         return client.get("$HISTORY_API/user?userId=$userId").body()
     }
+
+    override suspend fun getHistory(userId: String, historyId: String): HistoryResponse  {
+        return client.get("$HISTORY_API/history?userId=$userId&historyId=$historyId").body()
+    }
 }

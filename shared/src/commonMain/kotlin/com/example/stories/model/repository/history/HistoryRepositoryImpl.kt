@@ -108,4 +108,8 @@ class HistoryRepositoryImpl(
     override suspend fun getUserStories(userId: String): LoadStatus<List<History>> = runCatching {
         historyClaudDataSource.getUserStories(userId).map { it.toDomain() }
     }.toLoadStatus()
+
+    override suspend fun getHistory(userId: String, historyId: String) = runCatching {
+        historyClaudDataSource.getHistory(userId = userId, historyId = historyId).toDomain()
+    }.toLoadStatus()
 }

@@ -9,20 +9,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.ElementsListBody
+import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 
 @Composable
 fun CommunityHistoryDetailScreen(
-    viewModel: CommunityHistoryDetailViewModel
+    viewModel: CommunityHistoryDetailViewModel,
 ) {
+    val historyLoadStatus by viewModel.history.collectAsStateWithLifecycle()
 
+    LoadingDataScreen(loadStatus = historyLoadStatus) { history ->
+        CommunityHistoryDetail(history)
+    }
 }
 
 @Composable
@@ -40,7 +47,7 @@ fun CommunityHistoryDetail(
                     .padding(top = 24.dp)
                     .padding(horizontal = 24.dp),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.displayMedium,
             )
 
             ElementsListBody(

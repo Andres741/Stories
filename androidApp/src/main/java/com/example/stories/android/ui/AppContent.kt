@@ -3,7 +3,6 @@ package com.example.stories.android.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.stories.android.ui.communityHistoryDetail.CommunityHistoryDetailScreen
+import com.example.stories.android.ui.communityHistoryDetail.CommunityHistoryDetailViewModel
 import com.example.stories.android.ui.communityStories.CommunityStoriesListScreen
 import com.example.stories.android.ui.communityStories.CommunityStoriesListViewModel
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
@@ -88,7 +89,14 @@ fun AppContent() {
                 ) { backStackEntry ->
                     val historyId = backStackEntry.arguments?.getString(Routes.COMMUNITY_HISTORY_DETAIL.params[0]) ?: ""
                     val userId = backStackEntry.arguments?.getString(Routes.COMMUNITY_HISTORY_DETAIL.params[1]) ?: ""
-                    Text(text = "historyId = $historyId\nuserId = $userId")
+                    CommunityHistoryDetailScreen(
+                        viewModel = viewModel(
+                            factory = CommunityHistoryDetailViewModel.Factory(
+                                historyId = historyId,
+                                userId = userId,
+                            )
+                        )
+                    )
                 }
             }
         }

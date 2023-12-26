@@ -24,4 +24,5 @@ interface HistoryRepository {
     suspend fun swapElements(historyId: String, fromId: String, toId: String)
     suspend fun getClaudMock(): List<History>
     suspend fun getUserStories(userId: String): LoadStatus<List<History>>
+    suspend fun getHistory(userId: String, historyId: String): LoadStatus<History>
 }
