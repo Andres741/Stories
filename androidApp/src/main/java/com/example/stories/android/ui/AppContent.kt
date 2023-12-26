@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.stories.android.ui.communityStories.CommunityStoriesListScreen
+import com.example.stories.android.ui.communityStories.CommunityStoriesListViewModel
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.home.HomeScreen
@@ -56,7 +57,7 @@ fun AppContent() {
                         )
                     } else {
                         CommunityStoriesListScreen(
-                            viewModel = viewModel(),
+                            viewModel = viewModel(factory = CommunityStoriesListViewModel.Factory(userId)),
                             navigateDetail = { /* TODO */ }
                         )
                     }

@@ -14,4 +14,8 @@ class UserApi(private val client: HttpClient) : UserClaudDataSource {
     override suspend fun getAllUsers(): List<UserResponse> {
         return client.get("$USERS_API/all").body()
     }
+
+    override suspend fun getUserById(userId: String): UserResponse {
+        return client.get("$USERS_API/user/$userId").body()
+    }
 }

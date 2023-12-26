@@ -5,4 +5,5 @@ import com.example.stories.model.domain.model.User
 
 interface UserRepository {
     suspend fun getAllUsers(): LoadStatus<List<User>>
+    suspend fun getUserById(userId: String): LoadStatus<User>
 }

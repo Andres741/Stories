@@ -1,6 +1,7 @@
 package com.example.stories.model.domain.repository
 
 import com.example.stories.infrastructure.date.LocalDateRange
+import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +23,5 @@ interface HistoryRepository {
     suspend fun updateHistoryDateRange(historyId: String, newDateRange: LocalDateRange)
     suspend fun swapElements(historyId: String, fromId: String, toId: String)
     suspend fun getClaudMock(): List<History>
+    suspend fun getUserStories(userId: String): LoadStatus<List<History>>
 }

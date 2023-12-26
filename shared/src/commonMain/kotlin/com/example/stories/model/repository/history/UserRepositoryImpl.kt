@@ -11,4 +11,8 @@ class UserRepositoryImpl(private val dataSource: UserClaudDataSource) : UserRepo
     override suspend fun getAllUsers(): LoadStatus<List<User>> = runCatching {
         dataSource.getAllUsers().map { it.toDomain() }
     }.toLoadStatus()
+
+    override suspend fun getUserById(userId: String): LoadStatus<User> = runCatching {
+        dataSource.getUserById(userId).toDomain()
+    }.toLoadStatus()
 }

@@ -12,14 +12,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.StoriesColumn
+import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
@@ -29,7 +32,17 @@ fun CommunityStoriesListScreen(
     viewModel: CommunityStoriesListViewModel,
     navigateDetail: (String) -> Unit,
 ) {
-    // TODO
+    val storiesLoadStatus by viewModel.userAndStories.collectAsStateWithLifecycle()
+
+    LoadingDataScreen(loadStatus = storiesLoadStatus) { userAndStories ->
+        val (user, stories) = userAndStories
+
+        CommunityStoriesList(
+            user = user,
+            stories = stories,
+            navigateDetail = navigateDetail,
+        )
+    }
 }
 
 @Composable
@@ -56,7 +69,9 @@ fun CommunityStoriesList(
 
 @Composable
 private fun Header(user: User) {
-    Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
         user.profileImage?.let { profileImage ->
             AsyncImage(
                 model = profileImage,

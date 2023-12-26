@@ -1,12 +1,17 @@
 package com.example.stories.android.ui.communityStories
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.stories.viewModel.CommunityStoriesListCommonViewModel
 
-class CommunityStoriesListViewModel : ViewModel() {
+class CommunityStoriesListViewModel(userId: String) : ViewModel() {
 
-    val commonViewModel = CommunityStoriesListCommonViewModel(viewModelScope)
+    private val commonViewModel = CommunityStoriesListCommonViewModel(userId, viewModelScope)
 
-    // TODO
+    val userAndStories get() = commonViewModel.userAndStories
+
+    class Factory(private val userId: String) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = CommunityStoriesListViewModel(userId) as T
+    }
 }

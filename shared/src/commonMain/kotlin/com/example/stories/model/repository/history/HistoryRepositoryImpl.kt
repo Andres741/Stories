@@ -2,6 +2,8 @@ package com.example.stories.model.repository.history
 
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
+import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.LoadStatus.Loading.toLoadStatus
 import com.example.stories.model.dataSource.local.history.model.dataToDomain
 import com.example.stories.model.dataSource.local.history.model.toDomainFlow
 import com.example.stories.model.dataSource.remote.history.model.toDomain
@@ -102,4 +104,8 @@ class HistoryRepositoryImpl(
     }
 
     override suspend fun getClaudMock() = historyClaudDataSource.getMock().map { it.toDomain() }
+
+    override suspend fun getUserStories(userId: String): LoadStatus<List<History>> = runCatching {
+        historyClaudDataSource.getUserStories(userId).map { it.toDomain() }
+    }.toLoadStatus()
 }

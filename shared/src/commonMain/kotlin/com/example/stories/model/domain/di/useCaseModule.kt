@@ -13,6 +13,7 @@ import com.example.stories.model.domain.useCase.GetAllUsersUseCase
 import com.example.stories.model.domain.useCase.GetClaudMockUseCase
 import com.example.stories.model.domain.useCase.GetEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.GetHistoryByIdUseCase
+import com.example.stories.model.domain.useCase.GetUserStoriesUseCase
 import com.example.stories.model.domain.useCase.SwapElementsUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryDateRangeUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryElementUseCase
@@ -37,4 +38,5 @@ val useCasesModule = module {
     single { CommitChangesUseCase(get()) }
     single { GetClaudMockUseCase(get()) }
     single { GetAllUsersUseCase(get()) }
+    single { GetUserStoriesUseCase(get(), get()) }
 }
