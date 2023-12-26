@@ -171,7 +171,7 @@ fun HistoryDetail(
 }
 
 @Composable
-fun TitleHeader(
+private fun TitleHeader(
     title: String,
     editMode: Boolean,
     rotation: () -> Float,
