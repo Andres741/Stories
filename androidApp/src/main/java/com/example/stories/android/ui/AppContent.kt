@@ -3,6 +3,7 @@ package com.example.stories.android.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,59 +32,76 @@ fun AppContent() {
                 composable(route = Routes.HOME.getRoute()) {
                     HomeScreen(
                         homeViewModel = viewModel(),
-                        navigateToStories = {
-                            navController.navigate(Routes.STORIES.getDestinationRoute(it))
+                        navigateToStories = { historyId ->
+                            if (historyId == null) navController.navigate(Routes.STORIES.name)
+                            else navController.navigate(Routes.COMMUNITY_STORIES.getDestinationRoute(historyId))
                         },
                     )
                 }
+                composable(route = Routes.STORIES.getRoute()) {
+                    StoriesListScreen(
+                        viewModel = viewModel(),
+                        navigateDetail = { navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it)) },
+                    )
+                }
                 composable(
-                    route = Routes.STORIES.getRoute(),
+                    route = Routes.COMMUNITY_STORIES.getRoute(),
                     arguments = listOf(
-                        navArgument(name = Routes.STORIES.params!!) {
+                        navArgument(name = Routes.COMMUNITY_STORIES.params[0]) {
                             type = NavType.StringType
                             nullable = true
                             defaultValue = null
                         },
                     ),
                 ) { backStackEntry ->
-                    val userId = backStackEntry.arguments?.getString(Routes.STORIES.params)
+                    val userId = backStackEntry.arguments?.getString(Routes.COMMUNITY_STORIES.params[0]) ?: ""
 
-                    if (userId == null) {
-                        StoriesListScreen(
-                            viewModel = viewModel(),
-                            navigateDetail = {
-                                navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it))
-                            },
-                        )
-                    } else {
-                        CommunityStoriesListScreen(
-                            viewModel = viewModel(factory = CommunityStoriesListViewModel.Factory(userId)),
-                            navigateDetail = { /* TODO */ }
-                        )
-                    }
+                    CommunityStoriesListScreen(
+                        viewModel = viewModel(factory = CommunityStoriesListViewModel.Factory(userId)),
+                        navigateDetail = { historyId ->
+                            navController.navigate(Routes.COMMUNITY_HISTORY_DETAIL.getDestinationRoute(historyId, userId))
+                        }
+                    )
                 }
                 composable(
                     route = Routes.HISTORY_DETAIL.getRoute(),
                     arguments = listOf(
-                        navArgument(name = Routes.HISTORY_DETAIL.params!!) {
+                        navArgument(name = Routes.HISTORY_DETAIL.params[0]) {
                             type = NavType.StringType
                             defaultValue = ""
                         },
                     ),
                 ) { backStackEntry ->
-                    val historyId = backStackEntry.arguments?.getString(Routes.HISTORY_DETAIL.params) ?: ""
+                    val historyId = backStackEntry.arguments?.getString(Routes.HISTORY_DETAIL.params[0]) ?: ""
                     HistoryDetailScreen(
                         viewModel = viewModel(factory = HistoryDetailViewModel.Factory(historyId))
                     )
+                }
+                composable(
+                    route = Routes.COMMUNITY_HISTORY_DETAIL.getRoute(),
+                    arguments = listOf(
+                        navArgument(name = Routes.COMMUNITY_HISTORY_DETAIL.params[0]) {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                    ),
+                ) { backStackEntry ->
+                    val historyId = backStackEntry.arguments?.getString(Routes.COMMUNITY_HISTORY_DETAIL.params[0]) ?: ""
+                    val userId = backStackEntry.arguments?.getString(Routes.COMMUNITY_HISTORY_DETAIL.params[1]) ?: ""
+                    Text(text = "historyId = $historyId\nuserId = $userId")
                 }
             }
         }
     }
 }
 
-enum class Routes(val params: String?) {
-    HOME(null), STORIES("userId"), HISTORY_DETAIL("historyId");
+enum class Routes(val params: Array<String> = emptyArray()) {
+    HOME,
+    STORIES,
+    COMMUNITY_STORIES(arrayOf("userId")),
+    HISTORY_DETAIL(arrayOf("historyId")),
+    COMMUNITY_HISTORY_DETAIL(arrayOf("historyId", "userId"));
 
-    fun getDestinationRoute(arg: Any?) = "$this/$arg"
-    fun getRoute() = "$this${if (params == null) "" else "/{$params}"}"
+    fun getDestinationRoute(vararg args: String?) = "$this${buildString { args.forEach { append("/$it") } }}"
+    fun getRoute() = "$this${if (params.isEmpty()) "" else buildString { params.forEach { append("/{$it}") } }}"
 }

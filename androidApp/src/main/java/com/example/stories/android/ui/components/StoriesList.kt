@@ -35,7 +35,7 @@ import com.example.stories.model.domain.model.HistoryMocks
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun StoriesColumn(
+fun StoriesListBody(
     stories: List<History>,
     navigateDetail: (String) -> Unit,
     modifier: Modifier = Modifier,

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
-import com.example.stories.android.ui.components.StoriesColumn
+import com.example.stories.android.ui.components.StoriesListBody
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
@@ -58,7 +58,7 @@ fun CommunityStoriesList(
                 .padding(padding)
         ) {
             Header(user = user)
-            StoriesColumn(
+            StoriesListBody(
                 stories = stories,
                 navigateDetail = navigateDetail,
                 modifier = Modifier.padding(horizontal = 16.dp),

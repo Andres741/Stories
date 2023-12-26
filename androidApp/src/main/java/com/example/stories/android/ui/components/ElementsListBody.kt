@@ -1,4 +1,4 @@
-package com.example.stories.android.ui.historyDetail.components
+package com.example.stories.android.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -22,10 +22,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -33,9 +29,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDatePopUp
-import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
-import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.infrastructure.date.LocalDateRange
@@ -49,34 +42,11 @@ fun ElementsListBody(
     history: History,
     editMode: Boolean,
     rotation: () -> Float,
-    onEditElement: (HistoryElement) -> Unit,
-    onEditDateRange: (LocalDateRange) -> Unit,
+    onClickElement: (HistoryElement) -> Unit,
+    onClickDate: (LocalDateRange) -> Unit,
     swapElements: (fromId: String, toId: String) -> Unit,
     deleteElement: (element: HistoryElement) -> Unit,
 ) {
-
-    var editingElement by remember { mutableStateOf(null as HistoryElement?) }
-
-    editingElement?.let { element ->
-        when (element) {
-            is HistoryElement.Text -> EditTextElementPopUp(
-                text = element.text,
-                onConfirm = {
-                    onEditElement(element.copy(text = it))
-                    editingElement = null
-                },
-                onDismiss = { editingElement = null }
-            )
-            is HistoryElement.Image -> EditImageElementPopUp(
-                imageUrl = element.imageResource,
-                onConfirm = {
-                    onEditElement(element.copy(imageResource = it))
-                    editingElement = null
-                },
-                onDismiss = { editingElement = null }
-            )
-        }
-    }
 
     val numElements = history.elements.size
 
@@ -94,7 +64,7 @@ fun ElementsListBody(
                 editMode = editMode,
                 modifier = Modifier
                     .animateItemPlacement()
-                    .clickable(enabled = editMode) { editingElement = historyElement }
+                    .clickable(enabled = editMode) { onClickElement(historyElement) }
                     .graphicsLayer { rotationZ = rotation() },
                 moveElementUp = history.elements.getOrNull(index - 1)?.let { prevElement ->
                     { swapElements(historyElement.id, prevElement.id) }
@@ -107,7 +77,12 @@ fun ElementsListBody(
         }
 
         item {
-            DateRangeFooter(history, editMode, rotation, onEditDateRange)
+            DateRangeFooter(
+                history = history,
+                editMode = editMode,
+                rotation = rotation,
+                onClickDate = onClickDate,
+            )
         }
     }
 }
@@ -168,22 +143,8 @@ fun DateRangeFooter(
     history: History,
     editMode: Boolean,
     rotation: () -> Float,
-    onEditDateRange: (LocalDateRange) -> Unit
+    onClickDate: (LocalDateRange) -> Unit,
 ) {
-
-    var editingDateRange by remember { mutableStateOf(null as LocalDateRange?) }
-    editingDateRange?.let {
-        EditDatePopUp(
-            dateRange = it,
-            onConfirm = { newDateRange ->
-                onEditDateRange(newDateRange)
-                editingDateRange = null
-            },
-            onDismiss = {
-                editingDateRange = null
-            }
-        )
-    }
 
     val color = animateColorAsState(
         targetValue =
@@ -213,7 +174,7 @@ fun DateRangeFooter(
                 .drawBehind {
                     drawOutline(dateShape.createOutline(size, layoutDirection, this), color())
                 }
-                .clickable(enabled = editMode) { editingDateRange = history.dateRange }
+                .clickable(enabled = editMode) { onClickDate(history.dateRange) }
                 .padding(vertical = 5.dp)
         )
     }

@@ -32,7 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.historyDetail.components.AddElementFooter
-import com.example.stories.android.ui.historyDetail.components.ElementsListBody
+import com.example.stories.android.ui.components.ElementsListBody
+import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDatePopUp
+import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
+import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTitlePopUp
 import com.example.stories.android.util.resources.sharedPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
@@ -102,9 +105,59 @@ fun HistoryDetail(
                 )
             ).run { { value } }
 
+            var editingElement by remember { mutableStateOf(null as HistoryElement?) }
+            editingElement?.let { element ->
+                when (element) {
+                    is HistoryElement.Text -> EditTextElementPopUp(
+                        text = element.text,
+                        onConfirm = {
+                            editElement(element.copy(text = it))
+                            editingElement = null
+                        },
+                        onDismiss = { editingElement = null }
+                    )
+                    is HistoryElement.Image -> EditImageElementPopUp(
+                        imageUrl = element.imageResource,
+                        onConfirm = {
+                            editElement(element.copy(imageResource = it))
+                            editingElement = null
+                        },
+                        onDismiss = { editingElement = null }
+                    )
+                }
+            }
+
+            var editingDateRange by remember { mutableStateOf(null as LocalDateRange?) }
+            editingDateRange?.let {
+                EditDatePopUp(
+                    dateRange = it,
+                    onConfirm = { newDateRange ->
+                        editDateRange(newDateRange)
+                        editingDateRange = null
+                    },
+                    onDismiss = {
+                        editingDateRange = null
+                    }
+                )
+            }
+
             Column(modifier = Modifier.align(Alignment.TopCenter)) {
-                TitleHeader(history.title, editMode, rotation, editTitle)
-                ElementsListBody(history, editMode, rotation, editElement, editDateRange, swapElements, deleteElement)
+                TitleHeader(
+                    title = history.title,
+                    editMode = editMode,
+                    rotation = rotation,
+                    onEditTitle = editTitle,
+                )
+
+                ElementsListBody(
+                    history = history,
+                    editMode = editMode,
+                    rotation = rotation,
+                    onClickElement = { editingElement = it },
+                    onClickDate = { editingDateRange = it },
+                    swapElements = swapElements,
+                    deleteElement = deleteElement,
+                )
             }
 
             AddElementFooter(

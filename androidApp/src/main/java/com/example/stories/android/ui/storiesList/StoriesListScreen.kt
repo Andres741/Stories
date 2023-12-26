@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
-import com.example.stories.android.ui.components.StoriesColumn
+import com.example.stories.android.ui.components.StoriesListBody
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
@@ -116,7 +116,7 @@ fun StoriesList(
                 )
             }
 
-            StoriesColumn(
+            StoriesListBody(
                 stories = stories,
                 navigateDetail = navigateDetail,
                 onClickDelete = { deletingHistoryId = it },
