@@ -8,7 +8,7 @@ import io.ktor.client.request.get
 
 class UserApi(private val client: HttpClient) : UserClaudDataSource {
     companion object {
-        private const val USERS_API = "http://192.168.38.55:8080/api/users/v1"
+        private const val USERS_API = "http://192.168.1.137:8080/api/users/v1"
     }
 
     override suspend fun getAllUsers(): List<UserResponse> {
