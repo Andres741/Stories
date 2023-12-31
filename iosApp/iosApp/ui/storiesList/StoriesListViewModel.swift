@@ -4,7 +4,7 @@ import shared
 extension StoriesListScreen {
     @MainActor class StoriesListViewModel : ObservableObject, ViewLifeCycleObserver {
         
-        let commonViewModel = StoriesListCommonViewModel()
+        private let commonViewModel = StoriesListCommonViewModel()
         
         @Published var storiesLoadStatus: LoadStatus<ReferenceList<History>>? = nil
         @Published var newHistory: History? = nil

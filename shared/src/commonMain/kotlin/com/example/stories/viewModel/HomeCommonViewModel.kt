@@ -6,6 +6,7 @@ import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.useCase.GetAllUsersUseCase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
@@ -24,5 +25,9 @@ class HomeCommonViewModel(
         viewModelScope.launch {
             _users.value = getAllUsersUseCase()
         }
+    }
+
+    fun dispose() {
+        viewModelScope.cancel()
     }
 }

@@ -8,5 +8,5 @@ class HomeViewModel : ViewModel() {
 
     private val commonViewModel = HomeCommonViewModel(viewModelScope)
 
-    val users = commonViewModel.users
+    val users get() = commonViewModel.users
 }
