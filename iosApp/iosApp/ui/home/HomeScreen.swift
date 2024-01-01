@@ -22,7 +22,9 @@ struct HomeScreen: View {
                 let users = data.values
 
                 List(users, id: \.id) { user in
-                    UserItem(user)
+                    NavigationLink(destination: CommunityStoriesListScreen(userId: user.id)) {
+                        UserItem(user)
+                    }
                 }
             }
             .navigationTitle(getStringResource(path: \.community))
