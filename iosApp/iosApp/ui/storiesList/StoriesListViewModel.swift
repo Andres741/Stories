@@ -6,7 +6,7 @@ extension StoriesListScreen {
         
         private let commonViewModel = StoriesListCommonViewModel()
         
-        @Published var storiesLoadStatus: LoadStatus<ReferenceList<History>>? = nil
+        @Published var storiesLoadStatus: LoadStatus<Reference<[History]>>? = nil
         @Published var newHistory: History? = nil
         
         func deleteHistory(historyId: String) {
@@ -25,8 +25,8 @@ extension StoriesListScreen {
             commonViewModel.storiesLoadStatus.subscribe { stories in
                 if let stories = stories {
                     self.storiesLoadStatus = stories.mapData { stories in
-                        return ReferenceList(values: stories as? [History] ?? [])
-                    } as? LoadStatus<ReferenceList<History>>
+                        return Reference(value: stories as? [History] ?? [])
+                    } as? LoadStatus<Reference<[History]>>
                 }
             }
             commonViewModel.newHistory.subscribe { newHistory in

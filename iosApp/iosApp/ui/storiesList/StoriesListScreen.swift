@@ -20,7 +20,7 @@ struct StoriesListScreen: View {
             } loadingContent: {
                 DefaultLoadingScreen()
             } successContent: { data in
-                let stories = data.values
+                let stories = data.value
                 
                 if stories.isEmpty {
                     EmptyScreen(

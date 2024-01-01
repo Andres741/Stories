@@ -6,14 +6,14 @@ extension HomeScreen {
         
         private let commonViewModel = HomeCommonViewModel()
         
-        @Published private(set) var usersLoadStatus: LoadStatus<ReferenceList<User>>? = nil
+        @Published private(set) var usersLoadStatus: LoadStatus<Reference<[User]>>? = nil
 
         func startObserving() {
             commonViewModel.users.subscribe { users in
                 if let users = users {
                     self.usersLoadStatus = users.mapData { user in
-                        return ReferenceList(values: user as? [User] ?? [])
-                    } as? LoadStatus<ReferenceList<User>>
+                        return Reference(value: user as? [User] ?? [])
+                    } as? LoadStatus<Reference<[User]>>
                 }
             }
         }

@@ -19,7 +19,7 @@ struct HomeScreen: View {
             } loadingContent: {
                 DefaultLoadingScreen()
             } successContent: { data in
-                let users = data.values
+                let users = data.value
 
                 List(users, id: \.id) { user in
                     NavigationLink(destination: CommunityStoriesListScreen(userId: user.id)) {
