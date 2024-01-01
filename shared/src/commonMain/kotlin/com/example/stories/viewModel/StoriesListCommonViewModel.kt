@@ -9,7 +9,6 @@ import com.example.stories.model.domain.useCase.DeleteHistoryUseCase
 import com.example.stories.model.domain.useCase.GetAllStoriesUseCase
 import com.example.stories.model.domain.model.History
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -46,9 +45,5 @@ class StoriesListCommonViewModel(
 
     fun onNewHistoryConsumed() {
         _newHistory.value = null
-    }
-
-    fun dispose() {
-        viewModelScope.cancel()
     }
 }

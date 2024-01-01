@@ -20,7 +20,6 @@ import com.example.stories.model.domain.useCase.UpdateHistoryTitleUseCase
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -113,9 +112,5 @@ class HistoryDetailCommonViewModel(
         viewModelScope.launch {
             commitChangesUseCase(historyId)
         }
-    }
-
-    fun dispose() {
-        viewModelScope.cancel()
     }
 }
