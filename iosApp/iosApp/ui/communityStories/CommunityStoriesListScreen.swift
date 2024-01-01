@@ -33,7 +33,9 @@ struct CommunityStoriesListScreen: View {
                     )
                 } else {
                     List(stories, id: \.id) { history in
-                        HistoryItem(history: history)
+                        NavigationLink(destination: CommunityHistoryDetailScreen(historyId: history.id, userId: user.id)) {
+                            HistoryItem(history: history)
+                        }
                     }
                 }
                 Spacer()

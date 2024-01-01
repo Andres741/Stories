@@ -13,7 +13,7 @@ class CommunityHistoryDetailViewModel(historyId: String, userId: String) : ViewM
         coroutineScope = viewModelScope,
     )
 
-    val history get() = commonViewModel.history
+    val historyLoadStatus get() = commonViewModel.historyLoadStatus
 
     class Factory(private val historyId: String, private val userId: String) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = CommunityHistoryDetailViewModel(

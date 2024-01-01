@@ -17,12 +17,14 @@ class CommunityHistoryDetailCommonViewModel(
     coroutineScope: CoroutineScope?,
 ) : BaseCommonViewModel(coroutineScope) {
 
-    private val _history = MutableStateFlow(LoadStatus.Loading as LoadStatus<History>)
-    val history = _history.toCommonStateFlow()
+    private val _historyLoadStatus = MutableStateFlow(LoadStatus.Loading as LoadStatus<History>)
+    val historyLoadStatus = _historyLoadStatus.toCommonStateFlow()
+
+    constructor(historyId: String, userId: String): this(historyId = historyId, userId = userId, coroutineScope = null)
 
     init {
         viewModelScope.launch {
-            _history.value = getHistoryFromAPIUseCase(historyId, userId)
+            _historyLoadStatus.value = getHistoryFromAPIUseCase(historyId, userId)
         }
     }
 }

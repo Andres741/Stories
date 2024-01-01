@@ -25,7 +25,7 @@ import com.example.stories.model.domain.model.HistoryMocks
 fun CommunityHistoryDetailScreen(
     viewModel: CommunityHistoryDetailViewModel,
 ) {
-    val historyLoadStatus by viewModel.history.collectAsStateWithLifecycle()
+    val historyLoadStatus by viewModel.historyLoadStatus.collectAsStateWithLifecycle()
 
     LoadingDataScreen(loadStatus = historyLoadStatus) { history ->
         CommunityHistoryDetail(history)

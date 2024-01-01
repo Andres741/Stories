@@ -32,6 +32,7 @@ struct HistoryDetailScreen: View {
         _viewModel = StateObject(wrappedValue: HistoryDetailViewModel(historyId: historyId))
     }
     
+
     var body: some View {
         let historyLoadStatus = viewModel.historyLoadStatus
             
@@ -45,18 +46,7 @@ struct HistoryDetailScreen: View {
             
             let history = viewModel.editingHistory ?? $0
             
-            ZStack {
-                VStack {
-                    Header(history: history)
-                    
-                    BodyList(history: history)
-                }
-                
-                if editMode {
-                    EditMenu()
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
+            ScreenBody(history)
             .toolbar {
                 HStack {
                     if editMode {
@@ -167,53 +157,39 @@ struct HistoryDetailScreen: View {
                 }
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .attach(observer: viewModel)
     }
     
-    @ViewBuilder func Header(history: History) -> some View {
-        VStack(alignment: .leading) {
-            Text(history.title)
-                .font(.title)
-                .onTapGesture {
-                    if editMode {
-                        isEditingTitle = true
+    @ViewBuilder private func ScreenBody(_ history: History) -> some View {
+        ZStack {
+            VStack {
+                HistoryDetailHeader(
+                    history: history,
+                    titleBottomPadding: titleBottomPadding,
+                    editMode: editMode,
+                    inclinationAngle: inclinationAngle,
+                    onClickTitle: { isEditingTitle = true },
+                    onClickDate: { isEditingLocalDateRange = true }
+                )
+                
+                HistoryDetailBodyList(
+                    history: history,
+                    elementsEnumerated: elementsEnumerated,
+                    editMode: editMode,
+                    inclinationAngle: inclinationAngle,
+                    onClickElement: { editingElement = $0 },
+                    swapElements: { fromId, toId in
+                        viewModel.swapElements(fromId: fromId, toId: toId)
+                    },
+                    deleteElement: { element in
+                        viewModel.deleteElement(element: element)
                     }
-                }
-                .rotationEffect(inclinationAngle)
-                .padding(.bottom, titleBottomPadding)
-            
-            HStack {
-                Text(history.dateRange.format())
-                    .rotationEffect(inclinationAngle)
-                    .onTapGesture {
-                        if editMode { isEditingLocalDateRange = true }
-                    }
-                Spacer()
+                )
             }
-        }
-        .padding()
-    }
-    
-    @ViewBuilder func BodyList(history: History) -> some View {
-        List {
-            Section {
-                ForEach(elementsEnumerated, id: \.element.id) { index, element in
-                    ElementItem(
-                        historyElement: element,
-                        editMode: editMode,
-                        onClick: { if editMode { editingElement = $0 } },
-                        moveElementUp: history.elements[safe: index-1].map { prev in {
-                            viewModel.swapElements(fromId: element.id, toId: prev.id)
-                        }},
-                        moveElementDown: history.elements[safe: index+1].map { next in {
-                            viewModel.swapElements(fromId: element.id, toId: next.id)
-                        }},
-                        deleteElement: (history.elements.count > 1) ? { element in
-                            viewModel.deleteElement(element: element)
-                        } : nil
-                    )
-                    .rotationEffect(inclinationAngle)
-                }
+            
+            if editMode {
+                EditMenu()
             }
         }
     }
@@ -238,55 +214,8 @@ struct HistoryDetailScreen: View {
     }
 }
 
-@ViewBuilder func ElementItem(
-    historyElement: HistoryElement,
-    editMode: Bool,
-    onClick: @escaping (HistoryElement) -> Void,
-    moveElementUp: (() -> Void)?,
-    moveElementDown: (() -> Void)?,
-    deleteElement: ((HistoryElement) -> Void)?
-) -> some View {
-    VStack {
-        switch historyElement {
-        case let text as HistoryElement.Text:
-            Text(text.text).onTapGesture { onClick(text) }
-        case let image as HistoryElement.Image:
-            AsyncItemImage(url: image.imageResource).onTapGesture { onClick(image) }
-        default:
-            EmptyView()
-        }
-        if editMode {
-            ZStack {
-                HStack {
-                    Button(action: moveElementUp ?? {}) {
-                        Image(systemName: "arrow.up")
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(moveElementUp == nil)
-                    
-                    Button(action: moveElementDown ?? {}) {
-                        Image(systemName: "arrow.down")
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(moveElementDown == nil)
-                }
-                HStack {
-                    Spacer()
-                    Button(action: { deleteElement?(historyElement) }) {
-                        Image(systemName: "trash")
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(deleteElement == nil)
-                }
-            }
-            .transition(.opacity)
-            .padding()
-        }
-    }
-}
-
 struct HistoryDetailScreen_Previews: PreviewProvider {
     static var previews: some View {
-        HistoryDetailScreen(historyId: "1")
+        HistoryDetailScreen(historyId: "0")
     }
 }
