@@ -19,12 +19,12 @@ class CommunityStoriesListCommonViewModel(
 
     constructor(userId: String): this(userId = userId, coroutineScope = null)
 
-    private val _userAndStories = MutableStateFlow(LoadStatus.Loading as LoadStatus<Pair<User, List<History>>>)
-    val userAndStories = _userAndStories.toCommonStateFlow()
+    private val _userAndStoriesLoadStatus = MutableStateFlow(LoadStatus.Loading as LoadStatus<Pair<User, List<History>>>)
+    val userAndStoriesLoadStatus = _userAndStoriesLoadStatus.toCommonStateFlow()
 
     init {
         viewModelScope.launch {
-            _userAndStories.value = getUserStoriesUseCase(userId)
+            _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId)
         }
     }
 }

@@ -32,6 +32,7 @@
 
     <string name="empty_history_list_title">No stories yet</string>
     <string name="empty_history_list_text">Tell us about your stories by tapping the add button or go outside and just let things happened</string>
+    <string name="empty_community_history_list_text">This user still hasn\'t stories posted</string>
 
     <string name="create_history">Create</string>
 

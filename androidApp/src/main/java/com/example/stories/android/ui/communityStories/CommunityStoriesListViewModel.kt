@@ -9,7 +9,7 @@ class CommunityStoriesListViewModel(userId: String) : ViewModel() {
 
     private val commonViewModel = CommunityStoriesListCommonViewModel(userId, viewModelScope)
 
-    val userAndStories get() = commonViewModel.userAndStories
+    val userAndStoriesLoadStatus get() = commonViewModel.userAndStoriesLoadStatus
 
     class Factory(private val userId: String) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = CommunityStoriesListViewModel(userId) as T

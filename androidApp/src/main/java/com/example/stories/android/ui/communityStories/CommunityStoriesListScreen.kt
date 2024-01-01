@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.StoriesListBody
+import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
@@ -32,7 +33,7 @@ fun CommunityStoriesListScreen(
     viewModel: CommunityStoriesListViewModel,
     navigateDetail: (String) -> Unit,
 ) {
-    val storiesLoadStatus by viewModel.userAndStories.collectAsStateWithLifecycle()
+    val storiesLoadStatus by viewModel.userAndStoriesLoadStatus.collectAsStateWithLifecycle()
 
     LoadingDataScreen(loadStatus = storiesLoadStatus) { userAndStories ->
         val (user, stories) = userAndStories
@@ -61,6 +62,8 @@ fun CommunityStoriesList(
             StoriesListBody(
                 stories = stories,
                 navigateDetail = navigateDetail,
+                emptyScreenTitle = getStringResource { empty_history_list_title },
+                emptyScreenText = getStringResource { empty_community_history_list_text },
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }

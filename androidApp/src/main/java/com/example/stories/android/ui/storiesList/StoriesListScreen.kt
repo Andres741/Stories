@@ -119,6 +119,8 @@ fun StoriesList(
             StoriesListBody(
                 stories = stories,
                 navigateDetail = navigateDetail,
+                emptyScreenTitle = getStringResource { empty_history_list_title },
+                emptyScreenText = getStringResource { empty_history_list_text },
                 onClickDelete = { deletingHistoryId = it },
                 modifier = Modifier.padding(horizontal = 16.dp),
             )

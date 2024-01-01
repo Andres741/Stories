@@ -38,14 +38,16 @@ import com.example.stories.model.domain.model.HistoryMocks
 fun StoriesListBody(
     stories: List<History>,
     navigateDetail: (String) -> Unit,
+    emptyScreenTitle: String,
+    emptyScreenText: String,
     modifier: Modifier = Modifier,
     onClickDelete: ((String) -> Unit)? = null,
 ) {
 
     if (stories.isEmpty()) {
         EmptyScreen(
-            title = getStringResource { empty_history_list_title },
-            text = getStringResource { empty_history_list_text },
+            title = emptyScreenTitle,
+            text = emptyScreenText,
         )
         return
     }
