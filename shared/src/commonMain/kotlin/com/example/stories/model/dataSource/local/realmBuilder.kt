@@ -5,6 +5,7 @@ import com.example.stories.model.dataSource.local.history.model.HistoryElementRe
 import com.example.stories.model.dataSource.local.history.model.HistoryRealm
 import com.example.stories.model.dataSource.local.history.model.ImageElementRealm
 import com.example.stories.model.dataSource.local.history.model.TextElementRealm
+import com.example.stories.model.dataSource.local.user.model.UserRealm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
@@ -16,6 +17,7 @@ fun buildRealm() = Realm.open(
             HistoryElementRealm::class,
             TextElementRealm::class,
             ImageElementRealm::class,
+            UserRealm::class,
         )
     )
 )

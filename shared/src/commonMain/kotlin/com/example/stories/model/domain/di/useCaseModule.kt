@@ -14,6 +14,7 @@ import com.example.stories.model.domain.useCase.GetClaudMockUseCase
 import com.example.stories.model.domain.useCase.GetEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.GetHistoryByIdUseCase
 import com.example.stories.model.domain.useCase.GetHistoryFromAPIUseCase
+import com.example.stories.model.domain.useCase.GetLocalUserUseCase
 import com.example.stories.model.domain.useCase.GetUserStoriesUseCase
 import com.example.stories.model.domain.useCase.SwapElementsUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryDateRangeUseCase
@@ -41,4 +42,5 @@ val useCasesModule = module {
     single { GetAllUsersUseCase(get()) }
     single { GetUserStoriesUseCase(get(), get()) }
     single { GetHistoryFromAPIUseCase(get()) }
+    single { GetLocalUserUseCase(get()) }
 }

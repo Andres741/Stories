@@ -8,9 +8,11 @@ import com.example.stories.model.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.model.domain.useCase.DeleteHistoryUseCase
 import com.example.stories.model.domain.useCase.GetAllStoriesUseCase
 import com.example.stories.model.domain.model.History
+import com.example.stories.model.domain.useCase.GetLocalUserUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
@@ -18,6 +20,7 @@ import org.koin.core.component.get
 class StoriesListCommonViewModel(
     coroutineScope: CoroutineScope? = null,
     getAllStoriesUseCase: GetAllStoriesUseCase = Component.get(),
+    getLocalUserUseCase: GetLocalUserUseCase = Component.get(),
     private val deleteHistoryUseCase: DeleteHistoryUseCase = Component.get(),
     private val createBasicHistoryUseCase: CreateBasicHistoryUseCase = Component.get(),
 ) : BaseCommonViewModel(coroutineScope) {
@@ -31,8 +34,16 @@ class StoriesListCommonViewModel(
     private val _newHistory = MutableStateFlow(null as History?)
     val newHistory = _newHistory.toCommonStateFlow()
 
-    private val _isLogged = MutableStateFlow(false)
+    private val _isLogged = MutableStateFlow(true)
     val isLogged = _isLogged.toCommonStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getLocalUserUseCase().collectLatest { user ->
+                _isLogged.value = user != null
+            }
+        }
+    }
 
     fun deleteHistory(historyId: String) {
         viewModelScope.launch {

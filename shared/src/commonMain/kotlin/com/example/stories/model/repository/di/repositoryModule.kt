@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<HistoryRepository> { HistoryRepositoryImpl(get(), get()) }
-    single<UserRepository> { UserRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get()) }
 }
