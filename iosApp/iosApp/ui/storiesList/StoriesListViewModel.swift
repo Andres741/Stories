@@ -8,6 +8,7 @@ extension StoriesListScreen {
         
         @Published var storiesLoadStatus: LoadStatus<Reference<[History]>>? = nil
         @Published var newHistory: History? = nil
+        @Published var isLogged = false
         
         func deleteHistory(historyId: String) {
             commonViewModel.deleteHistory(historyId: historyId)
@@ -31,6 +32,9 @@ extension StoriesListScreen {
             }
             commonViewModel.newHistory.subscribe { newHistory in
                 self.newHistory = newHistory
+            }
+            commonViewModel.isLogged.subscribe { isLogged in
+                self.isLogged = isLogged?.boolValue ?? false
             }
         }
         

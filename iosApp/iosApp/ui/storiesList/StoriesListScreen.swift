@@ -4,6 +4,7 @@ import shared
 struct StoriesListScreen: View {
     
     @ObservedObject var viewModel: StoriesListViewModel
+    @State var isLogged: Bool = false
     
     init() {
         self.viewModel = StoriesListViewModel()
@@ -22,11 +23,17 @@ struct StoriesListScreen: View {
             } successContent: { data in
                 let stories = data.value
                 
+                if (!isLogged) {
+                    NotLoggedBanner().padding(.bottom)
+                }
+                
                 if stories.isEmpty {
+                    Spacer()
                     EmptyScreen(
                         title: getStringResource(path: \.empty_history_list_title),
                         text: getStringResource(path: \.empty_history_list_text)
                     )
+                    Spacer()
                 } else {
                     List(stories, id: \.id) { history in
                         NavigationLink(
@@ -65,9 +72,29 @@ struct StoriesListScreen: View {
                     HistoryDetailScreen(historyId: id)
                 }
             }
+            .onChange(of: viewModel.isLogged) { isLogged in
+                withAnimation {
+                    self.isLogged = isLogged
+                }
+            }
         }
         .attach(observer: viewModel)
     }
+}
+
+@ViewBuilder fileprivate func NotLoggedBanner() -> some View {
+    NavigationLink(destination: EmptyView()) {
+        HStack {
+            Text(getStringResource(path: \.not_logged_warn))
+            Spacer()
+            Image(systemName: "arrow.right")
+        }
+        .padding()
+        .background(Color.accentColor)
+        .clipShape(RoundedRectangle(cornerRadius: 25.0))
+        .padding(.horizontal)
+    }
+    .buttonStyle(PlainButtonStyle())
 }
 
 struct StoriesListScreen_Previews: PreviewProvider {
