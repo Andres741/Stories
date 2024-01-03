@@ -31,6 +31,9 @@ class StoriesListCommonViewModel(
     private val _newHistory = MutableStateFlow(null as History?)
     val newHistory = _newHistory.toCommonStateFlow()
 
+    private val _isLogged = MutableStateFlow(false)
+    val isLogged = _isLogged.toCommonStateFlow()
+
     fun deleteHistory(historyId: String) {
         viewModelScope.launch {
             deleteHistoryUseCase(historyId)

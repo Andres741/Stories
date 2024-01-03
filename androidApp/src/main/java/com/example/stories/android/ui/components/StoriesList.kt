@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stories.android.ui.StoriesTheme
-import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.AsyncItemImage
 import com.example.stories.android.util.ui.EmptyScreen
 import com.example.stories.android.util.ui.ItemCard
@@ -98,12 +97,14 @@ fun HistoryItem(
             }
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 8.dp),
+        ) {
             Text(
                 text = remember(history.dateRange.format()) {
                     history.dateRange.format()
                 },
-                modifier = Modifier.padding(top = 8.dp),
                 style = MaterialTheme.typography.labelLarge
             )
 

@@ -38,4 +38,6 @@
 
     <string name="community">Community</string>
     <string name="my_posts">My posts</string>
+
+    <string name="not_logged_warn">You are not log in, press here to enjoy the full experience.</string>
 </resources>

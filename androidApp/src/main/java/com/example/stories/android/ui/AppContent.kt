@@ -43,6 +43,7 @@ fun AppContent() {
                     StoriesListScreen(
                         viewModel = viewModel(),
                         navigateDetail = { navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it)) },
+                        navigateLogIn = { TODO() },
                     )
                 }
                 composable(

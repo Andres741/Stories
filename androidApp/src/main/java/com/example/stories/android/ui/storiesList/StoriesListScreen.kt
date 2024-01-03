@@ -1,11 +1,17 @@
 package com.example.stories.android.ui.storiesList
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -20,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,19 +38,25 @@ import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
+import kotlinx.coroutines.delay
 
 @Composable
 fun StoriesListScreen(
     viewModel: StoriesListViewModel,
     navigateDetail: (String) -> Unit,
+    navigateLogIn: () -> Unit,
 ) {
     val storiesLoadStatus by viewModel.storiesLoadStatus.collectAsStateWithLifecycle()
     LoadingDataScreen(storiesLoadStatus) { stories ->
         val navigateHistory by viewModel.newHistory.collectAsStateWithLifecycle()
+        val isLogged by viewModel.isLogged.collectAsStateWithLifecycle()
+
         StoriesList(
             stories = stories,
             navigateHistory = navigateHistory,
+            isLogged = isLogged,
             navigateDetail = navigateDetail,
+            navigateLogIn = navigateLogIn,
             deleteHistory = viewModel::deleteHistory,
             createBasicHistory = viewModel::createBasicHistory,
             onNewHistoryConsumed = viewModel::onNewHistoryConsumed,
@@ -55,7 +68,9 @@ fun StoriesListScreen(
 fun StoriesList(
     stories: List<History>,
     navigateHistory: History?,
+    isLogged: Boolean,
     navigateDetail: (String) -> Unit,
+    navigateLogIn: () -> Unit,
     deleteHistory: (String) -> Unit,
     createBasicHistory: (title: String, text: String) -> Unit,
     onNewHistoryConsumed: () -> Unit,
@@ -97,6 +112,11 @@ fun StoriesList(
                 style = MaterialTheme.typography.displayMedium
             )
 
+            NotLoggedBanner(
+                isLogged = isLogged,
+                onClickBanner = navigateLogIn,
+            )
+
             var deletingHistoryId by remember { mutableStateOf(null as String?) }
             deletingHistoryId?.let { id ->
                 AlertDialog(
@@ -128,6 +148,39 @@ fun StoriesList(
     }
 }
 
+@Composable
+private fun NotLoggedBanner(
+    isLogged: Boolean,
+    onClickBanner: () -> Unit,
+) {
+    AnimatedVisibility(
+        visible = !isLogged,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .background(color = MaterialTheme.colorScheme.tertiary, shape = MaterialTheme.shapes.small)
+                .fillMaxWidth()
+                .clickable { onClickBanner() },
+        ) {
+            Text(
+                text = getStringResource { not_logged_warn },
+                modifier = Modifier.padding(8.dp).weight(1f),
+                color = MaterialTheme.colorScheme.onTertiary,
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = "",
+                modifier = Modifier.size(36.dp).align(Alignment.CenterVertically),
+                tint = MaterialTheme.colorScheme.onTertiary,
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun StoriesList_preview() {
@@ -136,10 +189,21 @@ fun StoriesList_preview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            var showLogged by remember { mutableStateOf(true) }
+
+            LaunchedEffect(key1 = showLogged, block = {
+                if (!showLogged) {
+                    delay(1000)
+                    showLogged = true
+                }
+            })
+
             StoriesList(
                 stories = HistoryMocks().getMockStories(),
                 navigateHistory = null,
+                isLogged = showLogged.not(),
                 navigateDetail = {},
+                navigateLogIn = { showLogged = false },
                 deleteHistory = {},
                 createBasicHistory = { _, _ -> },
                 onNewHistoryConsumed = {},
