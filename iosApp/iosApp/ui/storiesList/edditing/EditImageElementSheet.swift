@@ -24,17 +24,13 @@ struct EditImageElementSheet: View {
     var body: some View {
         NavigationView {
             Form {
-                AsyncImage(
-                    url: URL(string: inputText)
-                ) { phase in
-                    switch imageLoader.phase {
-                    case .empty:
-                        ProgressView()
-                    case .failure(_):
-                        EmptyView()
-                    case.success(let image):
-                        image.resizable().aspectRatio(contentMode: .fit)
-                    }
+                switch imageLoader.phase {
+                case .empty:
+                    ProgressView()
+                case .failure(_):
+                    EmptyView()
+                case.success(let image):
+                    image.resizable().aspectRatio(contentMode: .fit)
                 }
                 
                 TextField(
@@ -55,16 +51,12 @@ struct EditImageElementSheet: View {
                 }
             }
             .onAppear {
-                loadImageFrom(inputText)
+                imageLoader.loadImageFrom(inputText)
             }
             .onChange(of: inputText) { newValue in
-                loadImageFrom(newValue)
+                imageLoader.loadImageFrom(newValue)
             }
         }
-    }
-    
-    private func loadImageFrom(_ string: String) {
-        imageLoader.source = URL(string: string).map { .remote(url: $0) }
     }
 }
 

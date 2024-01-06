@@ -17,6 +17,8 @@
 		CC502F122A769C1F00AFB821 /* LoadingDataScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC502F112A769C1F00AFB821 /* LoadingDataScreen.swift */; };
 		CC502F152A76B39000AFB821 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC502F142A76B39000AFB821 /* Reference.swift */; };
 		CC502F182A76D1A800AFB821 /* textResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC502F172A76D1A800AFB821 /* textResources.swift */; };
+		CC592F752B462BBE00AB46E3 /* LogInScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC592F742B462BBE00AB46E3 /* LogInScreen.swift */; };
+		CC592F772B462BD700AB46E3 /* LogInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC592F762B462BD700AB46E3 /* LogInViewModel.swift */; };
 		CC65C9632A6D5138001166A1 /* HistoryDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC65C9622A6D5138001166A1 /* HistoryDetailScreen.swift */; };
 		CC65C9662A6D532A001166A1 /* HistoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC65C9652A6D532A001166A1 /* HistoryDetailViewModel.swift */; };
 		CC6BAA9F2A6C33A5000DFD55 /* StoriesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6BAA9E2A6C33A5000DFD55 /* StoriesListViewModel.swift */; };
@@ -69,6 +71,8 @@
 		CC502F112A769C1F00AFB821 /* LoadingDataScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingDataScreen.swift; sourceTree = "<group>"; };
 		CC502F142A76B39000AFB821 /* Reference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
 		CC502F172A76D1A800AFB821 /* textResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = textResources.swift; sourceTree = "<group>"; };
+		CC592F742B462BBE00AB46E3 /* LogInScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInScreen.swift; sourceTree = "<group>"; };
+		CC592F762B462BD700AB46E3 /* LogInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewModel.swift; sourceTree = "<group>"; };
 		CC65C9622A6D5138001166A1 /* HistoryDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDetailScreen.swift; sourceTree = "<group>"; };
 		CC65C9652A6D532A001166A1 /* HistoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDetailViewModel.swift; sourceTree = "<group>"; };
 		CC6BAA9E2A6C33A5000DFD55 /* StoriesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesListViewModel.swift; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 		CC19CA822A79B0E60044C140 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				CC592F732B462BA100AB46E3 /* logIn */,
 				CCA63A182B434A8E00128450 /* communityHistoryDetail */,
 				CCA63A152B433BC600128450 /* views */,
 				CCA63A102B41CD6900128450 /* communityStories */,
@@ -192,6 +197,15 @@
 				CCC7442F2A8B684300D221B2 /* ImageLoader.swift */,
 			);
 			path = resources;
+			sourceTree = "<group>";
+		};
+		CC592F732B462BA100AB46E3 /* logIn */ = {
+			isa = PBXGroup;
+			children = (
+				CC592F742B462BBE00AB46E3 /* LogInScreen.swift */,
+				CC592F762B462BD700AB46E3 /* LogInViewModel.swift */,
+			);
+			path = logIn;
 			sourceTree = "<group>";
 		};
 		CC65C9642A6D52CB001166A1 /* historyDetail */ = {
@@ -384,9 +398,11 @@
 				CCA63A202B4361E700128450 /* detailViews.swift in Sources */,
 				CC8EE2792B3E332900BAED7A /* HomeScreen.swift in Sources */,
 				CCBFE7302A705C0F007C6BB5 /* imageResources.swift in Sources */,
+				CC592F772B462BD700AB46E3 /* LogInViewModel.swift in Sources */,
 				CCC744302A8B684300D221B2 /* ImageLoader.swift in Sources */,
 				CCA63A1C2B434AD000128450 /* CommunityHistoryDetailScreen.swift in Sources */,
 				CC65C9662A6D532A001166A1 /* HistoryDetailViewModel.swift in Sources */,
+				CC592F752B462BBE00AB46E3 /* LogInScreen.swift in Sources */,
 				CCE7AF1C2A87FB32002DCB8A /* EditTitle.swift in Sources */,
 				CC04501D2A91061A00996A61 /* EditDateRange.swift in Sources */,
 				CC65C9632A6D5138001166A1 /* HistoryDetailScreen.swift in Sources */,

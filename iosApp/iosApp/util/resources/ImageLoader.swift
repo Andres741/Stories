@@ -85,4 +85,8 @@ class ImageLoader: ObservableObject {
     deinit {
         loadTask = nil
     }
+    
+    func loadImageFrom(_ string: String) {
+        source = URL(string: string).map { .remote(url: $0) }
+    }
 }

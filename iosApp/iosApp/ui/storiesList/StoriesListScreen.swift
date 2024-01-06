@@ -6,6 +6,8 @@ struct StoriesListScreen: View {
     @ObservedObject var viewModel: StoriesListViewModel
     @State var isLogged: Bool = false
     
+    @State var isShowingLogIn = false
+    
     init() {
         self.viewModel = StoriesListViewModel()
     }
@@ -24,7 +26,7 @@ struct StoriesListScreen: View {
                 let stories = data.value
                 
                 if (!isLogged) {
-                    NotLoggedBanner().padding(.bottom)
+                    NotLoggedBanner(onClick: { isShowingLogIn = true }).padding(.bottom)
                 }
                 
                 if stories.isEmpty {
@@ -79,11 +81,14 @@ struct StoriesListScreen: View {
             }
         }
         .attach(observer: viewModel)
+        .navigationDestination(isPresented: $isShowingLogIn) {
+            LogInScreen(showLogIn: $isShowingLogIn)
+        }
     }
 }
 
-@ViewBuilder fileprivate func NotLoggedBanner() -> some View {
-    NavigationLink(destination: EmptyView()) {
+@ViewBuilder fileprivate func NotLoggedBanner(onClick: @escaping () -> Void) -> some View {
+    Button(action: onClick){
         HStack {
             Text(getStringResource(path: \.not_logged_warn))
             Spacer()
