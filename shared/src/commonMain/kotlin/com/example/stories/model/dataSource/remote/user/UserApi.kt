@@ -5,6 +5,8 @@ import com.example.stories.model.repository.dataSource.UserClaudDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
 
 class UserApi(private val client: HttpClient) : UserClaudDataSource {
     companion object {
@@ -17,5 +19,13 @@ class UserApi(private val client: HttpClient) : UserClaudDataSource {
 
     override suspend fun getUserById(userId: String): UserResponse {
         return client.get("$USERS_API/user/$userId").body()
+    }
+
+    override suspend fun createUser(name: String, description: String, profileImage: String?): UserResponse {
+        return client.post("$USERS_API/user") {
+            parameter("userName", name)
+            parameter("description", description)
+            parameter("profileImage", profileImage)
+        }.body()
     }
 }

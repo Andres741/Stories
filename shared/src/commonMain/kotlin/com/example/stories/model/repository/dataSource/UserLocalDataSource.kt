@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserLocalDataSource {
     fun getLocalUser(): Flow<UserRealm?>
+    suspend fun saveUser(user: UserRealm)
 }

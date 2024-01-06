@@ -5,6 +5,7 @@ import com.example.stories.model.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.model.domain.useCase.CreateEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.CreateImageElementUseCase
 import com.example.stories.model.domain.useCase.CreateTextElementUseCase
+import com.example.stories.model.domain.useCase.CreateUserUseCase
 import com.example.stories.model.domain.useCase.DeleteEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.DeleteElementUseCase
 import com.example.stories.model.domain.useCase.DeleteHistoryUseCase
@@ -43,4 +44,5 @@ val useCasesModule = module {
     single { GetUserStoriesUseCase(get(), get()) }
     single { GetHistoryFromAPIUseCase(get()) }
     single { GetLocalUserUseCase(get()) }
+    single { CreateUserUseCase(get()) }
 }

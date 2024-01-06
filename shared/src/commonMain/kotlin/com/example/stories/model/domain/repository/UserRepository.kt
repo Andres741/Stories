@@ -8,4 +8,5 @@ interface UserRepository {
     suspend fun getAllUsers(): LoadStatus<List<User>>
     suspend fun getUserById(userId: String): LoadStatus<User>
     fun getLocalUser(): Flow<User?>
+    suspend fun createUser(name: String, description: String, profileImage: String?): LoadStatus<User>
 }

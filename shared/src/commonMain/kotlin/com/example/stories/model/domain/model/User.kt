@@ -23,3 +23,10 @@ fun UserRealm.toDomain() = User(
     description = description,
     profileImage = profileImage,
 )
+
+fun User.toRealm() = UserRealm().also {
+    it._id = id
+    it.name = name
+    it.description = description
+    it.profileImage = profileImage
+}
