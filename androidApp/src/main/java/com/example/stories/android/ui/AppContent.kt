@@ -18,6 +18,7 @@ import com.example.stories.android.ui.communityStories.CommunityStoriesListViewM
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.home.HomeScreen
+import com.example.stories.android.ui.logIn.LogInScreen
 import com.example.stories.android.ui.storiesList.StoriesListScreen
 
 @Composable
@@ -43,7 +44,7 @@ fun AppContent() {
                     StoriesListScreen(
                         viewModel = viewModel(),
                         navigateDetail = { navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it)) },
-                        navigateLogIn = { TODO() },
+                        navigateLogIn = { navController.navigate(Routes.LOGIN.name) },
                     )
                 }
                 composable(
@@ -99,6 +100,12 @@ fun AppContent() {
                         )
                     )
                 }
+                composable(route = Routes.LOGIN.getRoute()) {
+                    LogInScreen(
+                        viewModel = viewModel(),
+                        navigateBack = { navController.popBackStack() }
+                    )
+                }
             }
         }
     }
@@ -109,7 +116,9 @@ enum class Routes(val params: Array<String> = emptyArray()) {
     STORIES,
     COMMUNITY_STORIES(arrayOf("userId")),
     HISTORY_DETAIL(arrayOf("historyId")),
-    COMMUNITY_HISTORY_DETAIL(arrayOf("historyId", "userId"));
+    COMMUNITY_HISTORY_DETAIL(arrayOf("historyId", "userId")),
+    LOGIN,
+    ;
 
     fun getDestinationRoute(vararg args: String?) = "$this${buildString { args.forEach { append("/$it") } }}"
     fun getRoute() = "$this${if (params.isEmpty()) "" else buildString { params.forEach { append("/{$it}") } }}"

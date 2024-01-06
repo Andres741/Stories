@@ -40,4 +40,12 @@
     <string name="my_posts">My posts</string>
 
     <string name="not_logged_warn">You are not log in, press here to enjoy the full experience.</string>
+
+    <string name="log_in">Log in</string>
+    <string name="crate_user">Crate new user</string>
+    <string name="user_name">Name</string>
+    <string name="user_description">Description</string>
+    <string name="user_profile_image">Profile image</string>
+    <string name="not_loaded_profile_image_warn">If image isn\'t load the URL won\'t be saved.</string>
+    <string name="user_name_not_valid_warn">User name cannot be empty.</string>
 </resources>
