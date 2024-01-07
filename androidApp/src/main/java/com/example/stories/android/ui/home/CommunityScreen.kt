@@ -35,15 +35,15 @@ import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
 
 @Composable
-fun HomeScreen(
-    homeViewModel: HomeViewModel,
+fun CommunityScreen(
+    viewModel: CommunityViewModel,
     navigateToStories: (historyId: String?) -> Unit,
 ) {
 
-    val usersLoadStatus by homeViewModel.users.collectAsStateWithLifecycle()
+    val usersLoadStatus by viewModel.users.collectAsStateWithLifecycle()
 
     LoadingDataScreen(loadStatus = usersLoadStatus) { users ->
-        Home(
+        Community(
             users = users,
             navigateToStories = navigateToStories
         )
@@ -51,7 +51,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun Home(
+fun Community(
     users: List<User>,
     navigateToStories: (historyId: String?) -> Unit,
 ) {
@@ -118,13 +118,13 @@ fun UserItem(
 
 @Preview
 @Composable
-fun HomeScreen_preview() {
+fun CommunityScreen_preview() {
     StoriesTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Home(
+            Community(
                 users = HistoryMocks().getMockUsers(),
                 navigateToStories = {}
             )

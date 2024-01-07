@@ -24,8 +24,8 @@
 		CC6BAA9F2A6C33A5000DFD55 /* StoriesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6BAA9E2A6C33A5000DFD55 /* StoriesListViewModel.swift */; };
 		CC6BAAA42A6C3CC9000DFD55 /* ViewLifeCycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6BAAA32A6C3CC9000DFD55 /* ViewLifeCycleObserver.swift */; };
 		CC7B11062A8C17F3003B611E /* StateAlternator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7B11052A8C17F3003B611E /* StateAlternator.swift */; };
-		CC8EE2792B3E332900BAED7A /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8EE2782B3E332900BAED7A /* HomeScreen.swift */; };
-		CC8EE27D2B3E338300BAED7A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8EE27C2B3E338300BAED7A /* HomeViewModel.swift */; };
+		CC8EE2792B3E332900BAED7A /* CommunityScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8EE2782B3E332900BAED7A /* CommunityScreen.swift */; };
+		CC8EE27D2B3E338300BAED7A /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8EE27C2B3E338300BAED7A /* CommunityViewModel.swift */; };
 		CC902B742A883C4500B4B45D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC902B732A883C4500B4B45D /* StringExtensions.swift */; };
 		CC902B772A89364600B4B45D /* EditTextElementSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC902B762A89364600B4B45D /* EditTextElementSheet.swift */; };
 		CC902B792A89727800B4B45D /* EditImageElementSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC902B782A89727800B4B45D /* EditImageElementSheet.swift */; };
@@ -78,8 +78,8 @@
 		CC6BAA9E2A6C33A5000DFD55 /* StoriesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesListViewModel.swift; sourceTree = "<group>"; };
 		CC6BAAA32A6C3CC9000DFD55 /* ViewLifeCycleObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLifeCycleObserver.swift; sourceTree = "<group>"; };
 		CC7B11052A8C17F3003B611E /* StateAlternator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateAlternator.swift; sourceTree = "<group>"; };
-		CC8EE2782B3E332900BAED7A /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
-		CC8EE27C2B3E338300BAED7A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		CC8EE2782B3E332900BAED7A /* CommunityScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityScreen.swift; sourceTree = "<group>"; };
+		CC8EE27C2B3E338300BAED7A /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		CC902B732A883C4500B4B45D /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		CC902B762A89364600B4B45D /* EditTextElementSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTextElementSheet.swift; sourceTree = "<group>"; };
 		CC902B782A89727800B4B45D /* EditImageElementSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageElementSheet.swift; sourceTree = "<group>"; };
@@ -245,8 +245,8 @@
 		CC8EE2772B3E330800BAED7A /* home */ = {
 			isa = PBXGroup;
 			children = (
-				CC8EE2782B3E332900BAED7A /* HomeScreen.swift */,
-				CC8EE27C2B3E338300BAED7A /* HomeViewModel.swift */,
+				CC8EE2782B3E332900BAED7A /* CommunityScreen.swift */,
+				CC8EE27C2B3E338300BAED7A /* CommunityViewModel.swift */,
 			);
 			path = home;
 			sourceTree = "<group>";
@@ -396,7 +396,7 @@
 				CCE233C12A9E7B7B00965D80 /* collectionExtensions.swift in Sources */,
 				CC502F182A76D1A800AFB821 /* textResources.swift in Sources */,
 				CCA63A202B4361E700128450 /* detailViews.swift in Sources */,
-				CC8EE2792B3E332900BAED7A /* HomeScreen.swift in Sources */,
+				CC8EE2792B3E332900BAED7A /* CommunityScreen.swift in Sources */,
 				CCBFE7302A705C0F007C6BB5 /* imageResources.swift in Sources */,
 				CC592F772B462BD700AB46E3 /* LogInViewModel.swift in Sources */,
 				CCC744302A8B684300D221B2 /* ImageLoader.swift in Sources */,
@@ -409,7 +409,7 @@
 				CC902B742A883C4500B4B45D /* StringExtensions.swift in Sources */,
 				CC6BAA9F2A6C33A5000DFD55 /* StoriesListViewModel.swift in Sources */,
 				CCBE0B0B2A9FEFDD00DE8315 /* EmptyScreen.swift in Sources */,
-				CC8EE27D2B3E338300BAED7A /* HomeViewModel.swift in Sources */,
+				CC8EE27D2B3E338300BAED7A /* CommunityViewModel.swift in Sources */,
 				CC502F122A769C1F00AFB821 /* LoadingDataScreen.swift in Sources */,
 				CC502F152A76B39000AFB821 /* Reference.swift in Sources */,
 				CC902B7B2A89755B00B4B45D /* EditElementSheet.swift in Sources */,

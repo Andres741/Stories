@@ -1,10 +1,10 @@
 import Foundation
 import shared
 
-extension HomeScreen {
-    @MainActor class HomeScreenViewModel : ObservableObject, ViewLifeCycleObserver {
+extension CommunityScreen {
+    @MainActor class CommunityViewModel : ObservableObject, ViewLifeCycleObserver {
         
-        private let commonViewModel = HomeCommonViewModel()
+        private let commonViewModel = CommunityCommonViewModel()
         
         @Published private(set) var usersLoadStatus: LoadStatus<Reference<[User]>>? = nil
 

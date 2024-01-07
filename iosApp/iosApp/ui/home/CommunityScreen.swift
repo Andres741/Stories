@@ -1,13 +1,13 @@
 import SwiftUI
 import shared
 
-struct HomeScreen: View {
+struct CommunityScreen: View {
     
-    @ObservedObject var viewModel: HomeScreenViewModel
+    @ObservedObject var viewModel: CommunityViewModel
     @State var showPosts = false
     
     init() {
-        self.viewModel = HomeScreenViewModel()
+        self.viewModel = CommunityViewModel()
     }
     
     var body: some View {
@@ -56,5 +56,5 @@ struct HomeScreen: View {
 }
 
 #Preview {
-    HomeScreen()
+    CommunityScreen()
 }

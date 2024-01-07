@@ -17,7 +17,7 @@ import com.example.stories.android.ui.communityStories.CommunityStoriesListScree
 import com.example.stories.android.ui.communityStories.CommunityStoriesListViewModel
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
-import com.example.stories.android.ui.home.HomeScreen
+import com.example.stories.android.ui.home.CommunityScreen
 import com.example.stories.android.ui.logIn.LogInScreen
 import com.example.stories.android.ui.storiesList.StoriesListScreen
 
@@ -30,10 +30,10 @@ fun AppContent() {
         ) {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = Routes.HOME.toString()) {
-                composable(route = Routes.HOME.getRoute()) {
-                    HomeScreen(
-                        homeViewModel = viewModel(),
+            NavHost(navController = navController, startDestination = Routes.COMMUNITY.toString()) {
+                composable(route = Routes.COMMUNITY.getRoute()) {
+                    CommunityScreen(
+                        viewModel = viewModel(),
                         navigateToStories = { historyId ->
                             if (historyId == null) navController.navigate(Routes.STORIES.name)
                             else navController.navigate(Routes.COMMUNITY_STORIES.getDestinationRoute(historyId))
@@ -112,7 +112,7 @@ fun AppContent() {
 }
 
 enum class Routes(val params: Array<String> = emptyArray()) {
-    HOME,
+    COMMUNITY,
     STORIES,
     COMMUNITY_STORIES(arrayOf("userId")),
     HISTORY_DETAIL(arrayOf("historyId")),
