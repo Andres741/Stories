@@ -9,7 +9,7 @@ extension HomeScreen {
         @Published private(set) var usersLoadStatus: LoadStatus<Reference<[User]>>? = nil
 
         func startObserving() {
-            commonViewModel.users.subscribe { users in
+            commonViewModel.users.subscribe(scope: commonViewModel.viewModelScope) { users in
                 if let users = users {
                     self.usersLoadStatus = users.mapData { user in
                         return Reference(value: user as? [User] ?? [])

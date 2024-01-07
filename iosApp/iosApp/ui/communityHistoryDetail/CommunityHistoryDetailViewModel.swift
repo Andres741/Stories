@@ -13,7 +13,7 @@ extension CommunityHistoryDetailScreen {
         }
         
         func startObserving() {
-            commonViewModel.historyLoadStatus.subscribe {
+            commonViewModel.historyLoadStatus.subscribe(scope: commonViewModel.viewModelScope) {
                 self.historyLoadStatus = $0!
             }
         }

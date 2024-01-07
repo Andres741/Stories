@@ -72,10 +72,10 @@ extension HistoryDetailScreen {
         
         
         func startObserving() {
-            commonViewModel.historyLoadStatus.subscribe {
+            commonViewModel.historyLoadStatus.subscribe(scope: commonViewModel.viewModelScope) {
                 self.historyLoadStatus = $0!
             }
-            commonViewModel.editingHistory.subscribe {
+            commonViewModel.editingHistory.subscribe(scope: commonViewModel.viewModelScope) {
                 self.editingHistory = $0
             }
         }

@@ -13,7 +13,7 @@ extension LogInScreen {
         }
         
         func startObserving() {
-            commonViewModel.userCreationState.subscribe { userCreationState in
+            commonViewModel.userCreationState.subscribe(scope: commonViewModel.viewModelScope) { userCreationState in
                 self.userCreationState = userCreationState!
             }
         }

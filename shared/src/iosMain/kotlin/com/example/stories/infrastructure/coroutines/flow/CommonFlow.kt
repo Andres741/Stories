@@ -13,21 +13,32 @@ actual open class CommonFlow<T> actual constructor(
 ) : Flow<T> by flow {
 
     fun subscribe(
-        coroutineScope: CoroutineScope,
+        scope: CoroutineScope,
         dispatcher: CoroutineDispatcher,
-        onCollect: (T) -> Unit
+        onCollect: (T) -> Unit,
     ): DisposableHandle {
-        val job = coroutineScope.launch(dispatcher) {
+        val job = scope.launch(dispatcher) {
             flow.collect(onCollect)
         }
         return DisposableHandle { job.cancel() }
     }
 
     fun subscribe(
-        onCollect: (T) -> Unit
+        scope: CoroutineScope,
+        onCollect: (T) -> Unit,
     ): DisposableHandle {
         return subscribe(
-            coroutineScope = GlobalScope,
+            scope = scope,
+            dispatcher = Dispatchers.Main,
+            onCollect = onCollect,
+        )
+    }
+
+    fun subscribeForever(
+        onCollect: (T) -> Unit,
+    ): DisposableHandle {
+        return subscribe(
+            scope = GlobalScope,
             dispatcher = Dispatchers.Main,
             onCollect = onCollect
         )

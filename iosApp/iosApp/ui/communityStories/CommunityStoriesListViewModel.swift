@@ -13,7 +13,7 @@ extension CommunityStoriesListScreen {
         @Published var userAndStoriesLoadStatus: LoadStatus<Reference<(User, [History])>>? = nil
         
         func startObserving() {
-            commonViewModel.userAndStoriesLoadStatus.subscribe { userAndStoriesLoadStatus in
+            commonViewModel.userAndStoriesLoadStatus.subscribe(scope: commonViewModel.viewModelScope) { userAndStoriesLoadStatus in
                 if let userAndStoriesLoadStatus {
                     self.userAndStoriesLoadStatus = userAndStoriesLoadStatus.mapData { userAndStories in
                         let user = userAndStories.first!

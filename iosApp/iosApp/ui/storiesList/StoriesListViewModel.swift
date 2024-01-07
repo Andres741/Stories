@@ -23,17 +23,17 @@ extension StoriesListScreen {
         }
 
         func startObserving() {
-            commonViewModel.storiesLoadStatus.subscribe { stories in
+            commonViewModel.storiesLoadStatus.subscribe(scope: commonViewModel.viewModelScope) { stories in
                 if let stories = stories {
                     self.storiesLoadStatus = stories.mapData { stories in
                         return Reference(value: stories as? [History] ?? [])
                     } as? LoadStatus<Reference<[History]>>
                 }
             }
-            commonViewModel.newHistory.subscribe { newHistory in
+            commonViewModel.newHistory.subscribe(scope: commonViewModel.viewModelScope) { newHistory in
                 self.newHistory = newHistory
             }
-            commonViewModel.isLogged.subscribe { isLogged in
+            commonViewModel.isLogged.subscribe(scope: commonViewModel.viewModelScope) { isLogged in
                 self.isLogged = isLogged?.boolValue ?? false
             }
         }

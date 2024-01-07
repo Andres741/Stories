@@ -49,7 +49,6 @@ struct StoriesListScreen: View {
                     }
                 }
             }
-            .navigationTitle(getStringResource(path: \.stories_screen_title))
             .toolbar {
                 Button(getStringResource(path: \.create_history)) {
                     viewModel.createBasicHistory(
@@ -81,6 +80,7 @@ struct StoriesListScreen: View {
             }
         }
         .attach(observer: viewModel)
+        .navigationTitle(getStringResource(path: \.stories_screen_title))
         .navigationDestination(isPresented: $isShowingLogIn) {
             LogInScreen(showLogIn: $isShowingLogIn)
         }
