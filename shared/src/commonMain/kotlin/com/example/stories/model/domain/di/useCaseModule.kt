@@ -1,6 +1,6 @@
 package com.example.stories.model.domain.di
 
-import com.example.stories.model.domain.useCase.CommitChangesUseCase
+import com.example.stories.model.domain.useCase.CommitHistoryChangesUseCase
 import com.example.stories.model.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.model.domain.useCase.CreateEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.CreateImageElementUseCase
@@ -38,7 +38,7 @@ val useCasesModule = module {
     single { UpdateHistoryDateRangeUseCase(get()) }
     single { UpdateHistoryElementUseCase(get()) }
     single { UpdateHistoryTitleUseCase(get()) }
-    single { CommitChangesUseCase(get()) }
+    single { CommitHistoryChangesUseCase(get(), get()) }
     single { GetClaudMockUseCase(get()) }
     single { GetAllUsersUseCase(get()) }
     single { GetUserStoriesUseCase(get(), get()) }

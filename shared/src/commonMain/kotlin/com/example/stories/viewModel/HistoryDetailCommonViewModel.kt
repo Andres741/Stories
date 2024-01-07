@@ -5,7 +5,7 @@ import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.loading.LoadStatus
-import com.example.stories.model.domain.useCase.CommitChangesUseCase
+import com.example.stories.model.domain.useCase.CommitHistoryChangesUseCase
 import com.example.stories.model.domain.useCase.CreateEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.CreateImageElementUseCase
 import com.example.stories.model.domain.useCase.CreateTextElementUseCase
@@ -39,7 +39,7 @@ class HistoryDetailCommonViewModel(
     private val createImageElementUseCase: CreateImageElementUseCase = Component.get(),
     private val swapElementsUseCase: SwapElementsUseCase = Component.get(),
     private val deleteElementUseCase: DeleteElementUseCase = Component.get(),
-    private val commitChangesUseCase: CommitChangesUseCase = Component.get(),
+    private val commitHistoryChangesUseCase: CommitHistoryChangesUseCase = Component.get(),
 ) : BaseCommonViewModel(coroutineScope) {
 
     constructor(historyId: String): this(historyId = historyId, coroutineScope = null)
@@ -110,7 +110,7 @@ class HistoryDetailCommonViewModel(
 
     fun saveEditingHistory() {
         viewModelScope.launch {
-            commitChangesUseCase(historyId)
+            commitHistoryChangesUseCase(historyId)
         }
     }
 }

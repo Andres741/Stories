@@ -3,6 +3,7 @@ package com.example.stories.model.domain.model
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
 import com.example.stories.model.dataSource.local.history.model.HistoryRealm
+import com.example.stories.model.dataSource.remote.history.model.HistoryResponse
 import io.realm.kotlin.ext.realmListOf
 import org.mongodb.kbson.ObjectId
 
@@ -22,3 +23,11 @@ fun History.toRealm() = HistoryRealm().also { realmHistory ->
     realmHistory.data?.endDate = dateRange.endDate.toMilliseconds()
     realmHistory.data?.elements = elements.mapTo(realmListOf(), HistoryElement::toRealm)
 }
+
+fun History.toResponse() = HistoryResponse(
+    id = id,
+    title = title,
+    startDate = dateRange.startDate.toMilliseconds(),
+    endDate = dateRange.endDate.toMilliseconds(),
+    elements = elements.map { it.toResponse() }
+)

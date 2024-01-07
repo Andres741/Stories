@@ -13,7 +13,7 @@ interface HistoryRepository {
     suspend fun createEditingHistory(historyId: String)
     suspend fun deleteHistory(historyId: String)
     suspend fun deleteEditingHistory(historyId: String)
-    suspend fun commitChanges(historyId: String): Boolean
+    suspend fun commitChanges(userId: String?, historyId: String): Boolean
     suspend fun createBasicHistory(title: String, text: String): History
     suspend fun createTextElement(parentHistoryId: String, newText: String)
     suspend fun createImageElement(parentHistoryId: String, newImageResource: String)
