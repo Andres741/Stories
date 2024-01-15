@@ -40,6 +40,7 @@
     <string name="my_posts">Mis posts</string>
 
     <string name="not_logged_warn">No has iniciado sesión, pulsa aquí para disfrutar de la experiencia completa.</string>
+    <string name="logged_warn">Configura tus datos de cuenta.</string>
 
     <string name="log_in">Inicio de sesión</string>
     <string name="crate_user">Crear nuevo usuario</string>

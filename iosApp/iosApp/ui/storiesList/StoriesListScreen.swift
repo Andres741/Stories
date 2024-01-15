@@ -4,10 +4,11 @@ import shared
 struct StoriesListScreen: View {
     
     @ObservedObject var viewModel: StoriesListViewModel
-    @State var isLogged: Bool = false
+    @State var showBanner: Bool = false
     
     @State var isShowingLogIn = false
-    
+    @State var isShowingUserData = false
+
     init() {
         self.viewModel = StoriesListViewModel()
     }
@@ -15,6 +16,7 @@ struct StoriesListScreen: View {
 	var body: some View {
         NavigationStack {
             let storiesLoadStatus = viewModel.storiesLoadStatus
+            let isLogged = viewModel.isLogged
             
             LoadingDataScreen(
                 loadStatus: storiesLoadStatus
@@ -25,8 +27,17 @@ struct StoriesListScreen: View {
             } successContent: { data in
                 let stories = data.value
                 
-                if (!isLogged) {
-                    NotLoggedBanner(onClick: { isShowingLogIn = true }).padding(.bottom)
+                if (showBanner) {
+                    Banner(
+                        bannerText: getBannerText(isLogged: isLogged),
+                        onClick: {
+                            if isLogged ?? false {
+                                isShowingUserData = true
+                            } else {
+                                isShowingLogIn = true
+                            }
+                        }
+                    ).padding(.bottom)
                 }
                 
                 if stories.isEmpty {
@@ -73,9 +84,9 @@ struct StoriesListScreen: View {
                     HistoryDetailScreen(historyId: id)
                 }
             }
-            .onChange(of: viewModel.isLogged) { isLogged in
+            .onChange(of: viewModel.isLogged != nil) { showBanner in
                 withAnimation {
-                    self.isLogged = isLogged
+                    self.showBanner = showBanner
                 }
             }
         }
@@ -84,22 +95,18 @@ struct StoriesListScreen: View {
         .navigationDestination(isPresented: $isShowingLogIn) {
             LogInScreen(showLogIn: $isShowingLogIn)
         }
-    }
-}
-
-@ViewBuilder fileprivate func NotLoggedBanner(onClick: @escaping () -> Void) -> some View {
-    Button(action: onClick){
-        HStack {
-            Text(getStringResource(path: \.not_logged_warn))
-            Spacer()
-            Image(systemName: "arrow.right")
+        .navigationDestination(isPresented: $isShowingUserData) {
+            Text("User data")
         }
-        .padding()
-        .background(Color.accentColor)
-        .clipShape(RoundedRectangle(cornerRadius: 25.0))
-        .padding(.horizontal)
     }
-    .buttonStyle(PlainButtonStyle())
+    
+    private func getBannerText(isLogged: Bool?) -> String {
+        return if isLogged == true {
+            getStringResource(path: \.logged_warn)
+        } else {
+            getStringResource(path: \.not_logged_warn)
+        }
+    }
 }
 
 struct StoriesListScreen_Previews: PreviewProvider {

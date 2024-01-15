@@ -1,9 +1,12 @@
 package com.example.stories.android.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -45,6 +48,7 @@ fun AppContent() {
                         viewModel = viewModel(),
                         navigateDetail = { navController.navigate(Routes.HISTORY_DETAIL.getDestinationRoute(it)) },
                         navigateLogIn = { navController.navigate(Routes.LOGIN.name) },
+                        navigateUserData = { navController.navigate(Routes.USER_DATA.name) }
                     )
                 }
                 composable(
@@ -106,6 +110,11 @@ fun AppContent() {
                         navigateBack = { navController.popBackStack() }
                     )
                 }
+                composable(route = Routes.USER_DATA.getRoute()) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(text = "User data", modifier = Modifier.align(Alignment.Center))
+                    }
+                }
             }
         }
     }
@@ -118,6 +127,7 @@ enum class Routes(val params: Array<String> = emptyArray()) {
     HISTORY_DETAIL(arrayOf("historyId")),
     COMMUNITY_HISTORY_DETAIL(arrayOf("historyId", "userId")),
     LOGIN,
+    USER_DATA,
     ;
 
     fun getDestinationRoute(vararg args: String?) = "$this${buildString { args.forEach { append("/$it") } }}"

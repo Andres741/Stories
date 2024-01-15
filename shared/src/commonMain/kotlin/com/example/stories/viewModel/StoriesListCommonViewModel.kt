@@ -34,7 +34,7 @@ class StoriesListCommonViewModel(
     private val _newHistory = MutableStateFlow(null as History?)
     val newHistory = _newHistory.toCommonStateFlow()
 
-    private val _isLogged = MutableStateFlow(true)
+    private val _isLogged = MutableStateFlow(null as Boolean?)
     val isLogged = _isLogged.toCommonStateFlow()
 
     init {
