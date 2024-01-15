@@ -31,7 +31,7 @@ val useCasesModule = module {
     single { CreateTextElementUseCase(get()) }
     single { DeleteEditingHistoryUseCase(get()) }
     single { DeleteElementUseCase(get()) }
-    single { DeleteHistoryUseCase(get()) }
+    single { DeleteHistoryUseCase(get(), get()) }
     single { GetAllStoriesUseCase(get()) }
     single { GetHistoryByIdUseCase(get()) }
     single { SwapElementsUseCase(get()) }

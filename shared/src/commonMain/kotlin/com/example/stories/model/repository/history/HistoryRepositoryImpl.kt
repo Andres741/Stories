@@ -15,12 +15,14 @@ import com.example.stories.model.domain.model.toRealm
 import com.example.stories.model.domain.model.toResponse
 import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
 
 class HistoryRepositoryImpl(
@@ -57,8 +59,13 @@ class HistoryRepositoryImpl(
         historyLocalDataSource.createEditingHistory(ObjectId(historyId))
     }
 
-    override suspend fun deleteHistory(historyId: String) {
-        historyLocalDataSource.deleteHistory(ObjectId(historyId))
+    override suspend fun deleteHistory(historyId: String, userId: String?) {
+        coroutineScope {
+            if (userId != null) launch {
+                historyClaudDataSource.deleteHistory(userId, historyId)
+            }
+            historyLocalDataSource.deleteHistory(ObjectId(historyId))
+        }
     }
 
     override suspend fun deleteEditingHistory(historyId: String) {

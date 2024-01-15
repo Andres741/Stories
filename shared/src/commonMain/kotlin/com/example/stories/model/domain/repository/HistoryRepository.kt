@@ -11,7 +11,7 @@ interface HistoryRepository {
     fun getAllStories(): Flow<List<History>>
     fun getEditingHistory(historyId: String): Flow<History?>
     suspend fun createEditingHistory(historyId: String)
-    suspend fun deleteHistory(historyId: String)
+    suspend fun deleteHistory(historyId: String, userId: String?)
     suspend fun deleteEditingHistory(historyId: String)
     suspend fun commitChanges(userId: String?, historyId: String): Boolean
     suspend fun createBasicHistory(title: String, text: String): History

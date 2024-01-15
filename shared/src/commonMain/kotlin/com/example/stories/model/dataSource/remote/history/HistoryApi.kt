@@ -5,6 +5,7 @@ import com.example.stories.model.dataSource.remote.setJsonBody
 import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.put
@@ -35,5 +36,12 @@ class HistoryApi(private val client: HttpClient) : HistoryClaudDataSource {
             parameter("userId", userId)
             setJsonBody(history)
         }
+    }
+
+    override suspend fun deleteHistory(userId: String, historyId: String): HistoryResponse {
+        return client.delete("$HISTORY_API/history") {
+            parameter("userId", userId)
+            parameter("historyId", historyId)
+        }.body()
     }
 }
