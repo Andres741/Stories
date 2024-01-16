@@ -55,7 +55,9 @@ struct CommunityStoriesListScreen: View {
             VStack(alignment: .leading){
                 Text(user.name)
                     .font(.title2)
-                Text(user.description_)
+                if !user.description_.isBlank() {
+                    Text(user.description_)
+                }
             }
             Spacer()
         }

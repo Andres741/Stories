@@ -92,7 +92,9 @@ private fun Header(user: User) {
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.displayMedium
             )
-            Text(text = user.description)
+            if (user.description.isNotBlank()) {
+                Text(user.description)
+            }
         }
     }
 }
