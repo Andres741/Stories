@@ -11,7 +11,7 @@ interface HistoryRepository {
     fun getAllStories(): Flow<List<History>>
     fun getEditingHistory(historyId: String): Flow<History?>
     suspend fun createEditingHistory(historyId: String)
-    suspend fun deleteHistory(historyId: String, userId: String?)
+    suspend fun deleteHistory(historyId: String, userId: String?): LoadStatus<Unit>
     suspend fun deleteEditingHistory(historyId: String)
     suspend fun commitChanges(userId: String?, historyId: String): Boolean
     suspend fun createBasicHistory(title: String, text: String): History
@@ -25,4 +25,5 @@ interface HistoryRepository {
     suspend fun getClaudMock(): List<History>
     suspend fun getUserStories(userId: String): LoadStatus<List<History>>
     suspend fun getHistory(userId: String, historyId: String): LoadStatus<History>
+    suspend fun saveStoriesInClaud(stories: List<History>, userId: String): LoadStatus<Unit>
 }

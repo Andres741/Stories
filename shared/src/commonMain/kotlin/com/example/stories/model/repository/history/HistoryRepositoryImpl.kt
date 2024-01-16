@@ -59,14 +59,14 @@ class HistoryRepositoryImpl(
         historyLocalDataSource.createEditingHistory(ObjectId(historyId))
     }
 
-    override suspend fun deleteHistory(historyId: String, userId: String?) {
+    override suspend fun deleteHistory(historyId: String, userId: String?) = runCatching {
         coroutineScope {
             if (userId != null) launch {
                 historyClaudDataSource.deleteHistory(userId, historyId)
             }
             historyLocalDataSource.deleteHistory(ObjectId(historyId))
         }
-    }
+    }.toLoadStatus()
 
     override suspend fun deleteEditingHistory(historyId: String) {
         historyLocalDataSource.deleteEditingHistory(ObjectId(historyId))
@@ -131,5 +131,15 @@ class HistoryRepositoryImpl(
 
     override suspend fun getHistory(userId: String, historyId: String) = runCatching {
         historyClaudDataSource.getHistory(userId = userId, historyId = historyId).toDomain()
+    }.toLoadStatus()
+
+    override suspend fun saveStoriesInClaud(stories: List<History>, userId: String): LoadStatus<Unit> = runCatching {
+        coroutineScope {
+            stories.forEach { history ->
+                launch {
+                    historyClaudDataSource.saveHistory(userId, history.toResponse())
+                }
+            }
+        }
     }.toLoadStatus()
 }
