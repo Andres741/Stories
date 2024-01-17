@@ -37,7 +37,7 @@ import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDat
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTitlePopUp
-import com.example.stories.android.util.resources.sharedPainterResource
+import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.android.util.ui.actionableFloatAnimation
 import com.example.stories.infrastructure.date.LocalDateRange
@@ -215,7 +215,7 @@ fun HistoryDetailFab(
             FloatingActionButton(onClick = saveEditingHistory) {
                 Icon(
                     modifier = Modifier.size(40.dp),
-                    painter = sharedPainterResource { save_icon },
+                    painter = getPainterResource { save_icon },
                     contentDescription = "",
                 )
             }
@@ -224,7 +224,7 @@ fun HistoryDetailFab(
         FloatingActionButton(onClick = inverseEditHistory) {
             Icon(
                 modifier = Modifier.size(40.dp),
-                painter = sharedPainterResource { if (editMode) cancel_icon else edit_icon },
+                painter = getPainterResource { if (editMode) cancel_icon else edit_icon },
                 contentDescription = "",
             )
         }

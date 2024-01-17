@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.min
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getString
 import com.example.stories.android.util.resources.getStringResource
-import com.example.stories.android.util.resources.sharedPainterResource
+import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.infrastructure.loading.LoadingError
 import com.example.stories.infrastructure.loading.LoadStatus
 
@@ -63,7 +63,7 @@ fun DefaultErrorScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = sharedPainterResource(imageResource = loadingError.icon),
+                painter = getPainterResource(imageResource = loadingError.icon),
                 modifier = Modifier
                     .padding(16.dp)
                     .size(36f.dp),
