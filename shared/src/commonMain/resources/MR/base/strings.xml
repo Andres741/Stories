@@ -49,4 +49,6 @@
     <string name="user_profile_image">Profile image</string>
     <string name="not_loaded_profile_image_warn">If image isn\'t load the URL won\'t be saved.</string>
     <string name="user_name_not_valid_warn">User name cannot be empty.</string>
+
+    <string name="user_data_title">Your data</string>
 </resources>

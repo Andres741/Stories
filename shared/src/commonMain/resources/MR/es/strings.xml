@@ -49,4 +49,6 @@
     <string name="user_profile_image">Imagen de perfil</string>
     <string name="not_loaded_profile_image_warn">Si no carga la image la url no será guardada.</string>
     <string name="user_name_not_valid_warn">El nombre de usuario no puede estar vacío.</string>
+
+    <string name="user_data_title">Tus datos</string>
 </resources>

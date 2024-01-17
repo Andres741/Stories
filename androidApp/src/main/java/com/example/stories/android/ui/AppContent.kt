@@ -1,12 +1,9 @@
 package com.example.stories.android.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -23,6 +20,7 @@ import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.home.CommunityScreen
 import com.example.stories.android.ui.logIn.LogInScreen
 import com.example.stories.android.ui.storiesList.StoriesListScreen
+import com.example.stories.android.ui.userData.UserDataScreen
 
 @Composable
 fun AppContent() {
@@ -111,9 +109,10 @@ fun AppContent() {
                     )
                 }
                 composable(route = Routes.USER_DATA.getRoute()) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(text = "User data", modifier = Modifier.align(Alignment.Center))
-                    }
+                    UserDataScreen(
+                        viewModel = viewModel(),
+                        navigateEditUser = { TODO() },
+                    )
                 }
             }
         }

@@ -96,7 +96,7 @@ struct StoriesListScreen: View {
             LogInScreen(showLogIn: $isShowingLogIn)
         }
         .navigationDestination(isPresented: $isShowingUserData) {
-            Text("User data")
+            UserDataScreen()
         }
     }
     
