@@ -2,21 +2,18 @@ package com.example.stories.android.ui.communityHistoryDetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.ElementsListBody
+import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
@@ -40,15 +37,8 @@ fun CommunityHistoryDetail(
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(padding)) {
-            Text(
-                text = history.title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .padding(horizontal = 24.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium,
-            )
+
+            TitleText(text = history.title)
 
             ElementsListBody(
                 history = history,

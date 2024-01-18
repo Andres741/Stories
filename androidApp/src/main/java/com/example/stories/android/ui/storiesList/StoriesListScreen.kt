@@ -22,13 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.Banner
 import com.example.stories.android.ui.components.StoriesListBody
+import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.model.domain.model.History
@@ -99,15 +99,9 @@ fun StoriesList(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            Text(
+            TitleText(
                 text = getStringResource { stories_screen_title },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 12.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium
+                modifier = Modifier.padding(bottom = 12.dp),
             )
 
             LoggingBanner(

@@ -51,8 +51,8 @@ fun UserDataForm(
             maxLines = 2,
             label = { Text(text = getStringResource { user_name }) },
             leadingIcon = { Icon(Icons.Filled.AccountBox, "") },
-            isError = isNameValid,
-            supportingText = if (isNameValid) {
+            isError = !isNameValid,
+            supportingText = if (!isNameValid) {
                 { Text(text = getStringResource { user_name_not_valid_warn }) }
             } else null,
         )

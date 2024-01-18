@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -19,12 +18,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
@@ -69,15 +68,7 @@ fun UserData(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = getStringResource { user_data_title },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .padding(horizontal = 24.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium
-            )
+            TitleText(text = getStringResource { user_data_title })
 
             val imageModifier = Modifier
                 .size(160.dp)

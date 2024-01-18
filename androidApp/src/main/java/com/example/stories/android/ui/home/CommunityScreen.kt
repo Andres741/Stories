@@ -22,12 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.LoadingDataScreen
@@ -63,15 +63,9 @@ fun Community(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            Text(
+            TitleText(
                 text = getStringResource { community },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 12.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium
+                modifier = Modifier.padding(bottom = 12.dp)
             )
             LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
                 items(users, key = { it.id }) { user ->

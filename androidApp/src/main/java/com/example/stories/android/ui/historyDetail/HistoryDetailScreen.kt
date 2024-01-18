@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,13 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.historyDetail.components.AddElementFooter
 import com.example.stories.android.ui.components.ElementsListBody
+import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDatePopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
@@ -191,16 +189,11 @@ private fun TitleHeader(
         )
     }
 
-    Text(
+    TitleText(
         text = title,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp)
-            .padding(horizontal = 24.dp)
             .graphicsLayer { rotationZ = rotation() }
-            .clickable(enabled = editMode) { editingTitle = title },
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.displayMedium
+            .clickable(enabled = editMode) { editingTitle = title }
     )
 }
 

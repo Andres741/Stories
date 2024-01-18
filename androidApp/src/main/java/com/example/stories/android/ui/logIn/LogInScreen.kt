@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -24,11 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.ui.components.UserDataForm
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.DefaultLoadingScreen
@@ -81,16 +80,8 @@ fun LogIn(
                 .fillMaxSize()
                 .blur(blurRadius)
                 .padding(horizontal = 16.dp)
-                .padding(vertical = 24.dp)
         ) {
-            Text(
-                text = getStringResource { log_in },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayMedium,
-            )
+            TitleText(text = getStringResource { log_in })
 
             val (name, onNameChange) = remember { mutableStateOf("") }
             val (description, onDescriptionChange) = remember { mutableStateOf("") }
@@ -99,7 +90,7 @@ fun LogIn(
 
             UserDataForm(
                 name = name,
-                isNameValid = userCreationState is UserCreationState.NotValidName,
+                isNameValid = userCreationState !is UserCreationState.NotValidName,
                 onNameChange = onNameChange,
                 description = description,
                 onDescriptionChange = onDescriptionChange,
@@ -111,7 +102,7 @@ fun LogIn(
 
             Button(
                 onClick = { summitUserData(name, description, image.takeIf { isURLValid }) },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp)
             ) {
                 Text(text = getStringResource { crate_user })
             }
