@@ -16,7 +16,7 @@ class LogInCommonViewModel(
 ) : BaseCommonViewModel(coroutineScope) {
 
     private val _userCreationState = MutableStateFlow(UserCreationState.None as UserCreationState)
-    var userCreationState = _userCreationState.toCommonStateFlow()
+    val userCreationState = _userCreationState.toCommonStateFlow()
 
     constructor(): this(coroutineScope = null)
 

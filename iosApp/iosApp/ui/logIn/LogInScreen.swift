@@ -21,48 +21,17 @@ struct LogInScreen: View {
     }
 
     var body: some View {
-        ZStack {
-            VStack {
-                UserDataForm(
-                    name: $name,
-                    description: $description,
-                    imageURL: $imageURL,
-                    isURLValid: $isURLValid,
-                    isNameValid: viewModel.userCreationState is UserCreationStateNotValidName
-                )
-
-                Button(
-                    getStringResource(path: \.crate_user),
-                    action: {
-                        viewModel.summitUserData(
-                            name: name,
-                            description: description,
-                            profileImage: isURLValid ? imageURL : nil
-                        )
-                    }
-                )
-                .buttonStyle(.borderedProminent)
-            }
-            .blur(radius: contentBlurRadius)
-            
-            if isCreatingUser {
-                ProgressView()
-                    .controlSize(.large)
-                    .transition(.opacity)
-            }
-        }
+        EditUserData(
+            name: $name, 
+            description: $description,
+            imageURL: $imageURL,
+            isURLValid: $isURLValid,
+            showLogIn: $showLogIn,
+            userCreationState: viewModel.userCreationState,
+            summitUserData: viewModel.summitUserData(name:description:profileImage:),
+            acceptText: getStringResource(path: \.crate_user)
+        )
         .navigationTitle(getStringResource(path: \.log_in))
-        .onChange(of: viewModel.userCreationState is UserCreationStateCreatingUser) { isCreatingUser in
-            self.isCreatingUser = isCreatingUser
-            withAnimation {
-                contentBlurRadius = isCreatingUser ? 3.0 : 0.0
-            }
-        }
-        .onChange(of: viewModel.userCreationState is UserCreationStateCreated) { isUserCreated in
-            if isUserCreated {
-                showLogIn = false
-            }
-        }
         .attach(observer: viewModel)
     }
 }
