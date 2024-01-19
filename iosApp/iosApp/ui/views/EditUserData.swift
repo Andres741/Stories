@@ -7,7 +7,7 @@ struct EditUserData: View {
     @Binding var imageURL: String
     @Binding var isURLValid: Bool
 
-    @Binding var showLogIn: Bool
+    @Binding var showEditUser: Bool
     let userCreationState: UserCreationState
     let summitUserData: (String, String, String?) -> Void
     let acceptText: String
@@ -50,7 +50,7 @@ struct EditUserData: View {
         }
         .onChange(of: userCreationState is UserCreationStateCreated) { isUserCreated in
             if isUserCreated {
-                showLogIn = false
+                showEditUser = false
             }
         }
     }
@@ -139,7 +139,7 @@ struct EditUserDataPreview: View {
             description: $description,
             imageURL: $imageURL,
             isURLValid: $isURLValid,
-            showLogIn: .constant(false),
+            showEditUser: .constant(false),
             userCreationState: userCreationState,
             summitUserData: { _,_,_ in userCreationState = userCreationState.nextState() },
             acceptText: getStringResource(path: \.crate_user)

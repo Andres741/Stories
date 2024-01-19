@@ -51,4 +51,6 @@
     <string name="user_name_not_valid_warn">User name cannot be empty.</string>
 
     <string name="user_data_title">Your data</string>
+    <string name="edit_user_data_title">Edit your data</string>
+    <string name="edit_user_data_save_new_data">Save your new data</string>
 </resources>

@@ -21,6 +21,7 @@ import com.example.stories.model.domain.useCase.SwapElementsUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryDateRangeUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryElementUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryTitleUseCase
+import com.example.stories.model.domain.useCase.UpdateUserUseCase
 import org.koin.dsl.module
 
 val useCasesModule = module {
@@ -45,4 +46,5 @@ val useCasesModule = module {
     single { GetHistoryFromAPIUseCase(get()) }
     single { GetLocalUserUseCase(get()) }
     single { CreateUserUseCase(get(), get()) }
+    single { UpdateUserUseCase(get(), get()) }
 }

@@ -26,7 +26,7 @@ struct LogInScreen: View {
             description: $description,
             imageURL: $imageURL,
             isURLValid: $isURLValid,
-            showLogIn: $showLogIn,
+            showEditUser: $showLogIn,
             userCreationState: viewModel.userCreationState,
             summitUserData: viewModel.summitUserData(name:description:profileImage:),
             acceptText: getStringResource(path: \.crate_user)

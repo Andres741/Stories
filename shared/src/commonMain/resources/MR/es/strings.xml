@@ -51,4 +51,6 @@
     <string name="user_name_not_valid_warn">El nombre de usuario no puede estar vacío.</string>
 
     <string name="user_data_title">Tus datos</string>
+    <string name="edit_user_data_title">Edita tus datos</string>
+    <string name="edit_user_data_save_new_data">Guardar tus nuevos datos</string>
 </resources>

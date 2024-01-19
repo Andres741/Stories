@@ -15,6 +15,7 @@ import com.example.stories.android.ui.communityHistoryDetail.CommunityHistoryDet
 import com.example.stories.android.ui.communityHistoryDetail.CommunityHistoryDetailViewModel
 import com.example.stories.android.ui.communityStories.CommunityStoriesListScreen
 import com.example.stories.android.ui.communityStories.CommunityStoriesListViewModel
+import com.example.stories.android.ui.editUserData.EditUserDataScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailScreen
 import com.example.stories.android.ui.historyDetail.HistoryDetailViewModel
 import com.example.stories.android.ui.home.CommunityScreen
@@ -105,13 +106,19 @@ fun AppContent() {
                 composable(route = Routes.LOGIN.getRoute()) {
                     LogInScreen(
                         viewModel = viewModel(),
-                        navigateBack = { navController.popBackStack() }
+                        navigateBack = navController::popBackStack,
                     )
                 }
                 composable(route = Routes.USER_DATA.getRoute()) {
                     UserDataScreen(
                         viewModel = viewModel(),
-                        navigateEditUser = { TODO() },
+                        navigateEditUser = { navController.navigate(Routes.EDIT_USER_DATA.name) },
+                    )
+                }
+                composable(route = Routes.EDIT_USER_DATA.getRoute()) {
+                    EditUserDataScreen(
+                        viewModel = viewModel(),
+                        navigateBack = navController::popBackStack,
                     )
                 }
             }
@@ -127,6 +134,7 @@ enum class Routes(val params: Array<String> = emptyArray()) {
     COMMUNITY_HISTORY_DETAIL(arrayOf("historyId", "userId")),
     LOGIN,
     USER_DATA,
+    EDIT_USER_DATA,
     ;
 
     fun getDestinationRoute(vararg args: String?) = "$this${buildString { args.forEach { append("/$it") } }}"

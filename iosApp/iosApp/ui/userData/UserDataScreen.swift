@@ -22,7 +22,7 @@ struct UserDataScreen: View {
         .attach(observer: viewModel)
         .navigationTitle(getStringResource(path: \.user_data_title))
         .navigationDestination(isPresented: $showEditUserData) {
-            Text("TODO")
+            EditUserDataScreen(showEditUserdata: $showEditUserData)
         }
     }
 }
