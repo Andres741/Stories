@@ -6,4 +6,5 @@ interface UserClaudDataSource {
     suspend fun getAllUsers(): List<UserResponse>
     suspend fun getUserById(userId: String): UserResponse
     suspend fun createUser(name: String, description: String, profileImage: String?): UserResponse
+    suspend fun editUser(user: UserResponse)
 }

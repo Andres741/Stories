@@ -46,5 +46,5 @@ val useCasesModule = module {
     single { GetHistoryFromAPIUseCase(get()) }
     single { GetLocalUserUseCase(get()) }
     single { CreateUserUseCase(get(), get()) }
-    single { UpdateUserUseCase(get(), get()) }
+    single { UpdateUserUseCase(get()) }
 }

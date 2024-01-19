@@ -5,6 +5,7 @@ import com.example.stories.infrastructure.loading.LoadStatus.Loading.toLoadStatu
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.model.toDomain
 import com.example.stories.model.domain.model.toRealm
+import com.example.stories.model.domain.model.toResponse
 import com.example.stories.model.domain.repository.UserRepository
 import com.example.stories.model.repository.dataSource.UserClaudDataSource
 import com.example.stories.model.repository.dataSource.UserLocalDataSource
@@ -36,4 +37,10 @@ class UserRepositoryImpl(
             localDataSource.saveUser(newUser.toRealm())
         }
     }.toLoadStatus()
+
+    override suspend fun editUser(user: User): LoadStatus<Unit> {
+        return claudDataSource.runCatching { editUser(user.toResponse()) }.also { result ->
+            result.onSuccess { localDataSource.saveUser(user.toRealm()) }
+        }.toLoadStatus()
+    }
 }

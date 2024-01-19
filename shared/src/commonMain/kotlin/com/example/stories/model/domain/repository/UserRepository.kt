@@ -9,4 +9,5 @@ interface UserRepository {
     suspend fun getUserById(userId: String): LoadStatus<User>
     fun getLocalUser(): Flow<User?>
     suspend fun createUser(name: String, description: String, profileImage: String?): LoadStatus<User>
+    suspend fun editUser(user: User): LoadStatus<Unit>
 }

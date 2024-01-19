@@ -30,3 +30,10 @@ fun User.toRealm() = UserRealm().also {
     it.description = description
     it.profileImage = profileImage
 }
+
+fun User.toResponse() = UserResponse(
+    id = id,
+    name = name,
+    description = description,
+    profileImage = profileImage,
+)

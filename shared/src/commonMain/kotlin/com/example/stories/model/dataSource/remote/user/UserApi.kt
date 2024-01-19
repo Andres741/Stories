@@ -1,5 +1,6 @@
 package com.example.stories.model.dataSource.remote.user
 
+import com.example.stories.model.dataSource.remote.setJsonBody
 import com.example.stories.model.dataSource.remote.user.model.UserResponse
 import com.example.stories.model.repository.dataSource.UserClaudDataSource
 import io.ktor.client.HttpClient
@@ -7,6 +8,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 
 class UserApi(private val client: HttpClient) : UserClaudDataSource {
     companion object {
@@ -27,5 +29,11 @@ class UserApi(private val client: HttpClient) : UserClaudDataSource {
             parameter("description", description)
             parameter("profileImage", profileImage)
         }.body()
+    }
+
+    override suspend fun editUser(user: UserResponse) {
+        client.put("$USERS_API/edit") {
+            setJsonBody(user)
+        }
     }
 }
