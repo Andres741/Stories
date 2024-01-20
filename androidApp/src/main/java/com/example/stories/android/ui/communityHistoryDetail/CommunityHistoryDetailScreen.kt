@@ -14,7 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.ElementsListBody
 import com.example.stories.android.ui.components.TitleText
-import com.example.stories.android.util.ui.LoadingDataScreen
+import com.example.stories.android.util.ui.RefreshLoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 
@@ -24,7 +24,7 @@ fun CommunityHistoryDetailScreen(
 ) {
     val historyLoadStatus by viewModel.historyLoadStatus.collectAsStateWithLifecycle()
 
-    LoadingDataScreen(loadStatus = historyLoadStatus) { history ->
+    RefreshLoadingDataScreen(loadStatus = historyLoadStatus, onRefresh = viewModel::refreshData) { history ->
         CommunityHistoryDetail(history)
     }
 }

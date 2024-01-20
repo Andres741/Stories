@@ -3,6 +3,7 @@ package com.example.stories.viewModel
 import com.example.stories.Component
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.setRefreshing
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.useCase.GetUserStoriesUseCase
@@ -12,9 +13,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.get
 
 class CommunityStoriesListCommonViewModel(
-    userId: String,
+    private val userId: String,
+    private val getUserStoriesUseCase: GetUserStoriesUseCase = Component.get(),
     coroutineScope: CoroutineScope? = null,
-    getUserStoriesUseCase: GetUserStoriesUseCase = Component.get(),
 ) : BaseCommonViewModel(coroutineScope) {
 
     constructor(userId: String): this(userId = userId, coroutineScope = null)
@@ -24,6 +25,13 @@ class CommunityStoriesListCommonViewModel(
 
     init {
         viewModelScope.launch {
+            _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId)
+        }
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _userAndStoriesLoadStatus.setRefreshing()
             _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId)
         }
     }

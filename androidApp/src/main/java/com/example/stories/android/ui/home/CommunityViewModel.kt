@@ -6,7 +6,9 @@ import com.example.stories.viewModel.CommunityCommonViewModel
 
 class CommunityViewModel : ViewModel() {
 
-    private val commonViewModel = CommunityCommonViewModel(viewModelScope)
+    private val commonViewModel = CommunityCommonViewModel(coroutineScope = viewModelScope)
 
     val users get() = commonViewModel.users
+
+    fun refreshData() = commonViewModel.refreshData()
 }

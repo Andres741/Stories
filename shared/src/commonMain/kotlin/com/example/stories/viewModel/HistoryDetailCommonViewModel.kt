@@ -5,6 +5,7 @@ import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.toLoadStatusCommonStateFlow
 import com.example.stories.model.domain.useCase.CommitHistoryChangesUseCase
 import com.example.stories.model.domain.useCase.CreateEditingHistoryUseCase
 import com.example.stories.model.domain.useCase.CreateImageElementUseCase
@@ -44,9 +45,8 @@ class HistoryDetailCommonViewModel(
 
     constructor(historyId: String): this(historyId = historyId, coroutineScope = null)
 
-    val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase(historyId).stateIn(
-        viewModelScope, SharingStarted.WhileSubscribed(1000), LoadStatus.Loading
-    ).toCommonStateFlow()
+    val historyLoadStatus: CommonStateFlow<LoadStatus<History>> = getHistoryByIdUseCase(historyId)
+        .toLoadStatusCommonStateFlow(viewModelScope)
 
     val editingHistory: CommonStateFlow<History?> = getEditingHistoryUseCase(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), null

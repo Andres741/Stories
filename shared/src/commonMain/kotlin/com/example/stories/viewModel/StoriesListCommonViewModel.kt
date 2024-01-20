@@ -4,6 +4,7 @@ import com.example.stories.Component
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.toLoadStatusCommonStateFlow
 import com.example.stories.model.domain.useCase.CreateBasicHistoryUseCase
 import com.example.stories.model.domain.useCase.DeleteHistoryUseCase
 import com.example.stories.model.domain.useCase.GetAllStoriesUseCase
@@ -11,9 +12,7 @@ import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.useCase.GetLocalUserUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
 
@@ -27,9 +26,8 @@ class StoriesListCommonViewModel(
 
     constructor(): this(coroutineScope = null)
 
-    val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = getAllStoriesUseCase().stateIn(
-        viewModelScope, SharingStarted.WhileSubscribed(5000), LoadStatus.Loading
-    ).toCommonStateFlow()
+    val storiesLoadStatus: CommonStateFlow<LoadStatus<List<History>>> = getAllStoriesUseCase()
+        .toLoadStatusCommonStateFlow(viewModelScope)
 
     private val _newHistory = MutableStateFlow(null as History?)
     val newHistory = _newHistory.toCommonStateFlow()

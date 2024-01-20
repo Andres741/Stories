@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.StoriesListBody
 import com.example.stories.android.util.resources.getStringResource
-import com.example.stories.android.util.ui.LoadingDataScreen
+import com.example.stories.android.util.ui.RefreshLoadingDataScreen
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
@@ -35,7 +35,7 @@ fun CommunityStoriesListScreen(
 ) {
     val storiesLoadStatus by viewModel.userAndStoriesLoadStatus.collectAsStateWithLifecycle()
 
-    LoadingDataScreen(loadStatus = storiesLoadStatus) { userAndStories ->
+    RefreshLoadingDataScreen(loadStatus = storiesLoadStatus, onRefresh = viewModel::refreshData) { userAndStories ->
         val (user, stories) = userAndStories
 
         CommunityStoriesList(

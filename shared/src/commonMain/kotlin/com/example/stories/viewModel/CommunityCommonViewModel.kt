@@ -1,39 +1,47 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
-import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.setRefreshing
+import com.example.stories.infrastructure.loading.toLoadStatusCommonStateFlow
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.useCase.GetAllUsersUseCase
 import com.example.stories.model.domain.useCase.GetLocalUserUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
 
 class CommunityCommonViewModel(
-    coroutineScope: CoroutineScope? = null,
-    getAllUsersUseCase: GetAllUsersUseCase = Component.get(),
+    private val getAllUsersUseCase: GetAllUsersUseCase = Component.get(),
     getLocalUserUseCase: GetLocalUserUseCase = Component.get(),
+    coroutineScope: CoroutineScope? = null,
 ) : BaseCommonViewModel(coroutineScope) {
 
     constructor(): this(coroutineScope = null)
 
-    private val _users = MutableStateFlow(LoadStatus.Loading as LoadStatus<List<User>>)
-    val users = _users.toCommonStateFlow()
+    private val localUserFlow = getLocalUserUseCase()
+
+    private val allUsersLoadStatus = MutableStateFlow(LoadStatus.Loading as LoadStatus<List<User>>)
+    val users = combine(localUserFlow, allUsersLoadStatus) { localUser, allUsers ->
+        if (localUser == null) allUsers else allUsers.mapData { users ->
+            users.filter { user ->
+                user.id != localUser.id
+            }
+        }
+    }.toLoadStatusCommonStateFlow(viewModelScope)
 
     init {
         viewModelScope.launch {
-            val localUserFlow = getLocalUserUseCase()
-            val allUsers = getAllUsersUseCase()
+            allUsersLoadStatus.value = getAllUsersUseCase()
+        }
+    }
 
-            localUserFlow.collect { localUser ->
-                _users.value = if (localUser == null) allUsers else allUsers.mapData { users ->
-                    users.filter { user ->
-                        user.id != localUser.id
-                    }
-                }
-            }
+    fun refreshData() {
+        viewModelScope.launch {
+            allUsersLoadStatus.setRefreshing()
+            allUsersLoadStatus.value = getAllUsersUseCase()
         }
     }
 }

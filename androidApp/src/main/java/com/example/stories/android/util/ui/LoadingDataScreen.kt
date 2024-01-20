@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,34 @@ import com.example.stories.infrastructure.loading.LoadingError
 import com.example.stories.infrastructure.loading.LoadStatus
 
 @Composable
+fun<T: Any> RefreshLoadingDataScreen(
+    loadStatus: LoadStatus<T>,
+    onRefresh: () -> Unit,
+    errorContent: @Composable (LoadingError) -> Unit = {
+        DefaultErrorScreen(
+            loadingError = it,
+            buttonText = getStringResource { refresh },
+            onClickButton = onRefresh,
+        )
+    },
+    loadingContent: @Composable () -> Unit = { DefaultLoadingScreen() },
+    successContent: @Composable BoxScope.(T) -> Unit
+) {
+    when (loadStatus) {
+        is LoadStatus.Error -> errorContent(loadStatus.error)
+        LoadStatus.Loading -> loadingContent()
+        is LoadStatus.Data -> {
+            PullRefreshLayout(
+                isRefreshing = loadStatus.isRefreshing(),
+                onRefresh = onRefresh,
+            ) {
+                successContent(loadStatus.value)
+            }
+        }
+    }
+}
+
+@Composable
 fun<T: Any> LoadingDataScreen(
     loadStatus: LoadStatus<T>,
     errorContent: @Composable (LoadingError) -> Unit = { DefaultErrorScreen(it) },
@@ -50,7 +79,8 @@ fun<T: Any> LoadingDataScreen(
 @Composable
 fun DefaultErrorScreen(
     loadingError: LoadingError,
-    onClickButton: (() -> Unit)? = null
+    buttonText: String = getStringResource { accept },
+    onClickButton: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
@@ -91,7 +121,7 @@ fun DefaultErrorScreen(
                 contentColor = MaterialTheme.colorScheme.onError
             )
         ) {
-            Text(text = getStringResource { accept })
+            Text(text = buttonText)
         }
     }
 }

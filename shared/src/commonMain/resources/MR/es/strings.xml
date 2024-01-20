@@ -16,6 +16,7 @@
     <string name="dismiss">Descartar</string>
     <string name="edit">Editar</string>
     <string name="save">Guardar</string>
+    <string name="refresh">Refrescar</string>
 
     <string name="init_date">Fecha de inicio</string>
     <string name="end_date">Fecha final</string>

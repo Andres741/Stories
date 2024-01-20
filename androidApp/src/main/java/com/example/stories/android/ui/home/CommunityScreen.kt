@@ -30,7 +30,7 @@ import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.ItemCard
-import com.example.stories.android.util.ui.LoadingDataScreen
+import com.example.stories.android.util.ui.RefreshLoadingDataScreen
 import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
 
@@ -42,10 +42,10 @@ fun CommunityScreen(
 
     val usersLoadStatus by viewModel.users.collectAsStateWithLifecycle()
 
-    LoadingDataScreen(loadStatus = usersLoadStatus) { users ->
+    RefreshLoadingDataScreen(loadStatus = usersLoadStatus, onRefresh = viewModel::refreshData) { users ->
         Community(
             users = users,
-            navigateToStories = navigateToStories
+            navigateToStories = navigateToStories,
         )
     }
 }
