@@ -12,13 +12,10 @@ struct CommunityScreen: View {
     
     var body: some View {
         NavigationStack {
-            LoadingDataScreen(
-                loadStatus: viewModel.usersLoadStatus
-            ) { error in
-                DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
-            } loadingContent: {
-                DefaultLoadingScreen()
-            } successContent: { data in
+            RefreshLoadingDataScreen(
+                loadStatus: viewModel.usersLoadStatus,
+                onRefresh: { viewModel.refreshData() }
+            ) { data in
                 let users = data.value
 
                 List(users, id: \.id) { user in

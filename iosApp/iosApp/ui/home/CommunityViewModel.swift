@@ -7,6 +7,10 @@ extension CommunityScreen {
         private let commonViewModel = CommunityCommonViewModel()
         
         @Published private(set) var usersLoadStatus: LoadStatus<Reference<[User]>>? = nil
+        
+        func refreshData() {
+            commonViewModel.refreshData()
+        }
 
         func startObserving() {
             commonViewModel.users.subscribe(scope: commonViewModel.viewModelScope) { users in
