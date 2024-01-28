@@ -12,6 +12,10 @@ extension CommunityHistoryDetailScreen {
             commonViewModel = CommunityHistoryDetailCommonViewModel(historyId: historyId, userId: userId)
         }
         
+        func refreshData() {
+            commonViewModel.refreshData()
+        }
+        
         func startObserving() {
             commonViewModel.historyLoadStatus.subscribe(scope: commonViewModel.viewModelScope) {
                 self.historyLoadStatus = $0!

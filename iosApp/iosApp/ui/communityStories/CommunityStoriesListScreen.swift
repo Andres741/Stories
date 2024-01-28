@@ -12,25 +12,22 @@ struct CommunityStoriesListScreen: View {
     var body: some View {
         let userAndStoriesLoadStatus = viewModel.userAndStoriesLoadStatus
         
-        LoadingDataScreen(
-            loadStatus: userAndStoriesLoadStatus
-        ) { error in
-            DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
-        } loadingContent: {
-            DefaultLoadingScreen()
-        } successContent: { userAndStories in
+        RefreshLoadingDataScreen(
+            loadStatus: userAndStoriesLoadStatus,
+            onRefresh: { viewModel.refreshData() }
+        ) { userAndStories in
             let (user, stories) = userAndStories.value
             
             VStack {
                 Header(user).padding()
                 
                 if stories.isEmpty {
-                    Spacer()
-                    
-                    EmptyScreen(
-                        title: getStringResource(path: \.empty_history_list_title),
-                        text: getStringResource(path: \.empty_community_history_list_text)
-                    )
+                    ScrollView {
+                        EmptyScreen(
+                            title: getStringResource(path: \.empty_history_list_title),
+                            text: getStringResource(path: \.empty_community_history_list_text)
+                        )
+                    }
                 } else {
                     List(stories, id: \.id) { history in
                         NavigationLink(destination: CommunityHistoryDetailScreen(historyId: history.id, userId: user.id)) {

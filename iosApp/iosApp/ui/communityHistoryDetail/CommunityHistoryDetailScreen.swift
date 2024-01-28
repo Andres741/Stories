@@ -12,13 +12,10 @@ struct CommunityHistoryDetailScreen: View {
     var body: some View {
         let historyLoadStatus = viewModel.historyLoadStatus
         
-        LoadingDataScreen(
-            loadStatus: historyLoadStatus
-        ) { error in
-            DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
-        } loadingContent: {
-            DefaultLoadingScreen()
-        } successContent: { history in
+        RefreshLoadingDataScreen(
+            loadStatus: historyLoadStatus,
+            onRefresh: { viewModel.refreshData() }
+        ) { history in
             VStack {
                 HistoryDetailHeader(history: history)
 
