@@ -1,7 +1,7 @@
 package com.example.stories.model.domain.repository
 
 import com.example.stories.infrastructure.date.LocalDateRange
-import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.Response
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ interface HistoryRepository {
     fun getAllStories(): Flow<List<History>>
     fun getEditingHistory(historyId: String): Flow<History?>
     suspend fun createEditingHistory(historyId: String)
-    suspend fun deleteHistory(historyId: String, userId: String?): LoadStatus<Unit>
+    suspend fun deleteHistory(historyId: String, userId: String?): Response<Unit>
     suspend fun deleteEditingHistory(historyId: String)
     suspend fun commitChanges(userId: String?, historyId: String): Boolean
     suspend fun createBasicHistory(title: String, text: String): History
@@ -22,8 +22,8 @@ interface HistoryRepository {
     suspend fun updateHistoryElement(historyElement: HistoryElement)
     suspend fun updateHistoryDateRange(historyId: String, newDateRange: LocalDateRange)
     suspend fun swapElements(historyId: String, fromId: String, toId: String)
-    suspend fun getClaudMock(): List<History>
-    suspend fun getUserStories(userId: String): LoadStatus<List<History>>
-    suspend fun getHistory(userId: String, historyId: String): LoadStatus<History>
-    suspend fun saveStoriesInClaud(stories: List<History>, userId: String): LoadStatus<Unit>
+    suspend fun getClaudMock(): Response<List<History>>
+    suspend fun getUserStories(userId: String): Response<List<History>>
+    suspend fun getHistory(userId: String, historyId: String): Response<History>
+    suspend fun saveStoriesInClaud(stories: List<History>, userId: String): Response<Unit>
 }

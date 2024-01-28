@@ -17,6 +17,8 @@ fun UserResponse.toDomain() = User(
     profileImage = profileImage,
 )
 
+fun List<UserResponse>.toDomain() = map { it.toDomain() }
+
 fun UserRealm.toDomain() = User(
     id = _id,
     name = name,

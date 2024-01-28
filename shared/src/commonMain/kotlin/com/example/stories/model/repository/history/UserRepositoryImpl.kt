@@ -1,7 +1,7 @@
 package com.example.stories.model.repository.history
 
-import com.example.stories.infrastructure.loading.LoadStatus
-import com.example.stories.infrastructure.loading.LoadStatus.Loading.toLoadStatus
+import com.example.stories.infrastructure.loading.Response
+import com.example.stories.infrastructure.loading.toResponse
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.model.toDomain
 import com.example.stories.model.domain.model.toRealm
@@ -16,13 +16,13 @@ class UserRepositoryImpl(
     private val claudDataSource: UserClaudDataSource,
     private val localDataSource: UserLocalDataSource,
 ) : UserRepository {
-    override suspend fun getAllUsers(): LoadStatus<List<User>> = runCatching {
-        claudDataSource.getAllUsers().map { it.toDomain() }
-    }.toLoadStatus()
+    override suspend fun getAllUsers(): Response<List<User>> {
+        return claudDataSource.getAllUsers().map { it.toDomain() }.toResponse()
+    }
 
-    override suspend fun getUserById(userId: String): LoadStatus<User> = runCatching {
-        claudDataSource.getUserById(userId).toDomain()
-    }.toLoadStatus()
+    override suspend fun getUserById(userId: String): Response<User>  {
+        return claudDataSource.getUserById(userId).map { it.toDomain() }.toResponse()
+    }
 
     override fun getLocalUser(): Flow<User?> {
         return localDataSource.getLocalUser().map { it?.toDomain() }
@@ -32,15 +32,17 @@ class UserRepositoryImpl(
         name: String,
         description: String,
         profileImage: String?,
-    ): LoadStatus<User> = runCatching {
-        claudDataSource.createUser(name, description, profileImage).toDomain().also { newUser ->
-            localDataSource.saveUser(newUser.toRealm())
-        }
-    }.toLoadStatus()
+    ): Response<User> {
+        return claudDataSource.createUser(name, description, profileImage).map {
+            it.toDomain().also { newUser ->
+                localDataSource.saveUser(newUser.toRealm())
+            }
+        }.toResponse()
+    }
 
-    override suspend fun editUser(user: User): LoadStatus<Unit> {
-        return claudDataSource.runCatching { editUser(user.toResponse()) }.also { result ->
-            result.onSuccess { localDataSource.saveUser(user.toRealm()) }
-        }.toLoadStatus()
+    override suspend fun editUser(user: User): Response<Unit> {
+        return claudDataSource.editUser(user.toResponse()).onSuccess {
+            localDataSource.saveUser(user.toRealm())
+        }.toResponse()
     }
 }

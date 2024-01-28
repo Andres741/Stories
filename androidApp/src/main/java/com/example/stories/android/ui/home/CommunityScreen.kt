@@ -37,7 +37,7 @@ import com.example.stories.model.domain.model.User
 @Composable
 fun CommunityScreen(
     viewModel: CommunityViewModel,
-    navigateToStories: (historyId: String?) -> Unit,
+    navigateToStories: (userId: String?) -> Unit,
 ) {
 
     val usersLoadStatus by viewModel.users.collectAsStateWithLifecycle()
@@ -53,7 +53,7 @@ fun CommunityScreen(
 @Composable
 fun Community(
     users: List<User>,
-    navigateToStories: (historyId: String?) -> Unit,
+    navigateToStories: (userId: String?) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {

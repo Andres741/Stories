@@ -1,5 +1,6 @@
 package com.example.stories.model.dataSource.remote.history
 
+import com.example.stories.infrastructure.loading.safeRequest
 import com.example.stories.model.dataSource.remote.history.model.HistoryResponse
 import com.example.stories.model.dataSource.remote.setJsonBody
 import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
@@ -16,30 +17,30 @@ class HistoryApi(private val client: HttpClient) : HistoryClaudDataSource {
         private const val HISTORY_API = "http://192.168.1.137:8080/api/history/v1"
     }
 
-    override suspend fun getMock(): List<HistoryResponse> {
-        return client.get("$HISTORY_API/mock").body()
+    override suspend fun getMock(): Result<List<HistoryResponse>> = safeRequest {
+        client.get("$HISTORY_API/mock").body()
     }
 
-    override suspend fun getUserStories(userId: String): List<HistoryResponse>  {
-        return client.get("$HISTORY_API/user?userId=$userId").body()
+    override suspend fun getUserStories(userId: String): Result<List<HistoryResponse>> = safeRequest {
+        client.get("$HISTORY_API/user?userId=$userId").body()
     }
 
-    override suspend fun getHistory(userId: String, historyId: String): HistoryResponse  {
-        return client.get("$HISTORY_API/history") {
+    override suspend fun getHistory(userId: String, historyId: String): Result<HistoryResponse> = safeRequest {
+        client.get("$HISTORY_API/history") {
             parameter("userId", userId)
             parameter("historyId", historyId)
         }.body()
     }
 
-    override suspend fun saveHistory(userId: String, history: HistoryResponse) {
+    override suspend fun saveHistory(userId: String, history: HistoryResponse): Result<Unit> = safeRequest {
         client.put("$HISTORY_API/history") {
             parameter("userId", userId)
             setJsonBody(history)
         }
     }
 
-    override suspend fun deleteHistory(userId: String, historyId: String): HistoryResponse {
-        return client.delete("$HISTORY_API/history") {
+    override suspend fun deleteHistory(userId: String, historyId: String): Result<HistoryResponse> = safeRequest {
+        client.delete("$HISTORY_API/history") {
             parameter("userId", userId)
             parameter("historyId", historyId)
         }.body()

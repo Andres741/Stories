@@ -4,6 +4,7 @@ import com.example.stories.Component
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.infrastructure.loading.setRefreshing
+import com.example.stories.infrastructure.loading.toLoadStatus
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.useCase.GetUserStoriesUseCase
@@ -25,14 +26,14 @@ class CommunityStoriesListCommonViewModel(
 
     init {
         viewModelScope.launch {
-            _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId)
+            _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId).toLoadStatus()
         }
     }
 
     fun refreshData() {
         viewModelScope.launch {
             _userAndStoriesLoadStatus.setRefreshing()
-            _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId)
+            _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId).toLoadStatus()
         }
     }
 }

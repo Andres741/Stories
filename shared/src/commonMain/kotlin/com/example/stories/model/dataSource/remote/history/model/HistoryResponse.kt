@@ -21,6 +21,8 @@ fun HistoryResponse.toDomain() = History(
     elements = elements.mapNotNull { it.toDomain() }
 )
 
+fun List<HistoryResponse>.toDomain() = map(HistoryResponse::toDomain)
+
 @Serializable
 data class HistoryElementResponse(
     val id: String,

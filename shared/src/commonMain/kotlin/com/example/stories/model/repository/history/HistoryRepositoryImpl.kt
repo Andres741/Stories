@@ -2,8 +2,8 @@ package com.example.stories.model.repository.history
 
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
-import com.example.stories.infrastructure.loading.LoadStatus
-import com.example.stories.infrastructure.loading.LoadStatus.Loading.toLoadStatus
+import com.example.stories.infrastructure.loading.Response
+import com.example.stories.infrastructure.loading.toResponse
 import com.example.stories.model.dataSource.local.history.model.dataToDomain
 import com.example.stories.model.dataSource.local.history.model.toDomainFlow
 import com.example.stories.model.dataSource.remote.history.model.toDomain
@@ -15,6 +15,8 @@ import com.example.stories.model.domain.model.toRealm
 import com.example.stories.model.domain.model.toResponse
 import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -22,7 +24,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
 
 class HistoryRepositoryImpl(
@@ -59,14 +60,16 @@ class HistoryRepositoryImpl(
         historyLocalDataSource.createEditingHistory(ObjectId(historyId))
     }
 
-    override suspend fun deleteHistory(historyId: String, userId: String?) = runCatching {
-        coroutineScope {
-            if (userId != null) launch {
-                historyClaudDataSource.deleteHistory(userId, historyId)
-            }
+    override suspend fun deleteHistory(historyId: String, userId: String?): Response<Unit> {
+        return coroutineScope {
+            val response = if (userId != null) async {
+                historyClaudDataSource.deleteHistory(userId, historyId).map { Unit }
+            } else null
             historyLocalDataSource.deleteHistory(ObjectId(historyId))
-        }
-    }.toLoadStatus()
+
+            response?.await() ?: Result.success(Unit)
+        }.toResponse()
+    }
 
     override suspend fun deleteEditingHistory(historyId: String) {
         historyLocalDataSource.deleteEditingHistory(ObjectId(historyId))
@@ -123,23 +126,30 @@ class HistoryRepositoryImpl(
         historyLocalDataSource.swapElements(ObjectId(historyId), ObjectId(fromId), ObjectId(toId))
     }
 
-    override suspend fun getClaudMock() = historyClaudDataSource.getMock().map { it.toDomain() }
+    override suspend fun getClaudMock(): Response<List<History>> = historyClaudDataSource.getMock().map {
+        it.toDomain()
+    }.toResponse()
 
-    override suspend fun getUserStories(userId: String): LoadStatus<List<History>> = runCatching {
-        historyClaudDataSource.getUserStories(userId).map { it.toDomain() }
-    }.toLoadStatus()
+    override suspend fun getUserStories(userId: String): Response<List<History>> {
+        return historyClaudDataSource.getUserStories(userId).map { it.toDomain() }.toResponse()
+    }
 
-    override suspend fun getHistory(userId: String, historyId: String) = runCatching {
-        historyClaudDataSource.getHistory(userId = userId, historyId = historyId).toDomain()
-    }.toLoadStatus()
+    override suspend fun getHistory(userId: String, historyId: String): Response<History> {
+        return historyClaudDataSource.getHistory(userId = userId, historyId = historyId).map {
+            it.toDomain()
+        }.toResponse()
+    }
 
-    override suspend fun saveStoriesInClaud(stories: List<History>, userId: String): LoadStatus<Unit> = runCatching {
-        coroutineScope {
-            stories.forEach { history ->
-                launch {
+    override suspend fun saveStoriesInClaud(stories: List<History>, userId: String): Response<Unit> {
+        return coroutineScope {
+            stories.map { history ->
+                async {
                     historyClaudDataSource.saveHistory(userId, history.toResponse())
                 }
+            }.awaitAll().forEach { item ->
+                item.onFailure { return@coroutineScope item }
             }
-        }
-    }.toLoadStatus()
+            runCatching {  }
+        }.toResponse()
+    }
 }

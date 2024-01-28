@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 
 fun buildKtorClient() = HttpClient {
     developmentMode = true
+    expectSuccess = true
     install(ContentNegotiation) {
         json(Json {
             ignoreUnknownKeys = true

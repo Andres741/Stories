@@ -42,20 +42,26 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
+                // Resources
                 api("dev.icerock.moko:resources:0.23.0")
-
                 implementation("io.insert-koin:koin-core:3.3.3")
                 api("dev.icerock.moko:mvvm-core:0.16.1")
 
+                // Realm
                 implementation("io.realm.kotlin:library-base:1.10.0")
                 implementation("io.realm.kotlin:library-sync:1.10.0")
 
+                // Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+                // Arrow
+                implementation("io.arrow-kt:arrow-core:1.2.0")
+                implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0")
             }
         }
 

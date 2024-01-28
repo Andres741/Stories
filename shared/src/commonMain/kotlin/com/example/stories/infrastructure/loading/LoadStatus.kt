@@ -49,20 +49,14 @@ sealed class LoadStatus<out D: Any> {
             is Loading -> this
         }
     }
-
-    fun<T: Any> Result<T>.toLoadStatus(exceptionMapper: ((Exception) -> LoadingError)? = null) = fold(
-        onSuccess = { Data(it) },
-        onFailure = { throwable ->
-            if (throwable is kotlin.Error) throw throwable
-            if (throwable is Exception && exceptionMapper != null) {
-                return@fold Error(exceptionMapper(throwable))
-            }
-            Error(LoadingError.GenericError)
-        },
-    )
 }
 
 fun<T: Any> loadStatusOf(data: T) = LoadStatus.Data(data)
+
+fun<T: Any> Response<T>.toLoadStatus(): LoadStatus<T> = fold(
+    ifLeft = { LoadStatus.Error(it) },
+    ifRight = { LoadStatus.Data(it) },
+)
 
 fun <T: Any> MutableStateFlow<LoadStatus<T>>.setRefreshing() {
     update { oldValue ->

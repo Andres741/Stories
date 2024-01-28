@@ -36,9 +36,9 @@ fun AppContent() {
                 composable(route = Routes.COMMUNITY.getRoute()) {
                     CommunityScreen(
                         viewModel = viewModel(),
-                        navigateToStories = { historyId ->
-                            if (historyId == null) navController.navigate(Routes.STORIES.name)
-                            else navController.navigate(Routes.COMMUNITY_STORIES.getDestinationRoute(historyId))
+                        navigateToStories = { userId ->
+                            if (userId == null) navController.navigate(Routes.STORIES.name)
+                            else navController.navigate(Routes.COMMUNITY_STORIES.getDestinationRoute(userId))
                         },
                     )
                 }

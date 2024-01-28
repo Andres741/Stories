@@ -3,6 +3,7 @@ package com.example.stories.viewModel
 import com.example.stories.Component
 import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.infrastructure.loading.setRefreshing
+import com.example.stories.infrastructure.loading.toLoadStatus
 import com.example.stories.infrastructure.loading.toLoadStatusCommonStateFlow
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.useCase.GetAllUsersUseCase
@@ -34,14 +35,14 @@ class CommunityCommonViewModel(
 
     init {
         viewModelScope.launch {
-            allUsersLoadStatus.value = getAllUsersUseCase()
+            allUsersLoadStatus.value = getAllUsersUseCase().toLoadStatus()
         }
     }
 
     fun refreshData() {
         viewModelScope.launch {
             allUsersLoadStatus.setRefreshing()
-            allUsersLoadStatus.value = getAllUsersUseCase()
+            allUsersLoadStatus.value = getAllUsersUseCase().toLoadStatus()
         }
     }
 }

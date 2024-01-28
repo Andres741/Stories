@@ -1,6 +1,6 @@
 package com.example.stories.model.domain.useCase
 
-import com.example.stories.infrastructure.loading.LoadStatus
+import com.example.stories.infrastructure.loading.Response
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.repository.HistoryRepository
 import com.example.stories.model.domain.repository.UserRepository
@@ -18,7 +18,7 @@ class CreateUserUseCase(
         description: String,
         profileImage: String?,
         saveLocalStories: Boolean = true,
-    ): LoadStatus<User>? = withContext(NonCancellable) {
+    ): Response<User>? = withContext(NonCancellable) {
         if (name.isBlank()) return@withContext null
         userRepository.createUser(name, description, profileImage).also {
             if (saveLocalStories) {

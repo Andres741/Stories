@@ -1,6 +1,10 @@
 package com.example.stories.model.domain.useCase
 
-import com.example.stories.infrastructure.loading.LoadStatus
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
+import com.example.stories.infrastructure.loading.LoadingError
+import com.example.stories.infrastructure.loading.Response
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.repository.HistoryRepository
@@ -13,7 +17,7 @@ class GetUserStoriesUseCase(
     private val historyRepository: HistoryRepository,
 ) {
 
-    suspend operator fun invoke(userId: String): LoadStatus<Pair<User, List<History>>> = coroutineScope {
+    suspend operator fun invoke(userId: String): Response<Pair<User, List<History>>> = coroutineScope {
         val userDef = async {
             userRepository.getUserById(userId)
         }
@@ -21,12 +25,11 @@ class GetUserStoriesUseCase(
         val stories = historyRepository.getUserStories(userId)
         val user = userDef.await()
 
-        val error = user.errorOrNull() ?: stories.errorOrNull()
-
-        error?.let {
-            return@coroutineScope LoadStatus.Error(it)
+        if (user is Either.Right && stories is Either.Right) {
+            return@coroutineScope (user.value to stories.value).right()
         }
 
-        LoadStatus.Data(user.dataOrNull()!! to stories.dataOrNull()!!)
+        val error = (user.leftOrNull() ?: stories.leftOrNull() ?: LoadingError.GenericError)
+        error.left()
     }
 }

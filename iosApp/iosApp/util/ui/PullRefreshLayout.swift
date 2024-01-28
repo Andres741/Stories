@@ -15,9 +15,7 @@ struct PullRefreshLayout<Content>: View where Content : View {
     }
     
     var body: some View {
-        NavigationStack {
-            content()
-        }
+        content()
         .refreshable {
             let _: Void = await withCheckedContinuation {
                 continuation.value = $0
