@@ -4,15 +4,17 @@ import shared
 extension CommunityScreen {
     @MainActor class CommunityViewModel : ObservableObject, ViewLifeCycleObserver {
         
-        private let commonViewModel = CommunityCommonViewModel()
+        private var commonViewModel: CommunityCommonViewModel?
         
         @Published private(set) var usersLoadStatus: LoadStatus<Reference<[User]>>? = nil
         
         func refreshData() {
-            commonViewModel.refreshData()
+            commonViewModel?.refreshData()
         }
 
         func startObserving() {
+            let commonViewModel = CommunityCommonViewModel()
+            self.commonViewModel = commonViewModel
             commonViewModel.users.subscribe(scope: commonViewModel.viewModelScope) { users in
                 if let users = users {
                     self.usersLoadStatus = users.mapData { user in
@@ -23,7 +25,7 @@ extension CommunityScreen {
         }
         
         func stopObserving() {
-            commonViewModel.dispose()
+            commonViewModel?.dispose()
         }
     }
 }

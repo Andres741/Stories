@@ -4,19 +4,22 @@ import shared
 extension CommunityStoriesListScreen {
     @MainActor class CommunityStoriesListViewModel : ObservableObject, ViewLifeCycleObserver {
         
-        private let commonViewModel: CommunityStoriesListCommonViewModel
+        private let userId: String
+        private var commonViewModel: CommunityStoriesListCommonViewModel?
         
         init(userId: String) {
-            commonViewModel = CommunityStoriesListCommonViewModel(userId: userId)
+            self.userId = userId
         }
         
         @Published var userAndStoriesLoadStatus: LoadStatus<Reference<(User, [History])>>? = nil
         
         func refreshData() {
-            commonViewModel.refreshData()
+            commonViewModel?.refreshData()
         }
         
         func startObserving() {
+            let commonViewModel = CommunityStoriesListCommonViewModel(userId: userId)
+            self.commonViewModel = commonViewModel
             commonViewModel.userAndStoriesLoadStatus.subscribe(scope: commonViewModel.viewModelScope) { userAndStoriesLoadStatus in
                 if let userAndStoriesLoadStatus {
                     self.userAndStoriesLoadStatus = userAndStoriesLoadStatus.mapData { userAndStories in
@@ -29,7 +32,7 @@ extension CommunityStoriesListScreen {
         }
         
         func stopObserving() {
-            commonViewModel.dispose()
+            commonViewModel?.dispose()
         }
     }
 }

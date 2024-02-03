@@ -4,25 +4,27 @@ import shared
 extension StoriesListScreen {
     @MainActor class StoriesListViewModel : ObservableObject, ViewLifeCycleObserver {
         
-        private let commonViewModel = StoriesListCommonViewModel()
+        private var commonViewModel: StoriesListCommonViewModel?
         
         @Published var storiesLoadStatus: LoadStatus<Reference<[History]>>? = nil
         @Published var newHistory: History? = nil
         @Published var isLogged: Bool? = nil
         
         func deleteHistory(historyId: String) {
-            commonViewModel.deleteHistory(historyId: historyId)
+            commonViewModel?.deleteHistory(historyId: historyId)
         }
 
         func createBasicHistory(title: String, text: String) {
-            commonViewModel.createBasicHistory(title: title, text: text)
+            commonViewModel?.createBasicHistory(title: title, text: text)
         }
 
         func onNewHistoryConsumed() {
-            commonViewModel.onNewHistoryConsumed()
+            commonViewModel?.onNewHistoryConsumed()
         }
 
         func startObserving() {
+            let commonViewModel = StoriesListCommonViewModel()
+            self.commonViewModel = commonViewModel
             commonViewModel.storiesLoadStatus.subscribe(scope: commonViewModel.viewModelScope) { stories in
                 if let stories = stories {
                     self.storiesLoadStatus = stories.mapData { stories in
@@ -39,7 +41,7 @@ extension StoriesListScreen {
         }
         
         func stopObserving() {
-            commonViewModel.dispose()
+            commonViewModel?.dispose()
         }
     }
 }

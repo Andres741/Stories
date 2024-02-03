@@ -9,11 +9,7 @@ struct UserDataScreen: View {
     var body: some View {
         LoadingDataScreen(
             loadStatus: viewModel.userLoadStatus
-        ) { error in
-            DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
-        } loadingContent: {
-            DefaultLoadingScreen()
-        } successContent: { user in
+        ) { user in
             UserData(
                 user: user,
                 showEditUserData: $showEditUserData

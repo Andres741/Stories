@@ -36,14 +36,7 @@ struct HistoryDetailScreen: View {
     var body: some View {
         let historyLoadStatus = viewModel.historyLoadStatus
             
-        LoadingDataScreen(
-            loadStatus: historyLoadStatus
-        ) { error in
-            DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
-        } loadingContent: {
-            DefaultLoadingScreen()
-        } successContent: {
-            
+        LoadingDataScreen(loadStatus: historyLoadStatus) {
             let history = viewModel.editingHistory ?? $0
             
             ScreenBody(history)
