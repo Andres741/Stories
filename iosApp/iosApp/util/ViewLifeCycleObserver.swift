@@ -1,6 +1,6 @@
 import SwiftUI
 
-protocol ViewLifeCycleObserver {
+@MainActor protocol ViewLifeCycleObserver {
     
     func startObserving()
     func stopObserving()
@@ -8,7 +8,7 @@ protocol ViewLifeCycleObserver {
 }
 
 extension View {
-    func attach(observer: ViewLifeCycleObserver) -> some View {
+    @MainActor func attach(observer: ViewLifeCycleObserver) -> some View {
         return onAppear {
             observer.startObserving()
         }.onDisappear {

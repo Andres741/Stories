@@ -8,10 +8,10 @@ struct HistoryDetailScreen: View {
 
     @StateObject private var viewModel: HistoryDetailViewModel
     
-    @State var elementsEnumerated = [EnumeratedSequence<[Element]>.Element]()
+    @State var elementsEnumerated = [EnumeratedSequence<[HistoryElement]>.Element]()
     @State var editMode = false
         
-    @State var editingElement: Element? = nil
+    @State var editingElement: HistoryElement? = nil
     @State var isEditingTitle = false
     @State var isEditingLocalDateRange = false
     
@@ -28,90 +28,18 @@ struct HistoryDetailScreen: View {
     @State var showCreateNewTextPopUp = false
     @State var showCreateNewImagePopUp = false
 
-    init(historyId: Int64) {
+    init(historyId: String) {
         _viewModel = StateObject(wrappedValue: HistoryDetailViewModel(historyId: historyId))
     }
     
+
     var body: some View {
         let historyLoadStatus = viewModel.historyLoadStatus
             
-        LoadingDataScreen(
-            loadStatus: historyLoadStatus
-        ) { error in
-            DefaultErrorScreen(loadingError: error, onClickEnabled: false, onClickButton: { })
-        } loadingContent: {
-            DefaultLoadingScreen()
-        } successContent: {
-            
+        LoadingDataScreen(loadStatus: historyLoadStatus) {
             let history = viewModel.editingHistory ?? $0
             
-            ZStack {
-                VStack {
-                    VStack(alignment: .leading) {
-                        Text(history.title)
-                            .font(.title)
-                            .onTapGesture {
-                                if editMode {
-                                    isEditingTitle = true
-                                }
-                            }
-                            .rotationEffect(inclinationAngle)
-                            .padding(.bottom, titleBottomPadding)
-                        
-                        HStack {
-                            Text(history.dateRange.format())
-                                .rotationEffect(inclinationAngle)
-                                .onTapGesture {
-                                    if editMode { isEditingLocalDateRange = true }
-                                }
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    List {
-                        Section {
-                            ForEach(elementsEnumerated, id: \.element.id) { index, element in
-                                ElementItem(
-                                    historyElement: element,
-                                    editMode: editMode,
-                                    onClick: { if editMode { editingElement = $0 } },
-                                    moveElementUp: history.elements[safe: index-1].map { prev in {
-                                        viewModel.swapElements(fromId: element.id, toId: prev.id)
-                                    }},
-                                    moveElementDown: history.elements[safe: index+1].map { next in {
-                                        viewModel.swapElements(fromId: element.id, toId: next.id)
-                                    }},
-                                    deleteElement: (history.elements.count > 1) ? { element in
-                                        viewModel.deleteElement(element: element)
-                                    } : nil
-                                )
-                                .rotationEffect(inclinationAngle)
-                            }
-                        }
-                    }
-                }
-                
-                if editMode {
-                    VStack {
-                        Spacer()
-                        
-                        Menu {
-                            Button(action: { showCreateNewImagePopUp = true }) {
-                                Label(getStringResource(path: \.add_image), systemImage: "plus")
-                            }
-                            Button(action: { showCreateNewTextPopUp = true }) {
-                                Label(getStringResource(path: \.add_text), systemImage: "plus")
-                            }
-                        } label: {
-                            Button(getStringResource(path: \.add_item), action: {})
-                                .buttonStyle(.borderedProminent)
-                        }
-                    }
-                    .transition(.scale)
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
+            ScreenBody(history)
             .toolbar {
                 HStack {
                     if editMode {
@@ -222,59 +150,65 @@ struct HistoryDetailScreen: View {
                 }
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .attach(observer: viewModel)
     }
-}
-
-@ViewBuilder func ElementItem(
-    historyElement: Element,
-    editMode: Bool,
-    onClick: @escaping (Element) -> Void,
-    moveElementUp: (() -> Void)?,
-    moveElementDown: (() -> Void)?,
-    deleteElement: ((Element) -> Void)?
-) -> some View {
-    VStack {
-        switch historyElement {
-        case let text as Element.Text:
-            Text(text.text).onTapGesture { onClick(text) }
-        case let image as Element.Image:
-            AsyncItemImage(url: image.imageResource).onTapGesture { onClick(image) }
-        default:
-            EmptyView()
-        }
-        if editMode {
-            ZStack {
-                HStack {
-                    Button(action: moveElementUp ?? {}) {
-                        Image(systemName: "arrow.up")
+    
+    @ViewBuilder private func ScreenBody(_ history: History) -> some View {
+        ZStack {
+            VStack {
+                HistoryDetailHeader(
+                    history: history,
+                    titleBottomPadding: titleBottomPadding,
+                    editMode: editMode,
+                    inclinationAngle: inclinationAngle,
+                    onClickTitle: { isEditingTitle = true },
+                    onClickDate: { isEditingLocalDateRange = true }
+                )
+                
+                HistoryDetailBodyList(
+                    history: history,
+                    elementsEnumerated: elementsEnumerated,
+                    editMode: editMode,
+                    inclinationAngle: inclinationAngle,
+                    onClickElement: { editingElement = $0 },
+                    swapElements: { fromId, toId in
+                        viewModel.swapElements(fromId: fromId, toId: toId)
+                    },
+                    deleteElement: { element in
+                        viewModel.deleteElement(element: element)
                     }
-                    .buttonStyle(.borderless)
-                    .disabled(moveElementUp == nil)
-                    
-                    Button(action: moveElementDown ?? {}) {
-                        Image(systemName: "arrow.down")
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(moveElementDown == nil)
-                }
-                HStack {
-                    Spacer()
-                    Button(action: { deleteElement?(historyElement) }) {
-                        Image(systemName: "trash")
-                    }
-                    .buttonStyle(.borderless)
-                    .disabled(deleteElement == nil)
-                }
+                )
             }
-            .transition(.opacity)
-            .padding()
+            
+            if editMode {
+                EditMenu()
+            }
         }
+    }
+    
+    @ViewBuilder func EditMenu() -> some View {
+        VStack {
+            Spacer()
+            
+            Menu {
+                Button(action: { showCreateNewImagePopUp = true }) {
+                    Label(getStringResource(path: \.add_image), systemImage: "plus")
+                }
+                Button(action: { showCreateNewTextPopUp = true }) {
+                    Label(getStringResource(path: \.add_text), systemImage: "plus")
+                }
+            } label: {
+                Button(getStringResource(path: \.add_item), action: {})
+                    .buttonStyle(.borderedProminent)
+            }
+        }
+        .transition(.scale)
     }
 }
 
 struct HistoryDetailScreen_Previews: PreviewProvider {
     static var previews: some View {
-        HistoryDetailScreen(historyId: 1)
+        HistoryDetailScreen(historyId: "0")
     }
 }

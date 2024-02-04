@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,21 +24,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.historyDetail.components.AddElementFooter
-import com.example.stories.android.ui.historyDetail.components.ElementsListBody
+import com.example.stories.android.ui.components.ElementsListBody
+import com.example.stories.android.ui.components.TitleText
+import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDatePopUp
+import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
+import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTitlePopUp
-import com.example.stories.android.util.resources.sharedPainterResource
+import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.android.util.ui.actionableFloatAnimation
-import com.example.stories.data.domain.mocks.Mocks
-import com.example.stories.data.domain.model.Element
-import com.example.stories.data.domain.model.History
 import com.example.stories.infrastructure.date.LocalDateRange
+import com.example.stories.model.domain.model.History
+import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.HistoryMocks
 
 @Composable
 fun HistoryDetailScreen(
@@ -73,15 +74,15 @@ fun HistoryDetailScreen(
 fun HistoryDetail(
     history: History,
     editMode: Boolean,
-    editElement: (Element) -> Unit,
+    editElement: (HistoryElement) -> Unit,
     editTitle: (newTitle: String) -> Unit,
     editDateRange: (newDateRange: LocalDateRange) -> Unit,
     inverseEditHistory: () -> Unit,
     saveEditingHistory: () -> Unit,
     createTextElement: (text: String) -> Unit,
     createImageElement: (imageUrl: String) -> Unit,
-    swapElements: (fromId: Long, toId: Long) -> Unit,
-    deleteElement: (element: Element) -> Unit,
+    swapElements: (fromId: String, toId: String) -> Unit,
+    deleteElement: (element: HistoryElement) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -102,9 +103,59 @@ fun HistoryDetail(
                 )
             ).run { { value } }
 
+            var editingElement by remember { mutableStateOf(null as HistoryElement?) }
+            editingElement?.let { element ->
+                when (element) {
+                    is HistoryElement.Text -> EditTextElementPopUp(
+                        text = element.text,
+                        onConfirm = {
+                            editElement(element.copy(text = it))
+                            editingElement = null
+                        },
+                        onDismiss = { editingElement = null }
+                    )
+                    is HistoryElement.Image -> EditImageElementPopUp(
+                        imageUrl = element.imageResource,
+                        onConfirm = {
+                            editElement(element.copy(imageResource = it))
+                            editingElement = null
+                        },
+                        onDismiss = { editingElement = null }
+                    )
+                }
+            }
+
+            var editingDateRange by remember { mutableStateOf(null as LocalDateRange?) }
+            editingDateRange?.let {
+                EditDatePopUp(
+                    dateRange = it,
+                    onConfirm = { newDateRange ->
+                        editDateRange(newDateRange)
+                        editingDateRange = null
+                    },
+                    onDismiss = {
+                        editingDateRange = null
+                    }
+                )
+            }
+
             Column(modifier = Modifier.align(Alignment.TopCenter)) {
-                TitleHeader(history.title, editMode, rotation, editTitle)
-                ElementsListBody(history, editMode, rotation, editElement, editDateRange, swapElements, deleteElement)
+                TitleHeader(
+                    title = history.title,
+                    editMode = editMode,
+                    rotation = rotation,
+                    onEditTitle = editTitle,
+                )
+
+                ElementsListBody(
+                    history = history,
+                    editMode = editMode,
+                    rotation = rotation,
+                    onClickElement = { editingElement = it },
+                    onClickDate = { editingDateRange = it },
+                    swapElements = swapElements,
+                    deleteElement = deleteElement,
+                )
             }
 
             AddElementFooter(
@@ -118,7 +169,7 @@ fun HistoryDetail(
 }
 
 @Composable
-fun TitleHeader(
+private fun TitleHeader(
     title: String,
     editMode: Boolean,
     rotation: () -> Float,
@@ -138,16 +189,11 @@ fun TitleHeader(
         )
     }
 
-    Text(
+    TitleText(
         text = title,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp)
-            .padding(horizontal = 24.dp)
             .graphicsLayer { rotationZ = rotation() }
-            .clickable(enabled = editMode) { editingTitle = title },
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.displayMedium
+            .clickable(enabled = editMode) { editingTitle = title }
     )
 }
 
@@ -162,7 +208,7 @@ fun HistoryDetailFab(
             FloatingActionButton(onClick = saveEditingHistory) {
                 Icon(
                     modifier = Modifier.size(40.dp),
-                    painter = sharedPainterResource { save_icon },
+                    painter = getPainterResource { save_icon },
                     contentDescription = "",
                 )
             }
@@ -171,7 +217,7 @@ fun HistoryDetailFab(
         FloatingActionButton(onClick = inverseEditHistory) {
             Icon(
                 modifier = Modifier.size(40.dp),
-                painter = sharedPainterResource { if (editMode) cancel_icon else edit_icon },
+                painter = getPainterResource { if (editMode) cancel_icon else edit_icon },
                 contentDescription = "",
             )
         }
@@ -188,7 +234,7 @@ fun StoriesList_preview() {
         ) {
             var editMode by remember { mutableStateOf(false) }
             HistoryDetail(
-                history = if (editMode) Mocks().getMockStories()[2] else Mocks().getMockStories()[1],
+                history = if (editMode) HistoryMocks().getMockStories()[2] else HistoryMocks().getMockStories()[1],
                 editMode = editMode,
                 editElement = {},
                 editTitle = {},

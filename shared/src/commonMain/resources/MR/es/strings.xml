@@ -16,6 +16,7 @@
     <string name="dismiss">Descartar</string>
     <string name="edit">Editar</string>
     <string name="save">Guardar</string>
+    <string name="refresh">Refrescar</string>
 
     <string name="init_date">Fecha de inicio</string>
     <string name="end_date">Fecha final</string>
@@ -32,6 +33,25 @@
 
     <string name="empty_history_list_title">No tienes historias todavía</string>
     <string name="empty_history_list_text">Cuéntanos una de tus historias pulsando el botón de añadir o sal fuera y deja que las cosas pasen</string>
+    <string name="empty_community_history_list_text">Este usuario todavía no ha publicado ninguna historia</string>
 
     <string name="create_history">Crear</string>
+
+    <string name="community">Comunidad</string>
+    <string name="my_posts">Mis posts</string>
+
+    <string name="not_logged_warn">No has iniciado sesión, pulsa aquí para disfrutar de la experiencia completa.</string>
+    <string name="logged_warn">Configura tus datos de cuenta.</string>
+
+    <string name="log_in">Inicio de sesión</string>
+    <string name="crate_user">Crear nuevo usuario</string>
+    <string name="user_name">Nombre</string>
+    <string name="user_description">Descripción</string>
+    <string name="user_profile_image">Imagen de perfil</string>
+    <string name="not_loaded_profile_image_warn">Si no carga la image la url no será guardada.</string>
+    <string name="user_name_not_valid_warn">El nombre de usuario no puede estar vacío.</string>
+
+    <string name="user_data_title">Tus datos</string>
+    <string name="edit_user_data_title">Edita tus datos</string>
+    <string name="edit_user_data_save_new_data">Guardar tus nuevos datos</string>
 </resources>

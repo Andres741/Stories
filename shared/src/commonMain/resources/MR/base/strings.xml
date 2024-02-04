@@ -16,6 +16,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>
+    <string name="refresh">Refresh</string>
 
     <string name="init_date">Initial date</string>
     <string name="end_date">End date</string>
@@ -32,6 +33,25 @@
 
     <string name="empty_history_list_title">No stories yet</string>
     <string name="empty_history_list_text">Tell us about your stories by tapping the add button or go outside and just let things happened</string>
+    <string name="empty_community_history_list_text">This user still hasn\'t stories posted</string>
 
     <string name="create_history">Create</string>
+
+    <string name="community">Community</string>
+    <string name="my_posts">My posts</string>
+
+    <string name="not_logged_warn">You are not log in, press here to enjoy the full experience.</string>
+    <string name="logged_warn">Configure your account data</string>
+
+    <string name="log_in">Log in</string>
+    <string name="crate_user">Crate new user</string>
+    <string name="user_name">Name</string>
+    <string name="user_description">Description</string>
+    <string name="user_profile_image">Profile image</string>
+    <string name="not_loaded_profile_image_warn">If image isn\'t load the URL won\'t be saved.</string>
+    <string name="user_name_not_valid_warn">User name cannot be empty.</string>
+
+    <string name="user_data_title">Your data</string>
+    <string name="edit_user_data_title">Edit your data</string>
+    <string name="edit_user_data_save_new_data">Save your new data</string>
 </resources>

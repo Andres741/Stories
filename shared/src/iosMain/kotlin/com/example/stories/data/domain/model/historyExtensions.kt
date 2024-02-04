@@ -1,4 +1,6 @@
 package com.example.stories.data.domain.model
 
-fun Element.Text.updateText(new: String) = copy(text = new)
-fun Element.Image.updateImageResource(new: String) = copy(imageResource = new)
+import com.example.stories.model.domain.model.HistoryElement
+
+fun HistoryElement.Text.updateText(new: String) = copy(text = new)
+fun HistoryElement.Image.updateImageResource(new: String) = copy(imageResource = new)

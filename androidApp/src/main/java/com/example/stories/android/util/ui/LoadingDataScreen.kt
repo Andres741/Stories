@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,9 +30,37 @@ import androidx.compose.ui.unit.min
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getString
 import com.example.stories.android.util.resources.getStringResource
-import com.example.stories.android.util.resources.sharedPainterResource
+import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.infrastructure.loading.LoadingError
 import com.example.stories.infrastructure.loading.LoadStatus
+
+@Composable
+fun<T: Any> RefreshLoadingDataScreen(
+    loadStatus: LoadStatus<T>,
+    onRefresh: () -> Unit,
+    errorContent: @Composable (LoadingError) -> Unit = {
+        DefaultErrorScreen(
+            loadingError = it,
+            buttonText = getStringResource { refresh },
+            onClickButton = onRefresh,
+        )
+    },
+    loadingContent: @Composable () -> Unit = { DefaultLoadingScreen() },
+    successContent: @Composable BoxScope.(T) -> Unit
+) {
+    when (loadStatus) {
+        is LoadStatus.Error -> errorContent(loadStatus.error)
+        LoadStatus.Loading -> loadingContent()
+        is LoadStatus.Data -> {
+            PullRefreshLayout(
+                isRefreshing = loadStatus.isRefreshing(),
+                onRefresh = onRefresh,
+            ) {
+                successContent(loadStatus.value)
+            }
+        }
+    }
+}
 
 @Composable
 fun<T: Any> LoadingDataScreen(
@@ -50,7 +79,8 @@ fun<T: Any> LoadingDataScreen(
 @Composable
 fun DefaultErrorScreen(
     loadingError: LoadingError,
-    onClickButton: (() -> Unit)? = null
+    buttonText: String = getStringResource { accept },
+    onClickButton: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
@@ -63,7 +93,7 @@ fun DefaultErrorScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = sharedPainterResource(imageResource = loadingError.icon),
+                painter = getPainterResource(imageResource = loadingError.icon),
                 modifier = Modifier
                     .padding(16.dp)
                     .size(36f.dp),
@@ -91,7 +121,7 @@ fun DefaultErrorScreen(
                 contentColor = MaterialTheme.colorScheme.onError
             )
         ) {
-            Text(text = getStringResource { accept })
+            Text(text = buttonText)
         }
     }
 }

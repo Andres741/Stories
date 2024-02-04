@@ -7,11 +7,11 @@ import com.example.stories.SharedRes
 import dev.icerock.moko.resources.ImageResource
 
 @Composable
-fun sharedPainterResource(imageResource: ImageResource): Painter {
+fun getPainterResource(imageResource: ImageResource): Painter {
     return painterResource(id = imageResource.drawableResId)
 }
 
 @Composable
-inline fun sharedPainterResource(resource: SharedRes.images.() -> ImageResource): Painter {
-    return sharedPainterResource(imageResource = SharedRes.images.resource())
+inline fun getPainterResource(resource: SharedRes.images.() -> ImageResource): Painter {
+    return getPainterResource(imageResource = SharedRes.images.resource())
 }

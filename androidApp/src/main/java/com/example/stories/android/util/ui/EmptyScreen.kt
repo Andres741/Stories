@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stories.android.ui.StoriesTheme
-import com.example.stories.android.util.resources.sharedPainterResource
+import com.example.stories.android.util.resources.getPainterResource
 
 @Composable
 fun EmptyScreen(
@@ -29,7 +29,7 @@ fun EmptyScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
     ) {
-        Icon(sharedPainterResource { empty_list }, "")
+        Icon(getPainterResource { empty_list }, "")
         Text(text = title, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
         Text(text = text, textAlign = TextAlign.Center)
     }
