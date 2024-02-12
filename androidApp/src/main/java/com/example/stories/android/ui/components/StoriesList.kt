@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
@@ -40,6 +42,7 @@ fun StoriesListBody(
     emptyScreenTitle: String,
     emptyScreenText: String,
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
     onClickDelete: ((String) -> Unit)? = null,
 ) {
 
@@ -51,7 +54,7 @@ fun StoriesListBody(
         return
     }
 
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier, state = listState) {
         items(stories, key = { it.id }) {history ->
             HistoryItem(
                 history = history,
