@@ -54,4 +54,8 @@
     <string name="user_data_title">Tus datos</string>
     <string name="edit_user_data_title">Edita tus datos</string>
     <string name="edit_user_data_save_new_data">Guardar tus nuevos datos</string>
+
+    <string name="pick_image">Seleccionar imagen</string>
+    <string name="pick_other_image">Seleccionar otra imagen</string>
+    <string name="drop_image">Quitar imagn</string>
 </resources>

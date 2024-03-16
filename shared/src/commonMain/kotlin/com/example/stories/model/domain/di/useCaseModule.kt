@@ -17,6 +17,7 @@ import com.example.stories.model.domain.useCase.GetHistoryByIdUseCase
 import com.example.stories.model.domain.useCase.GetHistoryFromAPIUseCase
 import com.example.stories.model.domain.useCase.GetLocalUserUseCase
 import com.example.stories.model.domain.useCase.GetUserStoriesUseCase
+import com.example.stories.model.domain.useCase.SendImageUseCase
 import com.example.stories.model.domain.useCase.SwapElementsUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryDateRangeUseCase
 import com.example.stories.model.domain.useCase.UpdateHistoryElementUseCase
@@ -47,4 +48,5 @@ val useCasesModule = module {
     single { GetLocalUserUseCase(get()) }
     single { CreateUserUseCase(get(), get()) }
     single { UpdateUserUseCase(get()) }
+    single { SendImageUseCase(get()) }
 }
