@@ -13,6 +13,7 @@ struct TestImagePickerScreen: View {
     var body: some View {
         VStack {
             ImagePicker(photosPickerItem: $photosPickerItem)
+                .padding(.horizontal)
             
             ScrollView {
                 VStack {
@@ -39,7 +40,7 @@ struct TestImagePickerScreen: View {
                     .background {
                         Color.red.opacity(0.7)
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }.background {
                 Color.blue

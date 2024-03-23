@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import shared
 
 extension PhotosPickerItem {
     func getData() async -> Data? {
@@ -13,16 +14,14 @@ extension PhotosPickerItem {
 
 extension String {
     var uiImageFromBase64: UIImage? {
-        guard let imageData = Data(base64Encoded: self, options: .ignoreUnknownCharacters) else {
-            return nil
+        Data(base64Encoded: self, options: .ignoreUnknownCharacters).flatMap { imageData in
+            UIImage(data: imageData)
         }
-        return UIImage(data: imageData)
     }
     
     var imageFromBase64: Image? {
-        guard let uiImage = uiImageFromBase64 else {
-            return nil
+        uiImageFromBase64.map { uiImage in
+            Image(uiImage: uiImage)
         }
-        return Image(uiImage: uiImage)
     }
 }

@@ -40,11 +40,13 @@ struct ImagePicker: View {
                 .background {
                     Color.gray.opacity(0.3)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .padding(.horizontal)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             } else {
-                PhotosPicker(getStringResource(path: \.pick_image), selection: $photosPickerItem, matching: .images)
-                    .buttonStyle(.bordered)
+                PhotosPicker(selection: $photosPickerItem, matching: .images) {
+                    Text(getStringResource(path: \.pick_image))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
             }
         }.transition(.scale)
         .onChange(of: photosPickerItem) { _ in

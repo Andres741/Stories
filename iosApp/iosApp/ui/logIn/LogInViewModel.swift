@@ -8,8 +8,8 @@ extension LogInScreen {
         
         @Published private(set) var userCreationState: UserCreationState = UserCreationStateNone()
 
-        func summitUserData(name: String, description: String, profileImage: String?) {
-            commonViewModel?.summitUserData(name: name, description: description, profileImage: profileImage)
+        func summitUserData(name: String, description: String, imageDataBase64: String?) {
+            commonViewModel?.summitUserData(name: name, description: description, imageDataBase64: imageDataBase64)
         }
         
         func startObserving() {

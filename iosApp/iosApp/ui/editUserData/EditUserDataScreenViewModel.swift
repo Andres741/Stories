@@ -9,8 +9,8 @@ extension EditUserDataScreen {
         @Published private(set) var localUserLoadStatus: LoadStatus<User>? = nil
         @Published private(set) var userCreationState: UserCreationState = UserCreationStateNone()
 
-        func saveNewUserData(name: String, description: String, profileImage: String?) {
-            commonViewModel?.saveNewUserData(name: name, description: description, profileImage: profileImage)
+        func saveNewUserData(name: String, description: String, imageDataBase64: String?) {
+            commonViewModel?.saveNewUserData(name: name, description: description, imageDataBase64: imageDataBase64)
         }
 
         func startObserving() {

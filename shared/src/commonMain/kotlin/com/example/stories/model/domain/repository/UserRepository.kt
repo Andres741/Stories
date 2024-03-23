@@ -8,6 +8,6 @@ interface UserRepository {
     suspend fun getAllUsers(): Response<List<User>>
     suspend fun getUserById(userId: String): Response<User>
     fun getLocalUser(): Flow<User?>
-    suspend fun createUser(name: String, description: String, profileImage: String?): Response<User>
-    suspend fun editUser(user: User): Response<Unit>
+    suspend fun createUser(name: String, description: String, byteArray: ByteArray?): Response<User>
+    suspend fun editUser(user: User, byteArray: ByteArray?): Response<User>
 }

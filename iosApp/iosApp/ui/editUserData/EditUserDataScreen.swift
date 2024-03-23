@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 import shared
 
 struct EditUserDataScreen: View {
@@ -7,8 +8,7 @@ struct EditUserDataScreen: View {
     
     @State var name = ""
     @State var description = ""
-    @State var imageURL = ""
-    @State var isURLValid = false
+    @State var photosPickerItem: PhotosPickerItem? = nil
     
     @State var isCreatingUser = false
     @State var contentBlurRadius = 0.0
@@ -31,17 +31,15 @@ struct EditUserDataScreen: View {
             EditUserData(
                 name: $name,
                 description: $description,
-                imageURL: $imageURL,
-                isURLValid: $isURLValid,
+                photosPickerItem: $photosPickerItem,
                 showEditUser: $showEditUserdata,
                 userCreationState: viewModel.userCreationState,
-                summitUserData: viewModel.saveNewUserData(name:description:profileImage:),
+                summitUserData: viewModel.saveNewUserData(name:description:imageDataBase64:),
                 acceptText: getStringResource(path: \.edit_user_data_save_new_data)
             )
             .onAppear {
                 self.name = localUser.name
                 self.description = localUser.description_
-                self.imageURL = localUser.profileImage ?? ""
             }
         }
         .navigationTitle(getStringResource(path: \.edit_user_data_title))

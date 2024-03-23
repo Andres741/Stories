@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 import shared
 
 struct LogInScreen: View {
@@ -7,8 +8,7 @@ struct LogInScreen: View {
     
     @State var name = ""
     @State var description = ""
-    @State var imageURL = ""
-    @State var isURLValid = false
+    @State var photosPickerItem: PhotosPickerItem? = nil
     
     @State var isCreatingUser = false
     @State var contentBlurRadius = 0.0
@@ -24,11 +24,10 @@ struct LogInScreen: View {
         EditUserData(
             name: $name, 
             description: $description,
-            imageURL: $imageURL,
-            isURLValid: $isURLValid,
+            photosPickerItem: $photosPickerItem,
             showEditUser: $showLogIn,
             userCreationState: viewModel.userCreationState,
-            summitUserData: viewModel.summitUserData(name:description:profileImage:),
+            summitUserData: viewModel.summitUserData(name:description:imageDataBase64:),
             acceptText: getStringResource(path: \.crate_user)
         )
         .navigationTitle(getStringResource(path: \.log_in))

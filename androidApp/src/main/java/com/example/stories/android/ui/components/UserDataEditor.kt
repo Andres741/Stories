@@ -1,5 +1,6 @@
 package com.example.stories.android.ui.components
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -8,7 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -33,16 +32,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.DefaultLoadingScreen
+import com.example.stories.android.util.ui.ImagePicker
 import com.example.stories.viewModel.UserCreationState
 
 @Composable
@@ -53,12 +49,10 @@ fun UserDataEditor(
     onNameChange: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
-    image: String,
-    onImageChange: (String) -> Unit,
-    isURLValid: Boolean,
-    onURLValid: (Boolean) -> Unit,
+    imageUri: Uri?,
+    onUriChange: (Uri?) -> Unit,
     userCreationState: UserCreationState,
-    summitUserData: (name: String, description: String, profileImage: String?) -> Unit,
+    summitUserData: (name: String, description: String, imageUri: Uri?) -> Unit,
     onUserCreated: () -> Unit,
 ) {
 
@@ -97,14 +91,13 @@ fun UserDataEditor(
                 onNameChange = onNameChange,
                 description = description,
                 onDescriptionChange = onDescriptionChange,
-                image = image,
-                onImageChange = onImageChange,
-                onURLValid = { onURLValid(it) },
+                imageUri = imageUri,
+                onUriChange = onUriChange,
                 modifier = Modifier.weight(1f),
             )
 
             Button(
-                onClick = { summitUserData(name, description, image.takeIf { isURLValid }) },
+                onClick = { summitUserData(name, description, imageUri) },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = 24.dp)
@@ -122,10 +115,9 @@ fun UserDataForm(
     onNameChange: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
-    image: String,
-    onImageChange: (String) -> Unit,
-    onURLValid: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    imageUri: Uri?,
+    onUriChange: (Uri?) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(36.dp),
@@ -156,26 +148,9 @@ fun UserDataForm(
             leadingIcon = { Icon(Icons.Filled.Menu, "") },
         )
 
-        TextField(
-            value = image,
-            onValueChange = onImageChange,
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 3,
-            label = { Text(text = getStringResource { user_profile_image }) },
-            leadingIcon = { Icon(Icons.Filled.Face, "") },
-            supportingText = { Text(text = getStringResource { not_loaded_profile_image_warn }) },
-        )
-
-        AsyncImage(
-            model = image,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth(.7f)
-                .aspectRatio(1f)
-                .align(Alignment.CenterHorizontally)
-                .clip(MaterialTheme.shapes.medium),
-            contentScale = ContentScale.Crop,
-            onState = { onURLValid(it is AsyncImagePainter.State.Success) },
+        ImagePicker(
+            imageUri = imageUri,
+            onUriChange = onUriChange,
         )
     }
 }
@@ -190,27 +165,28 @@ fun UserDataEditor_preview() {
         ) {
             val (name, onNameChange) = remember { mutableStateOf("") }
             val (description, onDescriptionChange) = remember { mutableStateOf("") }
-            val (image, onImageChange) = remember { mutableStateOf("") }
-            val (isURLValid, onURLValid) = remember { mutableStateOf(false) }
+            val (imageUri, onUriChange) = remember { mutableStateOf(null as Uri?) }
 
             var userCreationState by remember { mutableStateOf(UserCreationState.None as UserCreationState) }
             val context = LocalContext.current
 
-            UserDataEditor(
-                title = "UserDataEditor",
-                acceptText = "next state",
-                name = name,
-                onNameChange = onNameChange,
-                description = description,
-                onDescriptionChange = onDescriptionChange,
-                image = image,
-                onImageChange = onImageChange,
-                isURLValid = isURLValid,
-                onURLValid = onURLValid,
-                userCreationState = userCreationState,
-                summitUserData = { _, _, _ -> userCreationState = userCreationState.nextState() },
-                onUserCreated = { Toast.makeText(context, "User created", Toast.LENGTH_SHORT).show() }
-            )
+            Column {
+                Text(text = "imageUri: ${imageUri?.toString()}\npath: ${imageUri?.path}\nlastPathSegment: ${imageUri?.lastPathSegment}")
+
+                UserDataEditor(
+                    title = "UserDataEditor",
+                    acceptText = "next state",
+                    name = name,
+                    onNameChange = onNameChange,
+                    description = description,
+                    onDescriptionChange = onDescriptionChange,
+                    imageUri = imageUri,
+                    onUriChange = onUriChange,
+                    userCreationState = userCreationState,
+                    summitUserData = { _, _, _ -> userCreationState = userCreationState.nextState() },
+                    onUserCreated = { Toast.makeText(context, "User created", Toast.LENGTH_SHORT).show() }
+                )
+            }
         }
     }
 }

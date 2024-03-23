@@ -102,7 +102,7 @@ class TestViewModel : ViewModel() {
                 context = context,
             ) ?: return@launch
 
-            commonViewModel.sendPhoto("testImage", byteArrayImage.data)
+            commonViewModel.sendPhoto("testImage", byteArrayImage)
         }
     }
 }

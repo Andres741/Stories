@@ -12,11 +12,10 @@ class CreateUserUseCase(
     private val userRepository: UserRepository,
     private val historyRepository: HistoryRepository,
 ) {
-
     suspend operator fun invoke(
         name: String,
         description: String,
-        profileImage: String?,
+        profileImage: ByteArray?,
         saveLocalStories: Boolean = true,
     ): Response<User>? = withContext(NonCancellable) {
         if (name.isBlank()) return@withContext null

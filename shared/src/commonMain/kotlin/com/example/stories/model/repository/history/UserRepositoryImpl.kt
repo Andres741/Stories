@@ -31,18 +31,18 @@ class UserRepositoryImpl(
     override suspend fun createUser(
         name: String,
         description: String,
-        profileImage: String?,
+        byteArray: ByteArray?,
     ): Response<User> {
-        return claudDataSource.createUser(name, description, profileImage).map {
+        return claudDataSource.createUser(name, description, byteArray).map {
             it.toDomain().also { newUser ->
                 localDataSource.saveUser(newUser.toRealm())
             }
         }.toResponse()
     }
 
-    override suspend fun editUser(user: User): Response<Unit> {
-        return claudDataSource.editUser(user.toResponse()).onSuccess {
-            localDataSource.saveUser(user.toRealm())
+    override suspend fun editUser(user: User, byteArray: ByteArray?): Response<User> {
+        return claudDataSource.editUser(user.toResponse(), byteArray).map { it.toDomain() }.onSuccess { editedUser ->
+            localDataSource.saveUser(editedUser.toRealm())
         }.toResponse()
     }
 }

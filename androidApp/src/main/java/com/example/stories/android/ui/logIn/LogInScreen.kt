@@ -1,5 +1,6 @@
 package com.example.stories.android.ui.logIn
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -24,10 +25,12 @@ fun LogInScreen(
     navigateBack: () -> Unit,
 ) {
     val userCreationState by viewModel.userCreationState.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
     LogIn(
         userCreationState = userCreationState,
-        summitUserData = viewModel::summitUserData,
+        summitUserData = { name, description, imageUri ->
+            viewModel.summitUserData(name, description, imageUri, context)
+        },
         onUserCreated = navigateBack
     )
 }
@@ -35,14 +38,13 @@ fun LogInScreen(
 @Composable
 fun LogIn(
     userCreationState: UserCreationState,
-    summitUserData: (name: String, description: String, profileImage: String?) -> Unit,
+    summitUserData: (name: String, description: String, imageUri: Uri?) -> Unit,
     onUserCreated: () -> Unit,
 ) {
 
     val (name, onNameChange) = remember { mutableStateOf("") }
     val (description, onDescriptionChange) = remember { mutableStateOf("") }
-    val (image, onImageChange) = remember { mutableStateOf("") }
-    val (isURLValid, onURLValid) = remember { mutableStateOf(false) }
+    val (imageUri, onUriChange) = remember { mutableStateOf(null as Uri?) }
 
     UserDataEditor(
         title = getStringResource { log_in },
@@ -51,13 +53,11 @@ fun LogIn(
         onNameChange = onNameChange,
         description = description,
         onDescriptionChange = onDescriptionChange,
-        image = image,
-        onImageChange = onImageChange,
-        isURLValid = isURLValid,
-        onURLValid = onURLValid,
+        imageUri = imageUri,
+        onUriChange = onUriChange,
         userCreationState = userCreationState,
         summitUserData = summitUserData,
-        onUserCreated = onUserCreated
+        onUserCreated = onUserCreated,
     )
 }
 

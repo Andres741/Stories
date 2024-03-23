@@ -1,6 +1,7 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
+import com.example.stories.infrastructure.base64ToByteArray
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.model.domain.model.User
@@ -33,7 +34,7 @@ class EditUserDataScreenCommonViewModel(
         }
     }
 
-    fun saveNewUserData(name: String, description: String, profileImage: String?) {
+    fun saveNewUserData(name: String, description: String, imageData: ByteArray?) {
         val currentUser = localUserLoadStatus.value.dataOrNull() ?: return
         if (_userCreationState.value is UserCreationState.CreatingUser) return
 
@@ -44,8 +45,21 @@ class EditUserDataScreenCommonViewModel(
         _userCreationState.value = UserCreationState.CreatingUser
 
         viewModelScope.launch {
-            updateUserUseCase(currentUser.copy(name = name, description = description, profileImage = profileImage))
+            updateUserUseCase(
+                user = currentUser.copy(name = name, description = description),
+                imageData = imageData,
+            )
             _userCreationState.value = UserCreationState.Created
+        }
+    }
+
+    fun saveNewUserData(name: String, description: String, imageDataBase64: String?) {
+        viewModelScope.launch {
+            saveNewUserData(
+                name = name,
+                description = description,
+                imageData = imageDataBase64?.base64ToByteArray(),
+            )
         }
     }
 }

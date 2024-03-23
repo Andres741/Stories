@@ -16,7 +16,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.size.Size
-import com.example.stories.model.domain.model.ImageDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -74,11 +73,8 @@ object ImageUtils {
         return@withContext convertBitmapToByteArray(ensuredBitmap)
     }
 
-    suspend fun uriToImageDomain(uri: Uri, context: Context): ImageDomain? = withContext(Dispatchers.IO) {
-        ImageDomain(
-            name = uri.lastPathSegment ?: return@withContext null,
-            data = uriToByteArray(uri, SERVICE_MAX_SIZE, context).getOrNull() ?: return@withContext null
-        )
+    suspend fun uriToImageDomain(uri: Uri, context: Context): ByteArray? = withContext(Dispatchers.IO) {
+        uriToByteArray(uri, SERVICE_MAX_SIZE, context).getOrNull() ?: return@withContext null
     }
 
     suspend fun convertCompressedByteArrayToBitmap(src: ByteArray): Bitmap = withContext(Dispatchers.IO) {

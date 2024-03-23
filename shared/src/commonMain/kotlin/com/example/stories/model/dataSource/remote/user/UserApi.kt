@@ -1,15 +1,16 @@
 package com.example.stories.model.dataSource.remote.user
 
 import com.example.stories.infrastructure.loading.safeRequest
-import com.example.stories.model.dataSource.remote.setJsonBody
+import com.example.stories.model.dataSource.remote.createJpegImageFormData
 import com.example.stories.model.dataSource.remote.user.model.UserResponse
 import com.example.stories.model.repository.dataSource.UserClaudDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.client.request.post
-import io.ktor.client.request.put
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class UserApi(private val client: HttpClient) : UserClaudDataSource {
     companion object {
@@ -27,18 +28,23 @@ class UserApi(private val client: HttpClient) : UserClaudDataSource {
     override suspend fun createUser(
         name: String,
         description: String,
-        profileImage: String?,
+        profileImageData: ByteArray?,
     ): Result<UserResponse> = safeRequest {
-        client.post("$USERS_API/user") {
+        client.submitFormWithBinaryData(
+            url = "$USERS_API/user",
+            formData = createJpegImageFormData(key = "profileImage", profileImageData),
+        ) {
             parameter("userName", name)
             parameter("description", description)
-            parameter("profileImage", profileImage)
         }.body()
     }
 
-    override suspend fun editUser(user: UserResponse): Result<Unit> = safeRequest {
-        client.put("$USERS_API/edit") {
-            setJsonBody(user)
-        }
+    override suspend fun editUser(user: UserResponse, profileImageData: ByteArray?): Result<UserResponse> = safeRequest {
+        client.submitFormWithBinaryData(
+            url = "$USERS_API/edit",
+            formData = createJpegImageFormData(key = "profileImage", profileImageData) {
+                append("user", Json.encodeToString(user))
+            },
+        ).body()
     }
 }

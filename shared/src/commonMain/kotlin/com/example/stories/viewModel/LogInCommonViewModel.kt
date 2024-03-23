@@ -1,6 +1,7 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
+import com.example.stories.infrastructure.base64ToByteArray
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.model.domain.useCase.CreateUserUseCase
 import com.example.stories.model.domain.useCase.GetLocalUserUseCase
@@ -30,7 +31,7 @@ class LogInCommonViewModel(
         }
     }
 
-    fun summitUserData(name: String, description: String, profileImage: String?) {
+    fun summitUserData(name: String, description: String, imageData: ByteArray?) {
         if (_userCreationState.value is UserCreationState.CreatingUser) return
 
         if (name.isBlank()) {
@@ -40,7 +41,17 @@ class LogInCommonViewModel(
         _userCreationState.value = UserCreationState.CreatingUser
 
         viewModelScope.launch {
-            createUserUseCase(name, description, profileImage)
+            createUserUseCase(name, description, imageData)
+        }
+    }
+
+    fun summitUserData(name: String, description: String, imageDataBase64: String?) {
+        viewModelScope.launch {
+            summitUserData(
+                name = name,
+                description = description,
+                imageData = imageDataBase64?.base64ToByteArray(),
+            )
         }
     }
 }
