@@ -1,6 +1,6 @@
 package com.example.stories.android.ui.historyDetail.components.editPopUp
 
-import androidx.compose.foundation.layout.Spacer
+import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.TextField
@@ -10,11 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
+import com.example.stories.android.util.ui.ImagePicker
 
 @Composable
 fun EditTextElementPopUp(
@@ -44,34 +42,20 @@ fun EditTextElementPopUp(
 
 @Composable
 fun EditImageElementPopUp(
-    imageUrl: String,
-    onConfirm: (imageUrl: String) -> Unit,
+    imageUri: Uri?,
+    onSelectImage: (imageUri: Uri?) -> Unit,
+    onConfirm: (imageUri: Uri) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var inputText by remember { mutableStateOf(imageUrl) }
-    var isTextValid by remember { mutableStateOf(false) }
-
     BaseEditElementPopUp(
-        onConfirm = { onConfirm(inputText) },
-        isOnConfirmEnabled = isTextValid,
+        onConfirm = { onConfirm(imageUri ?: return@BaseEditElementPopUp) },
+        isOnConfirmEnabled = imageUri != null,
         modifier = Modifier.height(600.dp),
         onDismiss = onDismiss,
     ) {
-        AsyncImage(
-            model = inputText,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
-                .weight(1f),
-            onState = { isTextValid = it is AsyncImagePainter.State.Success }
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        TextField(
-            value = inputText,
-            onValueChange = { inputText = it },
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 15,
+        ImagePicker(
+            imageUri = imageUri,
+            onUriChange = onSelectImage,
         )
     }
 }

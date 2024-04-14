@@ -3,6 +3,7 @@ package com.example.stories.model.dataSource.remote.history.model
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.ImageResource
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -38,7 +39,7 @@ fun HistoryElementResponse.toDomain() = text?.let {
 } ?: image?.let {
     HistoryElement.Image(
         id = id,
-        imageResource = it.imageUrl,
+        imageResource = ImageResource.ImageUrl(it.imageUrl),
     )
 }
 

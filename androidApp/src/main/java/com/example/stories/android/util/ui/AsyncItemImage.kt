@@ -21,9 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.model.domain.model.ImageResource
 
 @Composable
-fun AsyncItemImage(url: String) {
+fun AsyncItemImage(imageResource: ImageResource) {
     Box(modifier = Modifier.fillMaxWidth()) {
         var isLoading by remember { mutableStateOf(true) }
 
@@ -33,7 +34,7 @@ fun AsyncItemImage(url: String) {
         )
 
         AsyncImage(
-            model = url,
+            model = imageResource.model,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth(),
@@ -52,7 +53,11 @@ fun AsyncItemImage_preview() {
         ) {
             LazyColumn(verticalArrangement = Arrangement.Center) {
                 item {
-                    AsyncItemImage(url = "https://www.elmueble.com/medio/2023/02/26/perro-de-raza-shiba-inu_b6387407_230226130353_900x900.jpg")
+                    AsyncItemImage(
+                        imageResource = ImageResource.ImageUrl(
+                            url = "https://www.elmueble.com/medio/2023/02/26/perro-de-raza-shiba-inu_b6387407_230226130353_900x900.jpg",
+                        ),
+                    )
                 }
             }
         }

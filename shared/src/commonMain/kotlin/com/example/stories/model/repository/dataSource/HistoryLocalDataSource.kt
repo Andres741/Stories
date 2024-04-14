@@ -22,7 +22,7 @@ interface HistoryLocalDataSource {
 
     suspend fun createTextElement(parentHistoryId: ObjectId, newText: String)
 
-    suspend fun createImageElement(parentHistoryId: ObjectId, newImageResource: String)
+    suspend fun createImageElement(parentHistoryId: ObjectId, newImageData: ByteArray)
 
     suspend fun deleteEditingElement(elementId: ObjectId)
 

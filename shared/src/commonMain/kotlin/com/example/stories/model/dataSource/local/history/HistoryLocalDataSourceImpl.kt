@@ -96,11 +96,11 @@ class HistoryLocalDataSourceImpl(
         )
     }
 
-    override suspend fun createImageElement(parentHistoryId: ObjectId, newImageResource: String) {
+    override suspend fun createImageElement(parentHistoryId: ObjectId, newImageData: ByteArray) {
         createElement(
             parentHistoryId = parentHistoryId,
             element = HistoryElementRealm().apply {
-                image = ImageElementRealm().apply { imageResource = newImageResource }
+                image = ImageElementRealm().apply { imageResource = newImageData }
             }
         )
     }
@@ -129,7 +129,10 @@ class HistoryLocalDataSourceImpl(
 
             val elementToEdit = parentHistory.editingData?.elements?.firstOrNull { it._id == historyElement._id } ?: return@write
 
-            findLatest(elementToEdit)?.text = historyElement.text
+            findLatest(elementToEdit)?.run {
+                text = historyElement.text
+                image = historyElement.image
+            }
         }
     }
 

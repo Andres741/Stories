@@ -13,6 +13,7 @@ import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.toRealm
 import com.example.stories.model.domain.model.toResponse
+import com.example.stories.model.domain.repository.ImageRepository
 import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -29,6 +30,7 @@ import org.mongodb.kbson.ObjectId
 class HistoryRepositoryImpl(
     private val historyLocalDataSource: HistoryLocalDataSource,
     private val historyClaudDataSource: HistoryClaudDataSource,
+    private val imageRepository: ImageRepository,
 ) : HistoryRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -81,10 +83,23 @@ class HistoryRepositoryImpl(
                 val history = getHistoryById(historyId).first() ?: return@also
 
                 return runCatching {
-                    historyClaudDataSource.saveHistory(userId, history.toResponse())
+                    val idToImageName = coroutineScope {
+                        history.elements
+                            .asSequence()
+                            .mapNotNull { it.id to (it.getImageData() ?: return@mapNotNull null) }
+                            .map { (id, data) ->
+                                async {
+                                    id to imageRepository.sendImage(data).getOrNull()
+                                }
+                            }
+                            .toList()
+                            .awaitAll()
+                            .toMap()
+                    }
+                    historyClaudDataSource.saveHistory(userId, history.toResponse(idToImageName))
                 }.fold(
                     onSuccess = { true },
-                    onFailure = { false }
+                    onFailure = { false },
                 )
             }
         }
@@ -98,8 +113,8 @@ class HistoryRepositoryImpl(
         historyLocalDataSource.createTextElement(ObjectId(parentHistoryId), newText)
     }
 
-    override suspend fun createImageElement(parentHistoryId: String, newImageResource: String) {
-        historyLocalDataSource.createImageElement(ObjectId(parentHistoryId), newImageResource)
+    override suspend fun createImageElement(parentHistoryId: String, newImageData: ByteArray) {
+        historyLocalDataSource.createImageElement(ObjectId(parentHistoryId), newImageData)
     }
 
     override suspend fun deleteEditingElement(elementId: String) {

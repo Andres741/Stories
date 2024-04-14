@@ -1,11 +1,15 @@
 package com.example.stories.android.ui.historyDetail
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.stories.android.util.ImageUtils
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.viewModel.HistoryDetailCommonViewModel
+import kotlinx.coroutines.launch
 
 class HistoryDetailViewModel(historyId: String) : ViewModel() {
 
@@ -21,7 +25,16 @@ class HistoryDetailViewModel(historyId: String) : ViewModel() {
 
     fun cancelEdit() = commonViewModel.cancelEdit()
 
-    fun editItem(element: HistoryElement) = commonViewModel.editElement(element)
+    fun editItem(context: Context, element: HistoryElement, imageUri: Uri?) {
+        viewModelScope.launch {
+            val updatedElement = imageUri?.let {
+                ImageUtils.uriToImageDomain(imageUri, context)
+            }?.let { imageData ->
+                (element as? HistoryElement.Image)?.setDataFromUrl(imageData)
+            } ?: element
+            commonViewModel.editElement(updatedElement)
+        }
+    }
 
     fun editTitle(newTitle: String) = commonViewModel.editTitle(newTitle)
 
@@ -31,7 +44,12 @@ class HistoryDetailViewModel(historyId: String) : ViewModel() {
 
     fun createTextElement(text: String) = commonViewModel.createTextElement(text)
 
-    fun createImageElement(imageUrl: String) = commonViewModel.createImageElement(imageUrl)
+    fun createImageElement(context: Context, imageUri: Uri) {
+        viewModelScope.launch {
+            val imageData = ImageUtils.uriToImageDomain(imageUri, context) ?: return@launch
+            commonViewModel.createImageElement(imageData)
+        }
+    }
 
     fun swapElements(fromId: String, toId: String) = commonViewModel.swapElements(fromId, toId)
 

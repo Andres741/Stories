@@ -1,5 +1,6 @@
 package com.example.stories.android.ui.historyDetail.components
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -47,7 +48,7 @@ fun AddElementFooter(
     editMode: Boolean,
     modifier: Modifier = Modifier,
     createTextElement: (text: String) -> Unit,
-    createImageElement: (imageUrl: String) -> Unit,
+    createImageElement: (imageUrl: Uri) -> Unit,
 ) {
     AnimatedVisibility(
         visible = editMode,
@@ -69,7 +70,7 @@ fun AddElementFooter(
                         scaleX = scale()
                         scaleY = scale()
                     }
-                    .clickable { showNewElementPicker = false }
+                    .clickable { showNewElementPicker = false },
             ) {
                 drawCircle(color = Color(0x55555555), radius = 100f)
             }
@@ -88,8 +89,10 @@ fun AddElementFooter(
 
             var showImagePopUp by remember { mutableStateOf(false) }
             if (showImagePopUp) {
+                val (imageUri, onUriChange) = remember { mutableStateOf(null as Uri?) }
                 EditImageElementPopUp(
-                    imageUrl = "",
+                    imageUri = imageUri,
+                    onSelectImage = onUriChange,
                     onConfirm = {
                         createImageElement(it)
                         showImagePopUp = false

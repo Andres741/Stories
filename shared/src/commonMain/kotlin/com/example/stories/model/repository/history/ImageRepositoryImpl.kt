@@ -6,7 +6,7 @@ import com.example.stories.model.domain.repository.ImageRepository
 import com.example.stories.model.repository.dataSource.ImageClaudDataSource
 
 class ImageRepositoryImpl(private val imageClaudDataSource: ImageClaudDataSource) : ImageRepository {
-    override suspend fun sendImage(name: String, byteArray: ByteArray): Response<Unit> {
-        return imageClaudDataSource.sendImage(name, byteArray).toResponse()
+    override suspend fun sendImage(byteArray: ByteArray): Response<String> {
+        return imageClaudDataSource.sendImage(byteArray).map { it.imageName }.toResponse()
     }
 }

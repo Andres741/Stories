@@ -5,7 +5,7 @@ import com.example.stories.model.domain.repository.HistoryRepository
 class CreateImageElementUseCase(
     private val historyRepository: HistoryRepository
 ) {
-    suspend operator fun invoke(parentHistoryId: String, newImageResource: String) {
-        historyRepository.createImageElement(parentHistoryId, newImageResource)
+    suspend operator fun invoke(parentHistoryId: String, newImageData: ByteArray) {
+        historyRepository.createImageElement(parentHistoryId, newImageData)
     }
 }

@@ -19,9 +19,9 @@ class TestCommonViewModel(
     private val _imagesSent = MutableStateFlow(0)
     val imagesSent = _imagesSent.toCommonStateFlow()
 
-    fun sendPhoto(name: String, image: ByteArray) {
+    fun sendPhoto(image: ByteArray) {
         viewModelScope.launch {
-            _imagesSent.value += sendImageUseCase(name, image).fold(
+            _imagesSent.value += sendImageUseCase(image).fold(
                 ifLeft = { -1 },
                 ifRight = { 1 },
             )
@@ -29,9 +29,9 @@ class TestCommonViewModel(
     }
 
     @OptIn(ExperimentalEncodingApi::class)
-    fun sendPhoto(name: String, base64String: String) {
+    fun sendPhoto(base64String: String) {
         viewModelScope.launch {
-            sendPhoto(name, Base64.Default.decode(base64String))
+            sendPhoto(Base64.Default.decode(base64String))
         }
     }
 }

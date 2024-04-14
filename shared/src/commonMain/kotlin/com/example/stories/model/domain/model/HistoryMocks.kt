@@ -19,17 +19,35 @@ class HistoryMocks {
             title = "Viaje al monte Bromo",
             dateRange = LocalDate(2023, 5, 21).toRange(),
             elements = listOf(
-                HistoryElement.Image(id = getNewId(), imageResource = "https://harindabama.files.wordpress.com/2012/10/bromo11.jpg"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://harindabama.files.wordpress.com/2012/10/bromo11.jpg")
+                ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
-                HistoryElement.Image(id = getNewId(), imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
-                HistoryElement.Image(id = getNewId(), imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
-                HistoryElement.Image(id = getNewId(), imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
-                HistoryElement.Image(id = getNewId(), imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
-                HistoryElement.Image(id = getNewId(), imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                ),
             ),
         ),
         History(
@@ -38,7 +56,10 @@ class HistoryMocks {
             dateRange = LocalDate(2023, 7, 12).toRange(),
             elements = listOf(
                 HistoryElement.Text(id = getNewId(), text = "Hice submarinismo dentro del USS Liberty, un barco estadounidense hundido en el noreste de Bali derante la Segunda Gerra Mundial por un submarino japonés."),
-                HistoryElement.Image(id = getNewId(), imageResource = "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/95/10/33.jpg"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://media.tacdn.com/media/attractions-splice-spp-674x446/07/95/10/33.jpg")
+                ),
             ),
         ),
         History(
@@ -46,7 +67,10 @@ class HistoryMocks {
             title = "Visita a Kuala Lumpur",
             dateRange = LocalDate(2023, 8, 5) range LocalDate.now(),
             elements = listOf(
-                HistoryElement.Image(id = getNewId(), imageResource = "https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg"),
+                HistoryElement.Image(
+                    id = getNewId(),
+                    imageResource = ImageResource.ImageUrl("https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg")
+                ),
                 HistoryElement.Text(id = getNewId(), text = "Estuve una semana en Kuala Lumpur, la capital de Malasia."),
             ),
         ),
@@ -59,7 +83,7 @@ class HistoryMocks {
     )
     fun getHistoryElementImage() = HistoryElement.Image(
         id = getNewId(),
-        imageResource = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"
+        imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
     )
 
     fun getDateRange() = LocalDate.now().add(dayOfMonth = -7) range LocalDate.now()

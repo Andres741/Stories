@@ -12,7 +12,6 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.put
 
 class HistoryApi(private val client: HttpClient) : HistoryClaudDataSource {
-
     companion object {
         private const val HISTORY_API = "http://192.168.1.137:8080/api/history/v1"
     }

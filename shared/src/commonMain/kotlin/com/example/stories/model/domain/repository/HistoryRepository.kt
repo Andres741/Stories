@@ -16,7 +16,7 @@ interface HistoryRepository {
     suspend fun commitChanges(userId: String?, historyId: String): Boolean
     suspend fun createBasicHistory(title: String, text: String): History
     suspend fun createTextElement(parentHistoryId: String, newText: String)
-    suspend fun createImageElement(parentHistoryId: String, newImageResource: String)
+    suspend fun createImageElement(parentHistoryId: String, newImageData: ByteArray)
     suspend fun deleteEditingElement(elementId: String)
     suspend fun updateHistoryTitle(historyId: String, newTitle: String)
     suspend fun updateHistoryElement(historyElement: HistoryElement)

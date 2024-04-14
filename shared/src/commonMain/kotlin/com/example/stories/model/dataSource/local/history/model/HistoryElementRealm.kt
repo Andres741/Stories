@@ -1,6 +1,7 @@
 package com.example.stories.model.dataSource.local.history.model
 
 import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.ImageResource
 import io.realm.kotlin.types.EmbeddedRealmObject
 import org.mongodb.kbson.ObjectId
 
@@ -21,14 +22,14 @@ class TextElementRealm : EmbeddedRealmObject {
 }
 
 class ImageElementRealm : EmbeddedRealmObject {
-    var imageResource: String? = null
+    var imageResource: ByteArray? = null
 }
 
 fun HistoryElementRealm.toDomain(): HistoryElement? {
     return image?.let { image ->
         HistoryElement.Image(
             id = _id.toHexString(),
-            imageResource = image.imageResource ?: return null
+            imageResource = ImageResource.ByteArrayImage(image.imageResource ?: return null)
         )
     } ?: text?.let { text ->
         HistoryElement.Text(

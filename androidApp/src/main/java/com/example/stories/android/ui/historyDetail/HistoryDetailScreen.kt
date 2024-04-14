@@ -1,5 +1,6 @@
 package com.example.stories.android.ui.historyDetail
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,6 +49,7 @@ import com.example.stories.model.domain.model.HistoryMocks
 fun HistoryDetailScreen(
     viewModel: HistoryDetailViewModel
 ) {
+    val context = LocalContext.current
     val historyLoadStatus by viewModel.historyLoadStatus.collectAsStateWithLifecycle()
 
     LoadingDataScreen(loadStatus = historyLoadStatus) { history ->
@@ -55,7 +58,7 @@ fun HistoryDetailScreen(
         HistoryDetail(
             history = editingItem ?: history,
             editMode = editMode,
-            editElement = viewModel::editItem,
+            editElement = { element, uri -> viewModel.editItem(context, element, uri) },
             editTitle = viewModel::editTitle,
             editDateRange = viewModel::editDates,
             inverseEditHistory =
@@ -63,9 +66,9 @@ fun HistoryDetailScreen(
                 else viewModel::enableEditMode,
             saveEditingHistory = viewModel::saveEditingHistory,
             createTextElement = viewModel::createTextElement,
-            createImageElement = viewModel::createImageElement,
+            createImageElement = { uri -> viewModel.createImageElement(context, uri) },
             swapElements = viewModel::swapElements,
-            deleteElement = viewModel::deleteElement
+            deleteElement = viewModel::deleteElement,
         )
     }
 }
@@ -74,13 +77,13 @@ fun HistoryDetailScreen(
 fun HistoryDetail(
     history: History,
     editMode: Boolean,
-    editElement: (HistoryElement) -> Unit,
+    editElement: (HistoryElement, Uri?) -> Unit,
     editTitle: (newTitle: String) -> Unit,
     editDateRange: (newDateRange: LocalDateRange) -> Unit,
     inverseEditHistory: () -> Unit,
     saveEditingHistory: () -> Unit,
     createTextElement: (text: String) -> Unit,
-    createImageElement: (imageUrl: String) -> Unit,
+    createImageElement: (imageData: Uri) -> Unit,
     swapElements: (fromId: String, toId: String) -> Unit,
     deleteElement: (element: HistoryElement) -> Unit,
 ) {
@@ -98,9 +101,7 @@ fun HistoryDetail(
                 isActive = editMode,
                 disabledValue = 0f,
                 values = remember { listOf(.4f, -.4f) },
-                animationSpec = tween(
-                    durationMillis = 60,
-                )
+                animationSpec = tween(durationMillis = 60),
             ).run { { value } }
 
             var editingElement by remember { mutableStateOf(null as HistoryElement?) }
@@ -109,19 +110,23 @@ fun HistoryDetail(
                     is HistoryElement.Text -> EditTextElementPopUp(
                         text = element.text,
                         onConfirm = {
-                            editElement(element.copy(text = it))
+                            editElement(element.copy(text = it), null)
                             editingElement = null
                         },
-                        onDismiss = { editingElement = null }
+                        onDismiss = { editingElement = null },
                     )
-                    is HistoryElement.Image -> EditImageElementPopUp(
-                        imageUrl = element.imageResource,
-                        onConfirm = {
-                            editElement(element.copy(imageResource = it))
-                            editingElement = null
-                        },
-                        onDismiss = { editingElement = null }
-                    )
+                    is HistoryElement.Image -> {
+                        val (imageUri, onUriChange) = remember { mutableStateOf(null as Uri?) }
+                        EditImageElementPopUp(
+                            imageUri = imageUri,
+                            onSelectImage = onUriChange,
+                            onConfirm = {
+                                editElement(element, imageUri)
+                                editingElement = null
+                            },
+                            onDismiss = { editingElement = null },
+                        )
+                    }
                 }
             }
 
@@ -236,7 +241,7 @@ fun StoriesList_preview() {
             HistoryDetail(
                 history = if (editMode) HistoryMocks().getMockStories()[2] else HistoryMocks().getMockStories()[1],
                 editMode = editMode,
-                editElement = {},
+                editElement = { _, _ -> },
                 editTitle = {},
                 editDateRange = {},
                 inverseEditHistory = { editMode = !editMode },
@@ -244,7 +249,7 @@ fun StoriesList_preview() {
                 createTextElement = {},
                 createImageElement = {},
                 swapElements = { _, _ -> },
-                deleteElement = {}
+                deleteElement = {},
             )
         }
     }

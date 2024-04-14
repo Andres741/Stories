@@ -90,9 +90,9 @@ class HistoryDetailCommonViewModel(
         }
     }
 
-    fun createImageElement(imageUrl: String) {
+    fun createImageElement(newImageData: ByteArray) {
         viewModelScope.launch {
-            createImageElementUseCase(historyId, imageUrl)
+            createImageElementUseCase(historyId, newImageData)
         }
     }
 
