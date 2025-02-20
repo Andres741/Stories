@@ -10,19 +10,19 @@ sealed class LoadingError {
     abstract val title: TextContainer
     abstract val message: TextContainer?
 
-    object GenericError : LoadingError() {
+    data object GenericError : LoadingError() {
         override val icon: ImageResource = SharedRes.images.error_icon
         override val title: TextContainer = StringResourceContainer(SharedRes.strings.generic_error_title)
         override val message: TextContainer = StringResourceContainer(SharedRes.strings.generic_error_message)
     }
 
-    object NoConnectionError : LoadingError() {
+    data object NoConnectionError : LoadingError() {
         override val icon: ImageResource = SharedRes.images.no_connection_icon
         override val title: TextContainer = StringResourceContainer(SharedRes.strings.no_connection_error_title)
         override val message: TextContainer = StringResourceContainer(SharedRes.strings.no_connection_error_message)
     }
 
-    object ServiceUnavailableError : LoadingError() {
+    data object ServiceUnavailableError : LoadingError() {
         override val icon: ImageResource = SharedRes.images.error_icon
         override val title: TextContainer = StringResourceContainer(SharedRes.strings.service_unavailable_error_title)
         override val message: TextContainer = StringResourceContainer(SharedRes.strings.service_unavailable_error_message)

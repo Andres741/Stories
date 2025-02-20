@@ -3,7 +3,7 @@ plugins {
     id("com.android.library")
     id("dev.icerock.mobile.multiplatform-resources")
     id("io.realm.kotlin")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.20"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -17,20 +17,16 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
-            export("dev.icerock.moko:resources:0.23.0")
+            export("dev.icerock.moko:resources:0.24.0")
             export("dev.icerock.moko:graphics:0.9.0")
-
-            if (System.getenv("XCODE_VERSION_MAJOR") == "1500") {
-                linkerOpts += "-ld64"
-            }
         }
     }
 
@@ -43,7 +39,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
                 // Resources
-                api("dev.icerock.moko:resources:0.23.0")
+                api("dev.icerock.moko:resources:0.24.0")
                 implementation("io.insert-koin:koin-core:3.3.3")
                 api("dev.icerock.moko:mvvm-core:0.16.1")
 
@@ -95,6 +91,9 @@ android {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "com.example.stories"
-    multiplatformResourcesClassName = "SharedRes"
+    resourcesPackage.set("com.example.stories") // required
+    resourcesClassName.set("SharedRes") // optional, default MR
+//    resourcesVisibility.set(MRVisibility.Internal) // optional, default Public
+//    iosBaseLocalizationRegion.set("en") // optional, default "en"
+//    iosMinimalDeploymentTarget.set("11.0") // optional, default "9.0"
 }

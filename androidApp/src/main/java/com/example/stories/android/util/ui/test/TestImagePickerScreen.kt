@@ -32,6 +32,7 @@ import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.ImageUtils
 import com.example.stories.android.util.rememberRefreshableAsyncImagePainter
 import com.example.stories.android.util.ui.ImagePicker
+import com.example.stories.model.dataSource.remote.URLs
 import com.example.stories.viewModel.TestCommonViewModel
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.launch
@@ -90,7 +91,7 @@ fun TestImagePickerScreen(viewModel: TestViewModel = viewModel()) {
     }
 }
 
-const val IMAGE_URL = "http://192.168.1.137:8080/api/images/testImage.jpeg"
+const val IMAGE_URL = "${URLs.BASE_URL}/api/images/testImage.jpeg"
 
 class TestViewModel : ViewModel() {
     private val commonViewModel = TestCommonViewModel(coroutineScope = viewModelScope)
