@@ -1,6 +1,7 @@
 package com.example.stories.model.dataSource.remote.user
 
 import com.example.stories.infrastructure.loading.safeRequest
+import com.example.stories.model.dataSource.remote.URLs
 import com.example.stories.model.dataSource.remote.createJpegImageFormData
 import com.example.stories.model.dataSource.remote.user.model.UserResponse
 import com.example.stories.model.repository.dataSource.UserClaudDataSource
@@ -14,7 +15,7 @@ import kotlinx.serialization.json.Json
 
 class UserApi(private val client: HttpClient) : UserClaudDataSource {
     companion object {
-        private const val USERS_API = "http://192.168.1.137:8080/api/users/v1"
+        private const val USERS_API = "${URLs.BASE_URL}/api/users/v1"
     }
 
     override suspend fun getAllUsers(): Result<List<UserResponse>> = safeRequest {

@@ -1,6 +1,7 @@
 package com.example.stories.model.dataSource.remote.history
 
 import com.example.stories.infrastructure.loading.safeRequest
+import com.example.stories.model.dataSource.remote.URLs
 import com.example.stories.model.dataSource.remote.history.model.HistoryResponse
 import com.example.stories.model.dataSource.remote.setJsonBody
 import com.example.stories.model.repository.dataSource.HistoryClaudDataSource
@@ -13,7 +14,7 @@ import io.ktor.client.request.put
 
 class HistoryApi(private val client: HttpClient) : HistoryClaudDataSource {
     companion object {
-        private const val HISTORY_API = "http://192.168.1.137:8080/api/history/v1"
+        private const val HISTORY_API = "${URLs.BASE_URL}/api/history/v1"
     }
 
     override suspend fun getMock(): Result<List<HistoryResponse>> = safeRequest {
