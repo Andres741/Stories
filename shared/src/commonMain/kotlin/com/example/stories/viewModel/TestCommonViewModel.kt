@@ -19,11 +19,13 @@ class TestCommonViewModel(
     private val _imagesSent = MutableStateFlow(0)
     val imagesSent = _imagesSent.toCommonStateFlow()
 
+    val sentImageName = MutableStateFlow(null as String?)
+
     fun sendPhoto(image: ByteArray) {
         viewModelScope.launch {
             _imagesSent.value += sendImageUseCase(image).fold(
                 ifLeft = { -1 },
-                ifRight = { 1 },
+                ifRight = { sentImageName.value = it ;1 },
             )
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -72,10 +73,21 @@ fun TestImagePickerScreen(viewModel: TestViewModel = viewModel()) {
                 }
             }
 
+            val serviceImageName by viewModel.sentImageName.collectAsStateWithLifecycle()
+
+            serviceImageName?.let {
+                Text(text = "Service image name: $serviceImageName")
+            }
+
             Divider()
 
             var refreshIndex by remember { mutableIntStateOf(0) }
-            val painter = rememberRefreshableAsyncImagePainter(IMAGE_URL, refreshIndex)
+            val imageUrl = getImageUrl(serviceImageName)
+
+            val painter = rememberRefreshableAsyncImagePainter(
+                data = imageUrl,
+                refreshKey = refreshIndex,
+            )
 
             Text(text = "Image from service")
 
@@ -91,11 +103,14 @@ fun TestImagePickerScreen(viewModel: TestViewModel = viewModel()) {
     }
 }
 
-const val IMAGE_URL = "${URLs.BASE_URL}/api/images/testImage.jpeg"
+@Stable
+fun getImageUrl(imageName: String?): String = "${URLs.BASE_URL}/api/images/${imageName ?: "testImage.jpeg"}"
 
 class TestViewModel : ViewModel() {
     private val commonViewModel = TestCommonViewModel(coroutineScope = viewModelScope)
     val imagesSent get() = commonViewModel.imagesSent
+    val sentImageName get() = commonViewModel.sentImageName
+
     fun sendPhoto(imageUri: Uri, context: Context) {
         viewModelScope.launch {
             val byteArrayImage = ImageUtils.uriToImageDomain(

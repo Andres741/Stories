@@ -18,7 +18,16 @@ class ImagesApi(private val client: HttpClient) : ImageClaudDataSource {
         return safeRequest {
             client.submitFormWithBinaryData(
                 url = IMAGES_API,
-                formData = createJpegImageFormData(key = "image", byteArray),
+                formData = createJpegImageFormData(key = "newImage", byteArray),
+            ).body()
+        }
+    }
+
+    override suspend fun sendTestImage(byteArray: ByteArray): Result<ImageResponse> {
+        return safeRequest {
+            client.submitFormWithBinaryData(
+                url = "$IMAGES_API/test",
+                formData = createJpegImageFormData(key = "testImage", byteArray),
             ).body()
         }
     }

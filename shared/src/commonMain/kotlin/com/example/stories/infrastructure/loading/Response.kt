@@ -19,3 +19,15 @@ fun<T> Result<T>.toResponse(): Response<T> = fold(
         }.left()
     },
 )
+
+inline fun<T, R> Result<T>.mapToResponse(transform: (value: T) -> R): Response<R> = fold(
+    onSuccess = { transform(it).right() },
+    onFailure = { t ->
+        when (t) {
+            is DisconnectedException -> LoadingError.NoConnectionError
+            is ClientRequestException -> LoadingError.GenericError
+            is ServerResponseException -> LoadingError.GenericError
+            else -> LoadingError.GenericError
+        }.left()
+    },
+)

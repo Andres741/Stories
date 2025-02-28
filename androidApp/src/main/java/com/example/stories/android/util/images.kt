@@ -90,14 +90,15 @@ fun rememberRefreshableAsyncImagePainter(data: Any?, refreshKey: Any?): AsyncIma
     }
 
     val painter = rememberAsyncImagePainter(
-        model = remember {
+        model = remember(data) {
             ImageRequest.Builder(context).data(data).size(Size.ORIGINAL).build()
         },
         imageLoader = imageLoader,
     )
 
     LaunchedEffect(
-        key1 = refreshKey,
+        data,
+        refreshKey,
         block = {
             painter.onForgotten()
             painter.onRemembered()

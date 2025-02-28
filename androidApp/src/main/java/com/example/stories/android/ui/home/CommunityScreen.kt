@@ -1,6 +1,7 @@
 package com.example.stories.android.ui.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +41,7 @@ import com.example.stories.model.domain.model.User
 fun CommunityScreen(
     viewModel: CommunityViewModel,
     navigateToStories: (userId: String?) -> Unit,
+    navigateTest: () -> Unit,
 ) {
 
     val usersLoadStatus by viewModel.users.collectAsStateWithLifecycle()
@@ -46,6 +50,7 @@ fun CommunityScreen(
         Community(
             users = users,
             navigateToStories = navigateToStories,
+            navigateTest = navigateTest,
         )
     }
 }
@@ -54,6 +59,7 @@ fun CommunityScreen(
 fun Community(
     users: List<User>,
     navigateToStories: (userId: String?) -> Unit,
+    navigateTest: () -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -62,18 +68,27 @@ fun Community(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            TitleText(
-                text = getStringResource { community },
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-            LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-                items(users, key = { it.id }) { user ->
-                    UserItem(
-                        user = user,
-                        modifier = Modifier.clickable { navigateToStories(user.id) }
-                    )
+        Box(modifier = Modifier.padding(padding).fillMaxSize()) {
+            Column {
+                TitleText(
+                    text = getStringResource { community },
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    items(users, key = { it.id }) { user ->
+                        UserItem(
+                            user = user,
+                            modifier = Modifier.clickable { navigateToStories(user.id) }
+                        )
+                    }
                 }
+            }
+
+            Button(
+                onClick = { navigateTest() },
+                modifier = Modifier.align(alignment = Alignment.BottomCenter)
+            ) {
+                Text(text = "Test")
             }
         }
     }
@@ -120,7 +135,8 @@ fun CommunityScreen_preview() {
         ) {
             Community(
                 users = HistoryMocks().getMockUsers(),
-                navigateToStories = {}
+                navigateToStories = {},
+                navigateTest = {},
             )
         }
     }
