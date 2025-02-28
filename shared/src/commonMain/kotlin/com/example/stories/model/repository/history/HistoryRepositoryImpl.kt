@@ -3,6 +3,7 @@ package com.example.stories.model.repository.history
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.date.toMilliseconds
 import com.example.stories.infrastructure.loading.Response
+import com.example.stories.infrastructure.loading.mapToResponse
 import com.example.stories.infrastructure.loading.toResponse
 import com.example.stories.model.dataSource.local.history.model.dataToDomain
 import com.example.stories.model.dataSource.local.history.model.toDomainFlow
@@ -11,6 +12,7 @@ import com.example.stories.model.domain.repository.HistoryRepository
 import com.example.stories.model.repository.dataSource.HistoryLocalDataSource
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.ImageUrl
 import com.example.stories.model.domain.model.toRealm
 import com.example.stories.model.domain.model.toResponse
 import com.example.stories.model.domain.repository.ImageRepository
@@ -25,6 +27,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.mongodb.kbson.ObjectId
 
 class HistoryRepositoryImpl(
@@ -83,20 +87,10 @@ class HistoryRepositoryImpl(
                 val history = getHistoryById(historyId).first() ?: return@also
 
                 return runCatching {
-                    val idToImageName = coroutineScope {
-                        history.elements
-                            .asSequence()
-                            .mapNotNull { it.id to (it.getImageData() ?: return@mapNotNull null) }
-                            .map { (id, data) ->
-                                async {
-                                    id to imageRepository.sendImage(data).getOrNull()
-                                }
-                            }
-                            .toList()
-                            .awaitAll()
-                            .toMap()
-                    }
-                    historyClaudDataSource.saveHistory(userId, history.toResponse(idToImageName))
+                    historyClaudDataSource.saveHistory(
+                        userId = userId,
+                        history = history.toResponse(idToImage = loadImageData(history))
+                    )
                 }.fold(
                     onSuccess = { true },
                     onFailure = { false },
@@ -122,7 +116,7 @@ class HistoryRepositoryImpl(
     }
 
     override suspend fun updateHistoryTitle(historyId: String, newTitle: String) {
-        historyLocalDataSource.updateHistoryTitle(ObjectId(hexString = historyId), newTitle)
+        historyLocalDataSource.updateHistoryTitle(ObjectId.invoke(hexString = historyId), newTitle)
     }
 
     override suspend fun updateHistoryElement(historyElement: HistoryElement) {
@@ -141,30 +135,47 @@ class HistoryRepositoryImpl(
         historyLocalDataSource.swapElements(ObjectId(historyId), ObjectId(fromId), ObjectId(toId))
     }
 
-    override suspend fun getClaudMock(): Response<List<History>> = historyClaudDataSource.getMock().map {
-        it.toDomain()
+    override suspend fun getClaudMock(): Response<List<History>> =
+        historyClaudDataSource.getMock().mapToResponse { it.toDomain() }
+
+    override suspend fun getUserStories(userId: String): Response<List<History>> =
+        historyClaudDataSource.getUserStories(userId).mapToResponse { it.toDomain() }
+
+    override suspend fun getHistory(
+        userId: String,
+        historyId: String,
+    ): Response<History> = historyClaudDataSource.getHistory(userId = userId, historyId = historyId)
+        .mapToResponse { it.toDomain() }
+
+    override suspend fun saveStoriesInClaud(
+        stories: List<History>,
+        userId: String
+    ): Response<Unit> = coroutineScope {
+        stories.map { history ->
+            async {
+                historyClaudDataSource.saveHistory(
+                    userId = userId,
+                    history = history.toResponse(idToImage = loadImageData(history)),
+                )
+            }
+        }.awaitAll().forEach { item ->
+            item.onFailure { return@coroutineScope item }
+        }
+        Result.success(Unit)
     }.toResponse()
 
-    override suspend fun getUserStories(userId: String): Response<List<History>> {
-        return historyClaudDataSource.getUserStories(userId).map { it.toDomain() }.toResponse()
-    }
+    private val imagesLoadMutex = Mutex()
 
-    override suspend fun getHistory(userId: String, historyId: String): Response<History> {
-        return historyClaudDataSource.getHistory(userId = userId, historyId = historyId).map {
-            it.toDomain()
-        }.toResponse()
-    }
-
-    override suspend fun saveStoriesInClaud(stories: List<History>, userId: String): Response<Unit> {
-        return coroutineScope {
-            stories.map { history ->
-                async {
-                    historyClaudDataSource.saveHistory(userId, history.toResponse())
-                }
-            }.awaitAll().forEach { item ->
-                item.onFailure { return@coroutineScope item }
+    private suspend fun loadImageData(history: History): Map<String, ImageUrl> {
+        return history.elements.mapNotNull {
+            imagesLoadMutex.withLock {
+                it.id to (it.loadImageDataIfExists() ?: return@mapNotNull null)
             }
-            runCatching {  }
-        }.toResponse()
+        }.toMap()
+    }
+
+    private suspend fun HistoryElement.loadImageDataIfExists(): ImageUrl? {
+        val imageData = getImageData() ?: return null
+        return imageRepository.sendImage(imageData).getOrNull()
     }
 }

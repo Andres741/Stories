@@ -4,6 +4,7 @@ import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.ImageResource
+import com.example.stories.model.domain.model.ImageUrl
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -39,7 +40,7 @@ fun HistoryElementResponse.toDomain() = text?.let {
 } ?: image?.let {
     HistoryElement.Image(
         id = id,
-        imageResource = ImageResource.ImageUrl(it.imageUrl),
+        imageResource = ImageResource.ResourceImageUrl(it.toImageUrl()),
     )
 }
 
@@ -47,7 +48,10 @@ fun HistoryElementResponse.toDomain() = text?.let {
 data class HistoryTextResponse(
     val text: String,
 )
+
 @Serializable
 data class HistoryImageResponse(
-    val imageUrl: String,
-)
+    val imageName: String,
+) {
+    fun toImageUrl() = ImageUrl(imageName)
+}

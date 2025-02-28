@@ -1,6 +1,7 @@
 package com.example.stories.viewModel
 
 import com.example.stories.Component
+import com.example.stories.infrastructure.base64ToByteArray
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.date.LocalDateRange
@@ -93,6 +94,12 @@ class HistoryDetailCommonViewModel(
     fun createImageElement(newImageData: ByteArray) {
         viewModelScope.launch {
             createImageElementUseCase(historyId, newImageData)
+        }
+    }
+
+    fun createImageElementFromBase64(newImageDataBase64: String) {
+        viewModelScope.launch {
+            createImageElementUseCase(historyId, newImageDataBase64.base64ToByteArray())
         }
     }
 

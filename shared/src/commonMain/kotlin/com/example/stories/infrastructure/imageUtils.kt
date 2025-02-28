@@ -9,3 +9,8 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 suspend fun String.base64ToByteArray(): ByteArray = withContext(Dispatchers.Default) {
     Base64.Default.decode(this@base64ToByteArray)
 }
+
+@OptIn(ExperimentalEncodingApi::class)
+suspend fun ByteArray.byteArrayToBase64(): String = withContext(Dispatchers.Default) {
+    Base64.Default.encode(this@byteArrayToBase64)
+}

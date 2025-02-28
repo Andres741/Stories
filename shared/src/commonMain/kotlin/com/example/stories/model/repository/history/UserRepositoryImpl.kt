@@ -1,6 +1,7 @@
 package com.example.stories.model.repository.history
 
 import com.example.stories.infrastructure.loading.Response
+import com.example.stories.infrastructure.loading.mapToResponse
 import com.example.stories.infrastructure.loading.toResponse
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.model.toDomain
@@ -19,11 +20,11 @@ class UserRepositoryImpl(
     private val imageClaudDataSource: ImageClaudDataSource,
 ) : UserRepository {
     override suspend fun getAllUsers(): Response<List<User>> {
-        return claudDataSource.getAllUsers().map { it.toDomain() }.toResponse()
+        return claudDataSource.getAllUsers().mapToResponse { it.toDomain() }
     }
 
     override suspend fun getUserById(userId: String): Response<User>  {
-        return claudDataSource.getUserById(userId).map { it.toDomain() }.toResponse()
+        return claudDataSource.getUserById(userId).mapToResponse { it.toDomain() }
     }
 
     override fun getLocalUser(): Flow<User?> {
@@ -39,11 +40,11 @@ class UserRepositoryImpl(
             imageClaudDataSource.sendImage(byteArray).getOrNull()?.imageName
         }
 
-        return claudDataSource.createUser(name, description, profileImage).map {
+        return claudDataSource.createUser(name, description, profileImage).mapToResponse {
             it.toDomain().also { newUser ->
                 localDataSource.saveUser(newUser.toRealm())
             }
-        }.toResponse()
+        }
     }
 
     override suspend fun editUser(user: User, byteArray: ByteArray?): Response<User> {
@@ -53,8 +54,8 @@ class UserRepositoryImpl(
 
         return claudDataSource.editUser(
             user = user.toResponse().copy(profileImage = profileImage),
-        ).map { it.toDomain() }.onSuccess { editedUser ->
+        ).mapToResponse { it.toDomain() }.onRight { editedUser ->
             localDataSource.saveUser(editedUser.toRealm())
-        }.toResponse()
+        }
     }
 }

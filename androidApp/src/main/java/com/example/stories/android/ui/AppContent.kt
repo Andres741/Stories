@@ -27,10 +27,7 @@ import kotlinx.serialization.Serializable
 @Composable
 fun AppContent() {
     StoriesTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = Routes.Community) {
@@ -58,7 +55,10 @@ fun AppContent() {
                     CommunityStoriesListScreen(
                         viewModel = viewModel(factory = CommunityStoriesListViewModel.Factory(communityRoute.userId)),
                         navigateDetail = { historyId ->
-                            navController.navigate(Routes.CommunityHistoryDetail(historyId, communityRoute.userId))
+                            navController.navigate(Routes.CommunityHistoryDetail(
+                                userId = communityRoute.userId,
+                                historyId = historyId,
+                            ))
                         }
                     )
                 }

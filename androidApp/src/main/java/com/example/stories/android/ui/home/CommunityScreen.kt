@@ -103,7 +103,7 @@ fun UserItem(
         Row(modifier = Modifier.fillMaxWidth()) {
             user.profileImage?.let { profileImage ->
                 AsyncImage(
-                    model = profileImage,
+                    model = profileImage.url,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 8.dp)

@@ -21,32 +21,32 @@ class HistoryMocks {
             elements = listOf(
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://harindabama.files.wordpress.com/2012/10/bromo11.jpg")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://harindabama.files.wordpress.com/2012/10/bromo11.jpg" })
                 ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp" })
                 ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp" })
                 ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp" })
                 ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"} )
                 ),
                 HistoryElement.Text(id = getNewId(), text = "Monté a caballo en el mar de arena que rodea al volcán activo Bromo, en el este de Java."),
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp" })
                 ),
             ),
         ),
@@ -58,7 +58,7 @@ class HistoryMocks {
                 HistoryElement.Text(id = getNewId(), text = "Hice submarinismo dentro del USS Liberty, un barco estadounidense hundido en el noreste de Bali derante la Segunda Gerra Mundial por un submarino japonés."),
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://media.tacdn.com/media/attractions-splice-spp-674x446/07/95/10/33.jpg")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/95/10/33.jpg"} )
                 ),
             ),
         ),
@@ -69,7 +69,7 @@ class HistoryMocks {
             elements = listOf(
                 HistoryElement.Image(
                     id = getNewId(),
-                    imageResource = ImageResource.ImageUrl("https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg")
+                    imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg" })
                 ),
                 HistoryElement.Text(id = getNewId(), text = "Estuve una semana en Kuala Lumpur, la capital de Malasia."),
             ),
@@ -83,7 +83,7 @@ class HistoryMocks {
     )
     fun getHistoryElementImage() = HistoryElement.Image(
         id = getNewId(),
-        imageResource = ImageResource.ImageUrl("https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp"),
+        imageResource = ImageResource.ResourceImageUrl(ImageUrl("").apply { url = "https://www.elperiodicodelturismo.com/images/crater-monte-bromo.webp" }),
     )
 
     fun getDateRange() = LocalDate.now().add(dayOfMonth = -7) range LocalDate.now()
@@ -93,7 +93,7 @@ class HistoryMocks {
             id = "0",
             name = "Nemo",
             description = "I am literally nobody",
-            profileImage = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-512.png",
+            profileImage = ImageUrl("").apply { url = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-512.png" },
         ),
         User(
             id = "1",

@@ -22,6 +22,7 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.model.domain.model.ImageResource
+import com.example.stories.model.domain.model.ImageUrl
 
 @Composable
 fun AsyncItemImage(imageResource: ImageResource) {
@@ -54,8 +55,8 @@ fun AsyncItemImage_preview() {
             LazyColumn(verticalArrangement = Arrangement.Center) {
                 item {
                     AsyncItemImage(
-                        imageResource = ImageResource.ImageUrl(
-                            url = "https://www.elmueble.com/medio/2023/02/26/perro-de-raza-shiba-inu_b6387407_230226130353_900x900.jpg",
+                        imageResource = ImageResource.ResourceImageUrl(
+                            imageUrl = ImageUrl("").apply { url = "https://www.elmueble.com/medio/2023/02/26/perro-de-raza-shiba-inu_b6387407_230226130353_900x900.jpg" },
                         ),
                     )
                 }
