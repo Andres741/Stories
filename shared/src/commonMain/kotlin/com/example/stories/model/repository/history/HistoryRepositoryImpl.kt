@@ -11,6 +11,7 @@ import com.example.stories.model.domain.repository.HistoryRepository
 import com.example.stories.model.repository.dataSource.HistoryLocalDataSource
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
+import com.example.stories.model.domain.model.ImageUrl
 import com.example.stories.model.domain.model.toRealm
 import com.example.stories.model.domain.model.toResponse
 import com.example.stories.model.domain.repository.ImageRepository
@@ -83,20 +84,10 @@ class HistoryRepositoryImpl(
                 val history = getHistoryById(historyId).first() ?: return@also
 
                 return runCatching {
-                    val idToImageName = coroutineScope {
-                        history.elements
-                            .asSequence()
-                            .mapNotNull { it.id to (it.getImageData() ?: return@mapNotNull null) }
-                            .map { (id, data) ->
-                                async {
-                                    id to imageRepository.sendImage(data).getOrNull()
-                                }
-                            }
-                            .toList()
-                            .awaitAll()
-                            .toMap()
-                    }
-                    historyClaudDataSource.saveHistory(userId, history.toResponse(idToImageName))
+                    historyClaudDataSource.saveHistory(
+                        userId = userId,
+                        history = history.toResponse(idToImage = loadImageData(history))
+                    )
                 }.fold(
                     onSuccess = { true },
                     onFailure = { false },
@@ -159,12 +150,30 @@ class HistoryRepositoryImpl(
         return coroutineScope {
             stories.map { history ->
                 async {
-                    historyClaudDataSource.saveHistory(userId, history.toResponse())
+                    historyClaudDataSource.saveHistory(
+                        userId = userId,
+                        history = history.toResponse(idToImage = loadImageData(history)),
+                    )
                 }
             }.awaitAll().forEach { item ->
                 item.onFailure { return@coroutineScope item }
             }
-            runCatching {  }
+            Result.success(Unit)
         }.toResponse()
+    }
+
+    private suspend fun loadImageData(history: History): Map<String, ImageUrl> = coroutineScope {
+        history.elements.map {
+            async {
+                it.id to (it.loadImageDataIfExists() ?: return@async null)
+            }
+        }.awaitAll()
+        .filterNotNull()
+        .toMap()
+    }
+
+    private suspend fun HistoryElement.loadImageDataIfExists(): ImageUrl? {
+        val imageData = getImageData() ?: return null
+        return imageRepository.sendImage(imageData).getOrNull()
     }
 }

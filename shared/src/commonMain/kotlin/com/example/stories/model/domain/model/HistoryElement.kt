@@ -7,6 +7,8 @@ import com.example.stories.model.dataSource.remote.history.model.HistoryElementR
 import com.example.stories.model.dataSource.remote.history.model.HistoryImageResponse
 import com.example.stories.model.dataSource.remote.history.model.HistoryTextResponse
 import org.mongodb.kbson.BsonObjectId
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 sealed class HistoryElement {
     abstract val id: String
@@ -35,6 +37,10 @@ sealed interface ImageResource {
     data class ByteArrayImage(
         val data: ByteArray,
     ) : ImageResource {
+
+        @OptIn(ExperimentalEncodingApi::class)
+        val base64Data by lazy { Base64.Default.encode(data) }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is ByteArrayImage) return false
@@ -47,9 +53,9 @@ sealed interface ImageResource {
         }
     }
 
-    data class ImageUrl(val url: String) : ImageResource
+    data class ResourceImageUrl(val url: ImageUrl) : ImageResource
 
-    val model get() = (this as? ByteArrayImage)?.data ?: (this as? ImageUrl)?.url
+    val model get() = (this as? ByteArrayImage)?.data ?: (this as? ResourceImageUrl)?.url
 }
 
 fun HistoryElement.toRealm() = HistoryElementRealm().also { realmElement ->
@@ -64,12 +70,13 @@ fun HistoryElement.toRealm() = HistoryElementRealm().also { realmElement ->
     }
 }
 
-fun HistoryElement.toResponse(idToImageName: Map<String, String?> = emptyMap()) = HistoryElementResponse(
+fun HistoryElement.toResponse(idToImage: Map<String, ImageUrl> = emptyMap()) = HistoryElementResponse(
     id = id,
     text = (this as? HistoryElement.Text)?.let { HistoryTextResponse(it.text) },
     image = (this as? HistoryElement.Image)?.let {
+        val imageUrl = (it.imageResource as? ImageResource.ResourceImageUrl)?.url ?: idToImage[id]
         HistoryImageResponse(
-            imageUrl = (it.imageResource as? ImageResource.ImageUrl)?.url ?: idToImageName[id] ?: "",
+            imageName = imageUrl?.imageName ?: "",
         )
     },
 )

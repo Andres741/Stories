@@ -4,7 +4,7 @@ import java.net.ConnectException
 
 actual fun<T> Result<T>.interceptConnectionException(): Result<T> {
     onFailure { throwable ->
-        if (throwable is ConnectException) return Result.failure(DisconnectedException)
+        if (throwable is ConnectException) return disconnectedExceptionResult
     }
     return this
 }

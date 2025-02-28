@@ -1,6 +1,7 @@
 package com.example.stories.model.repository.history
 
 import com.example.stories.infrastructure.loading.Response
+import com.example.stories.infrastructure.loading.mapToResponse
 import com.example.stories.infrastructure.loading.toResponse
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.model.toDomain
@@ -39,11 +40,11 @@ class UserRepositoryImpl(
             imageClaudDataSource.sendImage(byteArray).getOrNull()?.imageName
         }
 
-        return claudDataSource.createUser(name, description, profileImage).map {
+        return claudDataSource.createUser(name, description, profileImage).mapToResponse {
             it.toDomain().also { newUser ->
                 localDataSource.saveUser(newUser.toRealm())
             }
-        }.toResponse()
+        }
     }
 
     override suspend fun editUser(user: User, byteArray: ByteArray?): Response<User> {

@@ -24,10 +24,10 @@ fun History.toRealm() = HistoryRealm().also { realmHistory ->
     realmHistory.data?.elements = elements.mapTo(realmListOf(), HistoryElement::toRealm)
 }
 
-fun History.toResponse(idToImageName: Map<String, String?> = emptyMap()) = HistoryResponse(
+fun History.toResponse(idToImage: Map<String, ImageUrl> = emptyMap()) = HistoryResponse(
     id = id,
     title = title,
     startDate = dateRange.startDate.toMilliseconds(),
     endDate = dateRange.endDate.toMilliseconds(),
-    elements = elements.map { it.toResponse(idToImageName) }
+    elements = elements.map { it.toResponse(idToImage) }
 )

@@ -94,7 +94,7 @@ fun CommunityStoriesList(
                     CollapsingHeader(
                         userName = user.name,
                         userDescription = user.description,
-                        userImage = userImage,
+                        userImage = userImage.url,
                         progress = toolbarState.progress,
                         modifier = toolbarModifier.padding(16.dp)
                     )

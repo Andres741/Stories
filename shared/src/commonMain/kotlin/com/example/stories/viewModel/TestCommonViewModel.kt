@@ -25,7 +25,7 @@ class TestCommonViewModel(
         viewModelScope.launch {
             _imagesSent.value += sendImageUseCase(image).fold(
                 ifLeft = { -1 },
-                ifRight = { sentImageName.value = it ;1 },
+                ifRight = { sentImageName.value = it.imageName; 1 },
             )
         }
     }
