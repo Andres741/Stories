@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,6 +52,7 @@ fun UserData(
     navigateEditUser: () -> Unit,
 ) {
     Scaffold(
+        modifier = Modifier.padding(horizontal = 24.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = navigateEditUser) {
                 Icon(
@@ -91,9 +93,10 @@ fun UserData(
             Text(
                 text = user.name,
                 style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
             )
 
-            Text(user.description)
+            Text(user.description, textAlign = TextAlign.Center)
         }
     }
 }

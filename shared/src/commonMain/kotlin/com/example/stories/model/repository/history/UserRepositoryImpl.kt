@@ -7,6 +7,7 @@ import com.example.stories.model.domain.model.toDomain
 import com.example.stories.model.domain.model.toRealm
 import com.example.stories.model.domain.model.toResponse
 import com.example.stories.model.domain.repository.UserRepository
+import com.example.stories.model.repository.dataSource.ImageClaudDataSource
 import com.example.stories.model.repository.dataSource.UserClaudDataSource
 import com.example.stories.model.repository.dataSource.UserLocalDataSource
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.map
 class UserRepositoryImpl(
     private val claudDataSource: UserClaudDataSource,
     private val localDataSource: UserLocalDataSource,
+    private val imageClaudDataSource: ImageClaudDataSource,
 ) : UserRepository {
     override suspend fun getAllUsers(): Response<List<User>> {
         return claudDataSource.getAllUsers().map { it.toDomain() }.toResponse()
@@ -33,7 +35,11 @@ class UserRepositoryImpl(
         description: String,
         byteArray: ByteArray?,
     ): Response<User> {
-        return claudDataSource.createUser(name, description, byteArray).map {
+        val profileImage = byteArray?.let {
+            imageClaudDataSource.sendImage(byteArray).getOrNull()?.imageName
+        }
+
+        return claudDataSource.createUser(name, description, profileImage).map {
             it.toDomain().also { newUser ->
                 localDataSource.saveUser(newUser.toRealm())
             }
@@ -41,7 +47,13 @@ class UserRepositoryImpl(
     }
 
     override suspend fun editUser(user: User, byteArray: ByteArray?): Response<User> {
-        return claudDataSource.editUser(user.toResponse(), byteArray).map { it.toDomain() }.onSuccess { editedUser ->
+        val profileImage = byteArray?.let {
+            imageClaudDataSource.sendImage(byteArray).getOrNull()?.imageName
+        }
+
+        return claudDataSource.editUser(
+            user = user.toResponse().copy(profileImage = profileImage),
+        ).map { it.toDomain() }.onSuccess { editedUser ->
             localDataSource.saveUser(editedUser.toRealm())
         }.toResponse()
     }
