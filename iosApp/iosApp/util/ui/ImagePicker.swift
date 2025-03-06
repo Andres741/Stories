@@ -4,7 +4,7 @@ import PhotosUI
 struct ImagePicker: View {
     
     @Binding var photosPickerItem: PhotosPickerItem?
-    @State var image: Image?
+    @State var image: Image? = nil
     
     var body: some View {
         HStack {

@@ -10,7 +10,7 @@ struct CommunityHistoryDetailScreen: View {
     }
     
     var body: some View {
-        let historyLoadStatus = viewModel.historyLoadStatus
+        let historyLoadStatus: LoadStatus<History>? = viewModel.historyLoadStatus
         
         RefreshLoadingDataScreen(
             loadStatus: historyLoadStatus,
@@ -21,7 +21,7 @@ struct CommunityHistoryDetailScreen: View {
 
                 HistoryDetailBodyList(
                     history: history,
-                    elementsEnumerated: Array(history.elements.enumerated())
+                    elements: history.elements
                 )
             }
         }

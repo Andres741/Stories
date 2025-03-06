@@ -39,7 +39,7 @@ func HistoryItem(
         case let text as HistoryElement.Text:
             Text(text.text).font(.subheadline)
         case let image as HistoryElement.Image:
-            AsyncItemImage(url: image.imageResource)
+            HistoryImage(image: image)
         default:
             EmptyView()
         }

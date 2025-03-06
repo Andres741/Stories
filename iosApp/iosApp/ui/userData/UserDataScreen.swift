@@ -31,7 +31,7 @@ struct UserData: View {
     var body: some View {
         VStack(spacing: 8) {
             let image: any View = if let image = user.profileImage {
-                AsyncItemImage(url: image)
+                AsyncItemImage(url: image.url)
             } else {
                 Image(resourcePath: \.no_profile_image_icon)
                     .resizable()

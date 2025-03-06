@@ -3,6 +3,7 @@ package com.example.stories.viewModel
 import com.example.stories.Component
 import com.example.stories.infrastructure.base64ToByteArray
 import com.example.stories.infrastructure.coroutines.flow.CommonStateFlow
+import com.example.stories.infrastructure.coroutines.flow.toCommonFlow
 import com.example.stories.infrastructure.coroutines.flow.toCommonStateFlow
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.infrastructure.loading.LoadStatus
@@ -23,6 +24,7 @@ import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
@@ -52,6 +54,13 @@ class HistoryDetailCommonViewModel(
     val editingHistory: CommonStateFlow<History?> = getEditingHistoryUseCase(historyId).stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(1000), null
     ).toCommonStateFlow()
+
+    val showingElements = combine(
+        historyLoadStatus,
+        editingHistory,
+    ) { historyLoadStatus, editingHistory ->
+        (editingHistory ?: historyLoadStatus.dataOrNull())?.elements ?: emptyList()
+    }.toCommonFlow()
 
     private val currentHistory get() = historyLoadStatus.value.dataOrNull()
 

@@ -41,7 +41,7 @@
     <string name="my_posts">My posts</string>
 
     <string name="not_logged_warn">You are not log in, press here to enjoy the full experience.</string>
-    <string name="logged_warn">Configure your account data</string>
+    <string name="logged_warn">Consult your account data</string>
 
     <string name="log_in">Log in</string>
     <string name="crate_user">Crate new user</string>

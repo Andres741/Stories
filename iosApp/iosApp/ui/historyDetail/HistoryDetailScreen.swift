@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 import shared
 
 struct HistoryDetailScreen: View {
@@ -8,7 +9,6 @@ struct HistoryDetailScreen: View {
 
     @StateObject private var viewModel: HistoryDetailViewModel
     
-    @State var elementsEnumerated = [EnumeratedSequence<[HistoryElement]>.Element]()
     @State var editMode = false
         
     @State var editingElement: HistoryElement? = nil
@@ -27,11 +27,12 @@ struct HistoryDetailScreen: View {
     
     @State var showCreateNewTextPopUp = false
     @State var showCreateNewImagePopUp = false
+    
+    @State private var photosPickerItem: PhotosPickerItem? = nil
 
     init(historyId: String) {
         _viewModel = StateObject(wrappedValue: HistoryDetailViewModel(historyId: historyId))
     }
-    
 
     var body: some View {
         let historyLoadStatus = viewModel.historyLoadStatus
@@ -39,34 +40,16 @@ struct HistoryDetailScreen: View {
         LoadingDataScreen(loadStatus: historyLoadStatus) {
             let history = viewModel.editingHistory ?? $0
             
-            ScreenBody(history)
+            ScreenBody(
+                history: history,
+                showingElements: viewModel.showingElements,
+                editMode: editMode
+            )
             .toolbar {
-                HStack {
-                    if editMode {
-                        Button(getStringResource(path: \.dismiss)) {
-                            viewModel.cancelEdit()
-                        }
-                        Button(getStringResource(path: \.save)) {
-                            viewModel.saveEditingHistory()
-                        }
-                    } else {
-                        Button(getStringResource(path: \.edit)) {
-                            viewModel.enableEditMode()
-                        }
-                    }
-                }
+                Toolbar()
             }
             .sheet(isPresented: $isEditingTitle) {
-                EditTitle(
-                    inputText: history.title,
-                    onConfirm: { newTitle in
-                        viewModel.editTitle(newTitle: newTitle)
-                        isEditingTitle = false
-                    },
-                    onDismiss: {
-                        isEditingTitle = false
-                    }
-                )
+                Title(history: history)
             }
             .sheet(optional: $editingElement) { element in
                 EditElementSheet(
@@ -79,23 +62,7 @@ struct HistoryDetailScreen: View {
                 )
             }
             .sheet(isPresented: $isEditingLocalDateRange) {
-                let (initDate, endDate) = history.dateRange.toDateTouple()
-                EditDateRange(
-                    initDate: initDate,
-                    endDate: endDate,
-                    onConfirm: { newStart, newEnd in
-                        viewModel.editDates(
-                            newDateRange: datesToDateRange(startDate: newStart, endDate: newEnd)
-                        )
-                        isEditingLocalDateRange = false
-                    },
-                    onDismiss: {
-                        isEditingLocalDateRange = false
-                        stateAlternator.startAlternating()
-                    }
-                )
-                .onAppear { stateAlternator.stopAlternating() }
-                .onDisappear { stateAlternator.startAlternating() }
+                EditDatesSheet(history: history)
             }
             .sheet(isPresented: $showCreateNewTextPopUp) {
                 EditTextElementSheet(
@@ -111,9 +78,8 @@ struct HistoryDetailScreen: View {
             }
             .sheet(isPresented: $showCreateNewImagePopUp) {
                 EditImageElementSheet(
-                    imageUrl: "",
                     onConfirm: { newImageUrl in
-                        viewModel.createImageElement(imageUrl: newImageUrl)
+                        //viewModel.createImageElement(imageUrl: newImageUrl)
                         showCreateNewImagePopUp = false
                     },
                     onDismiss: {
@@ -121,40 +87,93 @@ struct HistoryDetailScreen: View {
                     }
                 )
             }
-            .onChange(of: stateAlternator.currentState) { angle in
+            .trackValue(of: stateAlternator.currentState) { angle in
                 withAnimation(
                     Animation.easeIn(duration: HistoryDetailScreen.SAKE_MOVEMENT_DURATION_SECONDS)
                 ) {
                     inclinationAngle = angle
                 }
             }
-            .onChange(of: viewModel.editingHistory) { editingHistory in
+            .trackValue(of: viewModel.editingHistory) { editingHistory in
                 if editingHistory == nil {
                     stateAlternator.stopAlternating()
                 } else {
                     stateAlternator.startAlternating()
                 }
             }
-            .onChange(of: viewModel.editingHistory) { newValue in
+            .trackValue(of: viewModel.editingHistory) { newValue in
                 withAnimation {
                     let editMode = newValue != nil
                     titleBottomPadding = editMode ? 6 : 0
                 }
             }
-            .onChange(of: viewModel.editingHistory) { newValue in
-                editMode = newValue != nil
-            }
-            .onChange(of: viewModel.showingElements) { elements in
+            .trackValue(of: viewModel.editingHistory) { newValue in
+                let editMode = newValue != nil
                 withAnimation {
-                    elementsEnumerated = elements.map { Array($0.enumerated()) } ?? []
+                    titleBottomPadding = editMode ? 6 : 0
                 }
+                self.editMode = editMode
             }
         }
         .navigationBarTitleDisplayMode(.inline)
         .attach(observer: viewModel)
     }
     
-    @ViewBuilder private func ScreenBody(_ history: History) -> some View {
+    @ViewBuilder private func Toolbar() -> some View {
+        HStack {
+            if editMode {
+                Button(getStringResource(path: \.dismiss)) {
+                    viewModel.cancelEdit()
+                }
+                Button(getStringResource(path: \.save)) {
+                    viewModel.saveEditingHistory()
+                }
+            } else {
+                Button(getStringResource(path: \.edit)) {
+                    viewModel.enableEditMode()
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder private func Title(history: History) -> some View {
+        EditTitle(
+            inputText: history.title,
+            onConfirm: { newTitle in
+                viewModel.editTitle(newTitle: newTitle)
+                isEditingTitle = false
+            },
+            onDismiss: {
+                isEditingTitle = false
+            }
+        )
+    }
+    
+    @ViewBuilder private func EditDatesSheet(history: History) -> some View {
+        let (initDate, endDate) = history.dateRange.toDateTouple()
+        EditDateRange(
+            initDate: initDate,
+            endDate: endDate,
+            onConfirm: { newStart, newEnd in
+                viewModel.editDates(
+                    newDateRange: datesToDateRange(startDate: newStart, endDate: newEnd)
+                )
+                isEditingLocalDateRange = false
+            },
+            onDismiss: {
+                isEditingLocalDateRange = false
+                stateAlternator.startAlternating()
+            }
+        )
+        .onAppear { stateAlternator.stopAlternating() }
+        .onDisappear { stateAlternator.startAlternating() }
+    }
+    
+    @ViewBuilder private func ScreenBody(
+        history: History,
+        showingElements: [HistoryElement]?,
+        editMode: Bool
+    ) -> some View {
         ZStack {
             VStack {
                 HistoryDetailHeader(
@@ -168,7 +187,7 @@ struct HistoryDetailScreen: View {
                 
                 HistoryDetailBodyList(
                     history: history,
-                    elementsEnumerated: elementsEnumerated,
+                    elements: showingElements,
                     editMode: editMode,
                     inclinationAngle: inclinationAngle,
                     onClickElement: { editingElement = $0 },
@@ -192,9 +211,15 @@ struct HistoryDetailScreen: View {
             Spacer()
             
             Menu {
-                Button(action: { showCreateNewImagePopUp = true }) {
-                    Label(getStringResource(path: \.add_image), systemImage: "plus")
+                PhotosPicker(selection: $photosPickerItem, matching: .images) {
+                    Label("Piker no funciona: " + getStringResource(path: \.add_image), systemImage: "plus")
+                        .frame(maxWidth: .infinity)
                 }
+
+                Button(action: { showCreateNewImagePopUp = true }) {
+                    Label("Piker andidado: " + getStringResource(path: \.add_image), systemImage: "plus")
+                }
+                
                 Button(action: { showCreateNewTextPopUp = true }) {
                     Label(getStringResource(path: \.add_text), systemImage: "plus")
                 }

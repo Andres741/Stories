@@ -48,18 +48,18 @@ fun<T: Any> RefreshLoadingDataScreen(
     loadingContent: @Composable () -> Unit = { DefaultLoadingScreen() },
     successContent: @Composable BoxScope.(T) -> Unit
 ) {
-    when (loadStatus) {
-        is LoadStatus.Error -> errorContent(loadStatus.error)
-        LoadStatus.Loading -> loadingContent()
-        is LoadStatus.Data -> {
+    loadStatus.fold(
+        onError = { errorContent(it) },
+        onLoading = { loadingContent() },
+        onSuccess = {
             PullRefreshLayout(
                 isRefreshing = loadStatus.isRefreshing(),
                 onRefresh = onRefresh,
             ) {
-                successContent(loadStatus.value)
+                successContent(it)
             }
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -69,11 +69,11 @@ fun<T: Any> LoadingDataScreen(
     loadingContent: @Composable () -> Unit = { DefaultLoadingScreen() },
     successContent: @Composable (T) -> Unit
 ) {
-    when (loadStatus) {
-        is LoadStatus.Error -> errorContent(loadStatus.error)
-        LoadStatus.Loading -> loadingContent()
-        is LoadStatus.Data -> successContent(loadStatus.value)
-    }
+    loadStatus.fold(
+        onError = { errorContent(it) },
+        onLoading = { loadingContent() },
+        onSuccess = { successContent(it) },
+    )
 }
 
 @Composable

@@ -23,6 +23,10 @@ extension StoriesListScreen {
         }
 
         func startObserving() {
+            storiesLoadStatus = nil
+            newHistory = nil
+            isLogged = nil
+
             let commonViewModel = StoriesListCommonViewModel()
             self.commonViewModel = commonViewModel
             commonViewModel.storiesLoadStatus.subscribe(scope: commonViewModel.viewModelScope) { stories in

@@ -64,7 +64,7 @@ extension TestImagePickerScreen {
         @Published var imagesSent: Int = 0
         
         func sendPhoto(_ base64: String) {
-            commonViewModel?.sendPhoto(name: "testImage", base64String: base64)
+            commonViewModel?.sendPhoto(base64String: base64)
         }
         
         func startObserving() {

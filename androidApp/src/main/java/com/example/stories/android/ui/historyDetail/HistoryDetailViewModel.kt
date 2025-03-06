@@ -20,6 +20,7 @@ class HistoryDetailViewModel(historyId: String) : ViewModel() {
 
     val historyLoadStatus = commonViewModel.historyLoadStatus
     val editingHistory = commonViewModel.editingHistory
+    val showingElements = commonViewModel.showingElements
 
     fun enableEditMode() = commonViewModel.setEditMode()
 

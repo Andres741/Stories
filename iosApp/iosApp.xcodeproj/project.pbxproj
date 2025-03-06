@@ -10,6 +10,7 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		4116C64F2D7A24C400CCCF57 /* modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4116C64E2D7A24C400CCCF57 /* modifiers.swift */; };
 		7555FF83242A565900829871 /* StoriesListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* StoriesListScreen.swift */; };
 		CC04501D2A91061A00996A61 /* EditDateRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC04501C2A91061A00996A61 /* EditDateRange.swift */; };
 		CC04501F2A912DB100996A61 /* LocalDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC04501E2A912DB100996A61 /* LocalDateExtensions.swift */; };
@@ -72,6 +73,7 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		4116C64E2D7A24C400CCCF57 /* modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = modifiers.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* StoriesListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesListScreen.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				CCBE0B0A2A9FEFDD00DE8315 /* EmptyScreen.swift */,
 				CC073BCA2B5D7CA600504E7E /* PullRefreshLayout.swift */,
 				CC3D4DFF2BA50BA900F755EE /* ImagePicker.swift */,
+				4116C64E2D7A24C400CCCF57 /* modifiers.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -444,6 +447,7 @@
 				7555FF83242A565900829871 /* StoriesListScreen.swift in Sources */,
 				CC04501F2A912DB100996A61 /* LocalDateExtensions.swift in Sources */,
 				CCA6ACDD2B589124000294E3 /* EditUserData.swift in Sources */,
+				4116C64F2D7A24C400CCCF57 /* modifiers.swift in Sources */,
 				CCA63A142B41CDE000128450 /* CommunityStoriesListScreen.swift in Sources */,
 				CCA63A1E2B434AFF00128450 /* CommunityHistoryDetailViewModel.swift in Sources */,
 				CC902B7D2A897A7800B4B45D /* ViewExtensions.swift in Sources */,

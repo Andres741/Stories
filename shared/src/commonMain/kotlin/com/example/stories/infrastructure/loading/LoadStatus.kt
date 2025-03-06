@@ -22,7 +22,7 @@ sealed class LoadStatus<out D: Any> {
     }
 
     data class Error(val error: LoadingError) : LoadStatus<Nothing>()
-    object Loading : LoadStatus<Nothing>()
+    data object Loading : LoadStatus<Nothing>()
 
     inline fun<T> fold(
         onSuccess: (D) -> T,

@@ -40,7 +40,7 @@ struct CommunityScreen: View {
 @ViewBuilder func UserItem(_ user: User) -> some View {
     HStack {
         if let image = user.profileImage {
-            AsyncItemImage(url: image)
+            AsyncItemImage(url: image.url)
                 .frame(maxWidth: 50, maxHeight: 50)
                 .clipShape(Circle())
         }
