@@ -76,9 +76,18 @@ class HistoryDetailCommonViewModel(
         }
     }
 
-    fun editElement(newElement: HistoryElement) {
+    fun editElement(newElement: HistoryElement, imageBase64Data: String?) {
         viewModelScope.launch {
-            updateHistoryElementUseCase(newElement)
+            editElement(newElement, imageBase64Data?.base64ToByteArray())
+        }
+    }
+
+    fun editElement(newElement: HistoryElement, imageData: ByteArray?) {
+        viewModelScope.launch {
+            val newImage = imageData?.let { imageData ->
+                (newElement as? HistoryElement.Image)?.setDataFromData(imageData)
+            }
+            updateHistoryElementUseCase(newImage ?: newElement)
         }
     }
 
@@ -106,9 +115,9 @@ class HistoryDetailCommonViewModel(
         }
     }
 
-    fun createImageElementFromBase64(newImageDataBase64: String) {
+    fun createImageElementFromBase64(base64Data: String) {
         viewModelScope.launch {
-            createImageElementUseCase(historyId, newImageDataBase64.base64ToByteArray())
+            createImageElementUseCase(historyId, base64Data.base64ToByteArray())
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +32,7 @@ fun ImagePicker(
     AnimatedContent(targetState = imageUri, label = "", modifier = modifier) { uri ->
         if (uri != null) {
             ItemCard {
-                AsyncImage(model = uri, contentDescription = "")
+                AsyncImage(model = uri, contentDescription = "", modifier = Modifier.fillMaxWidth())
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -57,7 +58,7 @@ fun ImagePicker(
             }
         } else {
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
                 onClick = { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
             ) {
                 Text(text = getStringResource { pick_image })

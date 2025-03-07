@@ -50,8 +50,10 @@ struct HistoryDetailBodyList: View {
                 }
             }
         }
-        .trackValue(of: elements) { elements in
-            self.elementsEnumerated = elements.map { Array($0.enumerated()) } ?? []
+        .trackValue(elements) { elements in
+            withAnimation {
+                self.elementsEnumerated = elements.map { Array($0.enumerated()) } ?? []
+            }
         }
     }
 }
@@ -137,12 +139,34 @@ struct HistoryDetailBodyList: View {
 @ViewBuilder func HistoryImage(image: HistoryElement.Image) -> some View {
     if let urlImage = image.imageResource as? ImageResource_ResourceImageUrl {
         AsyncItemImage(url: urlImage.imageUrl.url)
-    } else if let dataImage = image.imageResource as? ImageResource_ByteArrayImage {
-        if let imageData = Data(base64Encoded: dataImage.base64Data) {
-            if let uiImage = UIImage(data: imageData) {
+    } else if let byteArrayImage = image.imageResource as? ImageResource_ByteArrayImage {
+        ByteArrayImage(image: byteArrayImage)
+    }
+}
+
+struct ByteArrayImage: View {
+    let image: ImageResource_ByteArrayImage
+
+    @State private var uiImage: UIImage? = nil
+    
+    init(image: ImageResource_ByteArrayImage) {
+        self.image = image
+    }
+    
+    var body: some View {
+        ZStack {
+            if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+            }
+        }.trackValue(image) { image in
+            Task {
+                uiImage = (try? await image.base64Data()).flatMap { base64Data in
+                    Data(base64Encoded: base64Data)
+                }.flatMap { imageData in
+                    UIImage(data: imageData)
+                }
             }
         }
     }

@@ -6,6 +6,8 @@ import com.example.stories.model.dataSource.local.history.model.TextElementRealm
 import com.example.stories.model.dataSource.remote.history.model.HistoryElementResponse
 import com.example.stories.model.dataSource.remote.history.model.HistoryImageResponse
 import com.example.stories.model.dataSource.remote.history.model.HistoryTextResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.mongodb.kbson.BsonObjectId
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -22,11 +24,8 @@ sealed class HistoryElement {
         override val id: String,
         val imageResource: ImageResource,
     ) : HistoryElement() {
-        fun setDataFromUrl(data: ByteArray): Image {
+        fun setDataFromData(data: ByteArray): Image {
             return copy(imageResource = ImageResource.ByteArrayImage(data))
-        }
-        fun updateImageResource(new: String): Image {
-            return copy(imageResource = ImageResource.ResourceImageUrl(ImageUrl(new)))
         }
     }
 
@@ -42,7 +41,11 @@ sealed interface ImageResource {
     ) : ImageResource {
 
         @OptIn(ExperimentalEncodingApi::class)
-        val base64Data by lazy { Base64.Default.encode(data) }
+        suspend fun base64Data(): String {
+            return withContext(Dispatchers.Default) {
+                Base64.Default.encode(data)
+            }
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

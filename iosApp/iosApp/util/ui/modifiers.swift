@@ -16,7 +16,7 @@ struct TrackValueModifier<Value>: ViewModifier where Value: Equatable {
 }
 
 extension View {
-    func trackValue<Value: Equatable>(of value: Value, perform action: @escaping (Value) -> Void) -> some View {
+    func trackValue<Value: Equatable>(_ value: Value, perform action: @escaping (Value) -> Void) -> some View {
         self.modifier(TrackValueModifier(value: value, action: action))
     }
 }

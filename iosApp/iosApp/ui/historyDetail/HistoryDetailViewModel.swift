@@ -24,8 +24,8 @@ extension HistoryDetailScreen {
             commonViewModel?.cancelEdit()
         }
 
-        func editElement(newElement: HistoryElement) {
-            commonViewModel?.editElement(newElement: newElement)
+        func editElement(newElement: HistoryElement, base64Data: String?) {
+            commonViewModel?.editElement(newElement: newElement, imageBase64Data: base64Data)
         }
 
         func editTitle(newTitle: String) {
@@ -40,9 +40,8 @@ extension HistoryDetailScreen {
             commonViewModel?.createTextElement(text: text)
         }
 
-        func createImageElement(imageData: String) {
-            // TODO: use base 64 data
-            commonViewModel?.createImageElementFromBase64(newImageDataBase64: imageData)
+        func createImageElement(base64Data: String) {
+            commonViewModel?.createImageElementFromBase64(base64Data: base64Data)
         }
 
         func swapElements(fromId: String, toId: String) {
@@ -73,9 +72,7 @@ extension HistoryDetailScreen {
             }
             commonViewModel.showingElements.subscribe(scope: commonViewModel.viewModelScope) {
                 let showingElements: [HistoryElement]? = $0.map(Array.init)
-                withAnimation {
-                    self.showingElements = showingElements
-                }
+                self.showingElements = showingElements
             }
         }
 

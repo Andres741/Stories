@@ -84,7 +84,7 @@ struct StoriesListScreen: View {
                     HistoryDetailScreen(historyId: id)
                 }
             }
-            .trackValue(of: viewModel.isLogged != nil) { showBanner in
+            .trackValue(viewModel.isLogged != nil) { showBanner in
                 withAnimation {
                     self.showBanner = showBanner
                 }

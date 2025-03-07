@@ -1,6 +1,8 @@
 package com.example.stories.android.ui.historyDetail.components.editPopUp
 
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.TextField
@@ -10,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.stories.android.util.ui.ImagePicker
@@ -47,15 +50,22 @@ fun EditImageElementPopUp(
     onConfirm: (imageUri: Uri) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val isImagePiked = imageUri != null
     BaseEditElementPopUp(
         onConfirm = { onConfirm(imageUri ?: return@BaseEditElementPopUp) },
         isOnConfirmEnabled = imageUri != null,
-        modifier = Modifier.height(600.dp),
+        modifier = Modifier.fillMaxHeight(.8f).fillMaxWidth(),
         onDismiss = onDismiss,
     ) {
-        ImagePicker(
-            imageUri = imageUri,
-            onUriChange = onSelectImage,
-        )
+        Box(modifier = Modifier.weight(1f)) {
+            ImagePicker(
+                imageUri = imageUri,
+                onUriChange = onSelectImage,
+                modifier = Modifier.then(
+                    if (isImagePiked) Modifier.align(Alignment.Center)
+                    else Modifier.align(Alignment.BottomCenter)
+                )
+            )
+        }
     }
 }

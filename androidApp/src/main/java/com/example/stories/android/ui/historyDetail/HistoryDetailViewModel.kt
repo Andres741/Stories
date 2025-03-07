@@ -28,12 +28,10 @@ class HistoryDetailViewModel(historyId: String) : ViewModel() {
 
     fun editItem(context: Context, element: HistoryElement, imageUri: Uri?) {
         viewModelScope.launch {
-            val updatedElement = imageUri?.let {
+            val imageData = imageUri?.let {
                 ImageUtils.uriToImageDomain(imageUri, context)
-            }?.let { imageData ->
-                (element as? HistoryElement.Image)?.setDataFromUrl(imageData)
-            } ?: element
-            commonViewModel.editElement(updatedElement)
+            }
+            commonViewModel.editElement(element, imageData)
         }
     }
 

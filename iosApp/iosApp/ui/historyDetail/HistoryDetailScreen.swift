@@ -40,11 +40,7 @@ struct HistoryDetailScreen: View {
         LoadingDataScreen(loadStatus: historyLoadStatus) {
             let history = viewModel.editingHistory ?? $0
             
-            ScreenBody(
-                history: history,
-                showingElements: viewModel.showingElements,
-                editMode: editMode
-            )
+            ScreenBody(history: history)
             .toolbar {
                 Toolbar()
             }
@@ -54,8 +50,8 @@ struct HistoryDetailScreen: View {
             .sheet(optional: $editingElement) { element in
                 EditElementSheet(
                     element: element,
-                    onConfirm: { newElement in
-                        viewModel.editElement(newElement: newElement)
+                    onConfirm: { newElement, base64ImageData in
+                        viewModel.editElement(newElement: newElement, base64Data: base64ImageData)
                         editingElement = nil
                     },
                     onDismiss: { editingElement = nil }
@@ -78,8 +74,8 @@ struct HistoryDetailScreen: View {
             }
             .sheet(isPresented: $showCreateNewImagePopUp) {
                 EditImageElementSheet(
-                    onConfirm: { newImageUrl in
-                        //viewModel.createImageElement(imageUrl: newImageUrl)
+                    onConfirm: { base64Data in
+                        viewModel.createImageElement(base64Data: base64Data)
                         showCreateNewImagePopUp = false
                     },
                     onDismiss: {
@@ -87,27 +83,27 @@ struct HistoryDetailScreen: View {
                     }
                 )
             }
-            .trackValue(of: stateAlternator.currentState) { angle in
+            .trackValue(stateAlternator.currentState) { angle in
                 withAnimation(
                     Animation.easeIn(duration: HistoryDetailScreen.SAKE_MOVEMENT_DURATION_SECONDS)
                 ) {
                     inclinationAngle = angle
                 }
             }
-            .trackValue(of: viewModel.editingHistory) { editingHistory in
+            .trackValue(viewModel.editingHistory) { editingHistory in
                 if editingHistory == nil {
                     stateAlternator.stopAlternating()
                 } else {
                     stateAlternator.startAlternating()
                 }
             }
-            .trackValue(of: viewModel.editingHistory) { newValue in
+            .trackValue(viewModel.editingHistory) { newValue in
                 withAnimation {
                     let editMode = newValue != nil
                     titleBottomPadding = editMode ? 6 : 0
                 }
             }
-            .trackValue(of: viewModel.editingHistory) { newValue in
+            .trackValue(viewModel.editingHistory) { newValue in
                 let editMode = newValue != nil
                 withAnimation {
                     titleBottomPadding = editMode ? 6 : 0
@@ -169,11 +165,7 @@ struct HistoryDetailScreen: View {
         .onDisappear { stateAlternator.startAlternating() }
     }
     
-    @ViewBuilder private func ScreenBody(
-        history: History,
-        showingElements: [HistoryElement]?,
-        editMode: Bool
-    ) -> some View {
+    @ViewBuilder private func ScreenBody(history: History) -> some View {
         ZStack {
             VStack {
                 HistoryDetailHeader(
@@ -187,7 +179,7 @@ struct HistoryDetailScreen: View {
                 
                 HistoryDetailBodyList(
                     history: history,
-                    elements: showingElements,
+                    elements: viewModel.showingElements,
                     editMode: editMode,
                     inclinationAngle: inclinationAngle,
                     onClickElement: { editingElement = $0 },
@@ -211,13 +203,8 @@ struct HistoryDetailScreen: View {
             Spacer()
             
             Menu {
-                PhotosPicker(selection: $photosPickerItem, matching: .images) {
-                    Label("Piker no funciona: " + getStringResource(path: \.add_image), systemImage: "plus")
-                        .frame(maxWidth: .infinity)
-                }
-
                 Button(action: { showCreateNewImagePopUp = true }) {
-                    Label("Piker andidado: " + getStringResource(path: \.add_image), systemImage: "plus")
+                    Label(getStringResource(path: \.add_image), systemImage: "plus")
                 }
                 
                 Button(action: { showCreateNewTextPopUp = true }) {
