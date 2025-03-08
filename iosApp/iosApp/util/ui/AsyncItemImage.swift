@@ -4,7 +4,7 @@ import SwiftUI
     AsyncImage(
         url: URL(string: url),
         content: { image in
-            image.resizable().aspectRatio(contentMode: .fit)
+            image.resizable().scaledToFill()
         },
         placeholder: {
             ProgressView()

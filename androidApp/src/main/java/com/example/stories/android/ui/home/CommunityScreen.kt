@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -105,6 +106,7 @@ fun UserItem(
                 AsyncImage(
                     model = profileImage.url,
                     contentDescription = null,
+                    contentScale = ContentScale.FillHeight,
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .size(50.dp)

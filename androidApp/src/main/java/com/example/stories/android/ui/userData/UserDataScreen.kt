@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -76,17 +77,19 @@ fun UserData(
                 .size(160.dp)
                 .clip(CircleShape)
 
-            user.profileImage?.let { image ->
+            user.profileImage?.url?.let { image ->
                 AsyncImage(
                     model = image,
                     contentDescription = "",
-                    modifier = imageModifier
+                    contentScale = ContentScale.FillHeight,
+                    modifier = imageModifier,
                 )
             } ?: run {
                 Image(
                     painter = getPainterResource { no_profile_image_icon },
                     contentDescription = "",
-                    modifier = imageModifier
+                    contentScale = ContentScale.FillHeight,
+                    modifier = imageModifier,
                 )
             }
 
