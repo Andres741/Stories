@@ -2,7 +2,6 @@ package com.example.stories.model.repository.history
 
 import com.example.stories.infrastructure.loading.Response
 import com.example.stories.infrastructure.loading.mapToResponse
-import com.example.stories.infrastructure.loading.toResponse
 import com.example.stories.model.domain.model.User
 import com.example.stories.model.domain.model.toDomain
 import com.example.stories.model.domain.model.toRealm
@@ -54,8 +53,10 @@ class UserRepositoryImpl(
 
         return claudDataSource.editUser(
             user = user.toResponse().copy(profileImage = profileImage),
-        ).mapToResponse { it.toDomain() }.onRight { editedUser ->
-            localDataSource.saveUser(editedUser.toRealm())
+        ).mapToResponse {
+            it.toDomain().also { editedUser ->
+                localDataSource.saveUser(editedUser.toRealm())
+            }
         }
     }
 }
