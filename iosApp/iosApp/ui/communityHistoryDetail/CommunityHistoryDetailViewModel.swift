@@ -15,8 +15,8 @@ extension CommunityHistoryDetailScreen {
             self.userId = userId
         }
         
-        func refreshData() {
-            commonViewModel?.refreshData()
+        func refreshData(showLoading: Bool) {
+            commonViewModel?.refreshData(showLoading: showLoading)
         }
         
         func startObserving() {

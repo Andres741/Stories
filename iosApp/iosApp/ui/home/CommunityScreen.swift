@@ -14,7 +14,9 @@ struct CommunityScreen: View {
         NavigationStack {
             RefreshLoadingDataScreen(
                 loadStatus: viewModel.usersLoadStatus,
-                onRefresh: { viewModel.refreshData() }
+                onRefresh: viewModel.refreshData,
+                isDataEmpty: { users in users.value.isEmpty},
+                refreshTitle: getStringResource(path: \.empty_users_screen_title)
             ) { data in
                 let users = data.value
 

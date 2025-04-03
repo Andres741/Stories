@@ -30,9 +30,9 @@ class CommunityHistoryDetailCommonViewModel(
         }
     }
 
-    fun refreshData() {
+    fun refreshData(showLoading: Boolean) {
         viewModelScope.launch {
-            _historyLoadStatus.setRefreshing()
+            _historyLoadStatus.setRefreshing(showLoading)
             _historyLoadStatus.value = getHistoryFromAPIUseCase(historyId, userId).toLoadStatus()
         }
     }

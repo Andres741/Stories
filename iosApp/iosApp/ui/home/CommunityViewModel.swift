@@ -8,8 +8,8 @@ extension CommunityScreen {
         
         @Published private(set) var usersLoadStatus: LoadStatus<Reference<[User]>>? = nil
         
-        func refreshData() {
-            commonViewModel?.refreshData()
+        func refreshData(showLoading: Bool) {
+            commonViewModel?.refreshData(showLoading: showLoading)
         }
 
         func startObserving() {

@@ -38,7 +38,6 @@ fun AppContent() {
                             if (userId == null) navController.navigate(Routes.Stories)
                             else navController.navigate(Routes.CommunityStories(userId))
                         },
-                        navigateTest = { navController.navigate(Routes.TestImages) },
                     )
                 }
                 composable<Routes.Stories> {

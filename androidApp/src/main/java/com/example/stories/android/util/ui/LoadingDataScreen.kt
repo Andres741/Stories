@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,36 +28,47 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import com.example.stories.SharedRes
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.util.resources.getString
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.infrastructure.loading.LoadingError
 import com.example.stories.infrastructure.loading.LoadStatus
+import dev.icerock.moko.resources.ImageResource
 
 @Composable
 fun<T: Any> RefreshLoadingDataScreen(
     loadStatus: LoadStatus<T>,
-    onRefresh: () -> Unit,
+    onRefresh: (showLoading: Boolean) -> Unit,
+    isDataEmpty: (T) -> Boolean = { false },
+    refreshTitle: String = getStringResource { empty_generic_screen_title },
     errorContent: @Composable (LoadingError) -> Unit = {
         DefaultErrorScreen(
             loadingError = it,
             buttonText = getStringResource { refresh },
-            onClickButton = onRefresh,
+            onClickButton = { onRefresh(true) },
         )
     },
     loadingContent: @Composable () -> Unit = { DefaultLoadingScreen() },
-    successContent: @Composable BoxScope.(T) -> Unit
+    successContent: @Composable BoxScope.(T) -> Unit,
 ) {
     loadStatus.fold(
         onError = { errorContent(it) },
         onLoading = { loadingContent() },
         onSuccess = {
-            PullRefreshLayout(
-                isRefreshing = loadStatus.isRefreshing(),
-                onRefresh = onRefresh,
-            ) {
-                successContent(it)
+            if (isDataEmpty(it)) {
+                EmptyDataScreen(
+                    title = refreshTitle,
+                    onClickButton = { onRefresh(true) },
+                )
+            } else {
+                PullRefreshLayout(
+                    isRefreshing = loadStatus.isRefreshing(),
+                    onRefresh = { onRefresh(false) },
+                ) {
+                    successContent(it)
+                }
             }
         },
     )
@@ -77,9 +89,12 @@ fun<T: Any> LoadingDataScreen(
 }
 
 @Composable
-fun DefaultErrorScreen(
-    loadingError: LoadingError,
+fun InfoScreen(
+    icon: ImageResource,
+    title: String,
+    message: String?,
     buttonText: String = getStringResource { accept },
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
     onClickButton: (() -> Unit)? = null,
 ) {
     Box(
@@ -93,19 +108,19 @@ fun DefaultErrorScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = getPainterResource(imageResource = loadingError.icon),
+                painter = getPainterResource(imageResource = icon),
                 modifier = Modifier
                     .padding(16.dp)
                     .size(36f.dp),
                 contentDescription = "",
             )
             Text(
-                text = loadingError.title.getString(),
+                text = title,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineMedium,
             )
             Text(
-                text = loadingError.message?.getString() ?: return@Column,
+                text = message ?: return@Column,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 30f.dp)
@@ -116,14 +131,30 @@ fun DefaultErrorScreen(
             modifier = Modifier
                 .align(alignment = Alignment.BottomCenter)
                 .fillMaxWidth(),
-            colors = ButtonDefaults.textButtonColors(
-                containerColor = MaterialTheme.colorScheme.error,
-                contentColor = MaterialTheme.colorScheme.onError
-            )
+            colors = colors
         ) {
             Text(text = buttonText)
         }
     }
+}
+
+@Composable
+fun DefaultErrorScreen(
+    loadingError: LoadingError,
+    buttonText: String = getStringResource { accept },
+    onClickButton: (() -> Unit)? = null,
+) {
+    InfoScreen(
+        icon = loadingError.icon,
+        title = loadingError.title.getString(),
+        message = loadingError.message?.getString(),
+        buttonText = buttonText,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.error,
+            contentColor = MaterialTheme.colorScheme.onError
+        ),
+        onClickButton = onClickButton,
+    )
 }
 
 @Preview
@@ -145,6 +176,32 @@ fun DefaultErrorScreen_preview() {
                 loadingError = LoadingError.GenericError,
                 onClickButton = toast::show
             )
+        }
+    }
+}
+
+@Composable
+fun EmptyDataScreen(
+    title: String = getStringResource { empty_generic_screen_title },
+    onClickButton: () -> Unit
+) {
+    InfoScreen(
+        icon = SharedRes.images.empty_list,
+        title = title,
+        message = getStringResource { empty_screen_description },
+        buttonText = getStringResource { refresh },
+        onClickButton = onClickButton
+    )
+}
+
+@Preview
+@Composable
+fun EmptyDataScreen_preview() {
+    StoriesTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            EmptyDataScreen(onClickButton = {})
         }
     }
 }

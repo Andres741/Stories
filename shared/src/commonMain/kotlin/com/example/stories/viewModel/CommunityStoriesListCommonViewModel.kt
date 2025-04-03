@@ -30,9 +30,9 @@ class CommunityStoriesListCommonViewModel(
         }
     }
 
-    fun refreshData() {
+    fun refreshData(showLoading: Boolean) {
         viewModelScope.launch {
-            _userAndStoriesLoadStatus.setRefreshing()
+            _userAndStoriesLoadStatus.setRefreshing(showLoading)
             _userAndStoriesLoadStatus.value = getUserStoriesUseCase(userId).toLoadStatus()
         }
     }

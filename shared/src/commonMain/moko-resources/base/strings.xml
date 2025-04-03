@@ -12,6 +12,11 @@
     <string name="service_unavailable_error_title">Server are under maintenance</string>
     <string name="service_unavailable_error_message">Please, try again later when the server is available again</string>
 
+    <string name="empty_generic_screen_title">No data available at the moment</string>
+    <string name="empty_stories_screen_title">This user still hasn\'t stories posted</string>
+    <string name="empty_users_screen_title">No users registered at the moment</string>
+    <string name="empty_screen_description">Press the \"Refresh\" button to reload the data</string>
+
     <string name="accept">Accept</string>
     <string name="dismiss">Dismiss</string>
     <string name="edit">Edit</string>
@@ -28,8 +33,8 @@
     <string name="delete_history_pop_up_title">Are you sure?</string>
     <string name="delete_history_pop_up_text">You won\'t be able to recover deleted histories</string>
 
-    <string name="basic_history_title">Your new history</string>
-    <string name="basic_history_text">And in that point I felt I was further than ever...</string>
+    <string name="basic_history_title">Your new history title</string>
+    <string name="basic_history_text">Write a description of your story here</string>
 
     <string name="empty_history_list_title">No stories yet</string>
     <string name="empty_history_list_text">Tell us about your stories by tapping the add button or go outside and just let things happened</string>

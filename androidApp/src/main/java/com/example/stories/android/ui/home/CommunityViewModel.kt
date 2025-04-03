@@ -10,5 +10,5 @@ class CommunityViewModel : ViewModel() {
 
     val users get() = commonViewModel.users
 
-    fun refreshData() = commonViewModel.refreshData()
+    fun refreshData(showLoading: Boolean) = commonViewModel.refreshData(showLoading)
 }

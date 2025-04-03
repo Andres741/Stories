@@ -97,8 +97,8 @@ class HistoryMocks {
         ),
         User(
             id = "1",
-            name = "Innominado",
-            description = "Perdí mi nombre, no recuerdo cuando.",
+            name = "Edmundo",
+            description = "Soy capitán de barcos.",
             profileImage = null,
         ),
     )

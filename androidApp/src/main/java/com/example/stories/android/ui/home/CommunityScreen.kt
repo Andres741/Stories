@@ -1,7 +1,6 @@
 package com.example.stories.android.ui.home
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +20,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +32,7 @@ import com.example.stories.android.ui.components.TitleText
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.ItemCard
 import com.example.stories.android.util.ui.RefreshLoadingDataScreen
+import com.example.stories.infrastructure.loading.LoadStatus
 import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
 
@@ -42,25 +40,22 @@ import com.example.stories.model.domain.model.User
 fun CommunityScreen(
     viewModel: CommunityViewModel,
     navigateToStories: (userId: String?) -> Unit,
-    navigateTest: () -> Unit,
 ) {
 
     val usersLoadStatus by viewModel.users.collectAsStateWithLifecycle()
 
-    RefreshLoadingDataScreen(loadStatus = usersLoadStatus, onRefresh = viewModel::refreshData) { users ->
-        Community(
-            users = users,
-            navigateToStories = navigateToStories,
-            navigateTest = navigateTest,
-        )
-    }
+    Community(
+        usersLoadStatus = usersLoadStatus,
+        onRefresh = viewModel::refreshData,
+        navigateToStories = navigateToStories,
+    )
 }
 
 @Composable
 fun Community(
-    users: List<User>,
+    usersLoadStatus: LoadStatus<List<User>>,
+    onRefresh: (showLoading: Boolean) -> Unit,
     navigateToStories: (userId: String?) -> Unit,
-    navigateTest: () -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -69,8 +64,13 @@ fun Community(
             }
         }
     ) { padding ->
-        Box(modifier = Modifier.padding(padding).fillMaxSize()) {
-            Column {
+        RefreshLoadingDataScreen(
+            loadStatus = usersLoadStatus,
+            onRefresh = onRefresh,
+            isDataEmpty = { users -> users.isEmpty() },
+            refreshTitle = getStringResource { empty_users_screen_title },
+        ) { users ->
+            Column(modifier = Modifier.padding(padding).fillMaxSize()) {
                 TitleText(
                     text = getStringResource { community },
                     modifier = Modifier.padding(bottom = 12.dp)
@@ -83,13 +83,6 @@ fun Community(
                         )
                     }
                 }
-            }
-
-            Button(
-                onClick = { navigateTest() },
-                modifier = Modifier.align(alignment = Alignment.BottomCenter)
-            ) {
-                Text(text = "Test")
             }
         }
     }
@@ -136,9 +129,9 @@ fun CommunityScreen_preview() {
             color = MaterialTheme.colorScheme.background
         ) {
             Community(
-                users = HistoryMocks().getMockUsers(),
+                usersLoadStatus = LoadStatus.Data(HistoryMocks().getMockUsers()),
+                onRefresh = {},
                 navigateToStories = {},
-                navigateTest = {},
             )
         }
     }

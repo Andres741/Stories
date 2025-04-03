@@ -58,8 +58,11 @@ fun<T: Any> Response<T>.toLoadStatus(): LoadStatus<T> = fold(
     ifRight = { LoadStatus.Data(it) },
 )
 
-fun <T: Any> MutableStateFlow<LoadStatus<T>>.setRefreshing() {
+fun <T: Any> MutableStateFlow<LoadStatus<T>>.setRefreshing(showLoading: Boolean) {
     update { oldValue ->
+        if (showLoading) {
+            return@update LoadStatus.Loading
+        }
         when (oldValue) {
             is LoadStatus.Data -> {
                 oldValue.setRefreshing()

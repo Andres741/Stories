@@ -39,9 +39,9 @@ class CommunityCommonViewModel(
         }
     }
 
-    fun refreshData() {
+    fun refreshData(showLoading: Boolean) {
         viewModelScope.launch {
-            allUsersLoadStatus.setRefreshing()
+            allUsersLoadStatus.setRefreshing(showLoading)
             allUsersLoadStatus.value = getAllUsersUseCase().toLoadStatus()
         }
     }

@@ -11,7 +11,7 @@ class CommunityStoriesListViewModel(userId: String) : ViewModel() {
 
     val userAndStoriesLoadStatus get() = commonViewModel.userAndStoriesLoadStatus
 
-    fun refreshData() = commonViewModel.refreshData()
+    fun refreshData(showLoading: Boolean) = commonViewModel.refreshData(showLoading)
 
     class Factory(private val userId: String) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = CommunityStoriesListViewModel(userId) as T

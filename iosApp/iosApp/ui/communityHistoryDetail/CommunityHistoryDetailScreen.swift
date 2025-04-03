@@ -14,7 +14,7 @@ struct CommunityHistoryDetailScreen: View {
         
         RefreshLoadingDataScreen(
             loadStatus: historyLoadStatus,
-            onRefresh: { viewModel.refreshData() }
+            onRefresh: viewModel.refreshData
         ) { history in
             VStack {
                 HistoryDetailHeader(history: history)

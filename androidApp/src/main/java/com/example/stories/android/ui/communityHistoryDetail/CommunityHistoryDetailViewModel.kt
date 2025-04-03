@@ -15,7 +15,7 @@ class CommunityHistoryDetailViewModel(historyId: String, userId: String) : ViewM
 
     val historyLoadStatus get() = commonViewModel.historyLoadStatus
 
-    fun refreshData() = commonViewModel.refreshData()
+    fun refreshData(showLoading: Boolean) = commonViewModel.refreshData(showLoading)
 
     class Factory(private val historyId: String, private val userId: String) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = CommunityHistoryDetailViewModel(

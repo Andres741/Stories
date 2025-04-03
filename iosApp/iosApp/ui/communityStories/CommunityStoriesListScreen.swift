@@ -14,7 +14,12 @@ struct CommunityStoriesListScreen: View {
         
         RefreshLoadingDataScreen(
             loadStatus: userAndStoriesLoadStatus,
-            onRefresh: { viewModel.refreshData() }
+            onRefresh: viewModel.refreshData,
+            isDataEmpty: { userAndStories in
+                let (_, stories) = userAndStories.value
+                return stories.isEmpty
+            },
+            refreshTitle: getStringResource(path: \.empty_stories_screen_title)
         ) { userAndStories in
             let (user, stories) = userAndStories.value
             

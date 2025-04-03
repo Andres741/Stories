@@ -42,7 +42,12 @@ fun CommunityStoriesListScreen(
 ) {
     val storiesLoadStatus by viewModel.userAndStoriesLoadStatus.collectAsStateWithLifecycle()
 
-    RefreshLoadingDataScreen(loadStatus = storiesLoadStatus, onRefresh = viewModel::refreshData) { userAndStories ->
+    RefreshLoadingDataScreen(
+        loadStatus = storiesLoadStatus,
+        onRefresh = viewModel::refreshData,
+        isDataEmpty = { (_, stories) -> stories.isEmpty() },
+        refreshTitle = getStringResource { empty_stories_screen_title },
+    ) { userAndStories ->
         val (user, stories) = userAndStories
 
         CommunityStoriesList(

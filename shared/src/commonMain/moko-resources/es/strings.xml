@@ -12,6 +12,11 @@
     <string name="service_unavailable_error_title">Los servidores enstán bajo mantenimiento</string>
     <string name="service_unavailable_error_message">Por favor, inténtelo más tarde cuando los servidores vuelvan a funcionar</string>
 
+    <string name="empty_generic_screen_title">No hay datos actualmente</string>
+    <string name="empty_stories_screen_title">No hay historias actualmente</string>
+    <string name="empty_users_screen_title">No hay usuarios actualmente</string>
+    <string name="empty_screen_description">Pulsa el botón \"Refrescar\" para volver a cargar los datos</string>
+
     <string name="accept">Aceptar</string>
     <string name="dismiss">Descartar</string>
     <string name="edit">Editar</string>
@@ -28,8 +33,8 @@
     <string name="delete_history_pop_up_title">¿Estás seguro?</string>
     <string name="delete_history_pop_up_text">No podrás recuperar historias eliminadas</string>
 
-    <string name="basic_history_title">Tu nueva historia</string>
-    <string name="basic_history_text">Y en ese momento me sentí mas lejos que nunca...</string>
+    <string name="basic_history_title">Título de nueva historia</string>
+    <string name="basic_history_text">Escribe aqui una descripción de tu historia</string>
 
     <string name="empty_history_list_title">No tienes historias todavía</string>
     <string name="empty_history_list_text">Cuéntanos una de tus historias pulsando el botón de añadir o sal fuera y deja que las cosas pasen</string>
