@@ -1,0 +1,1 @@
+Personal project to practice with KMP and SwiftUI technologies, consisting of a small social network where users can share life stories made up of text or image articles. The application is developed using KMP, with the UI implemented in Jetpack Compose and SwiftUI.
