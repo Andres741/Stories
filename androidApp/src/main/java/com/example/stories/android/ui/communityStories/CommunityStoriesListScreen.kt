@@ -148,7 +148,7 @@ private fun CollapsingHeader(
                 AsyncImage(
                     model = userImage,
                     contentDescription = null,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.FillHeight,
                     modifier = Modifier
                         .size(80.dp)
                         .clip(CircleShape)
