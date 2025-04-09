@@ -2,6 +2,10 @@
 
 **Stories** is a modern, multiplatform application designed to allow users to browse and read stories. Built using Kotlin Multiplatform Mobile (KMM), it leverages the power of shared Kotlin code to target Android and iOS. This project demonstrates best practices in multiplatform development, including modularization, clean architecture, dependency injection, and remote and local data handling.
 
+## App Demo
+
+[This video](https://drive.google.com/file/d/1ePAMIZB90lRYn7lkd_y7LdCbpPjguzKi/view?usp=sharing) demonstrates the Stories app in action.
+
 ## Features
 
 *   **Browse Stories:** Users can browse a list of stories.
