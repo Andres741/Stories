@@ -1,6 +1,9 @@
 package com.example.stories.android.ui.storiesList
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,15 +32,21 @@ import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.Banner
 import com.example.stories.android.ui.components.StoriesListBody
 import com.example.stories.android.ui.components.TitleText
+import com.example.stories.android.ui.historyDateItemIdSharedTransition
+import com.example.stories.android.ui.historyFirstItemIdSharedTransition
+import com.example.stories.android.ui.historyTitleIdSharedTransition
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
+import com.example.stories.android.util.ui.SharedTransitionStuff
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun StoriesListScreen(
     viewModel: StoriesListViewModel,
+    sharedTransitionStuff: SharedTransitionStuff,
     navigateDetail: (String) -> Unit,
     navigateLogIn: () -> Unit,
     navigateUserData: () -> Unit,
@@ -51,6 +60,7 @@ fun StoriesListScreen(
             stories = stories,
             navigateHistory = navigateHistory,
             isLogged = isLogged,
+            sharedTransitionStuff = sharedTransitionStuff,
             navigateDetail = navigateDetail,
             navigateLogIn = navigateLogIn,
             navigateUserData = navigateUserData,
@@ -61,11 +71,13 @@ fun StoriesListScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun StoriesList(
     stories: List<History>,
     navigateHistory: History?,
     isLogged: Boolean?,
+    sharedTransitionStuff: SharedTransitionStuff,
     navigateDetail: (String) -> Unit,
     navigateLogIn: () -> Unit,
     navigateUserData: () -> Unit,
@@ -134,6 +146,15 @@ fun StoriesList(
                 navigateDetail = navigateDetail,
                 emptyScreenTitle = getStringResource { empty_history_list_title },
                 emptyScreenText = getStringResource { empty_history_list_text },
+                itemTextModifier = { history ->
+                    Modifier.historyTitleIdSharedTransition(sharedTransitionStuff, history.id)
+                },
+                itemFirstModifier = { history ->
+                    Modifier.historyFirstItemIdSharedTransition(sharedTransitionStuff, history.id)
+                },
+                itemDateModifier = { history ->
+                    Modifier.historyDateItemIdSharedTransition(sharedTransitionStuff, history.id)
+                },
                 onClickDelete = { deletingHistoryId = it },
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -161,6 +182,7 @@ private fun LoggingBanner(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun StoriesList_preview() {
@@ -178,17 +200,24 @@ fun StoriesList_preview() {
                 }
             })
 
-            StoriesList(
-                stories = HistoryMocks().getMockStories(),
-                navigateHistory = null,
-                isLogged = showLogged.not(),
-                navigateDetail = {},
-                navigateLogIn = { showLogged = false },
-                navigateUserData = {},
-                deleteHistory = {},
-                createBasicHistory = { _, _ -> },
-                onNewHistoryConsumed = {},
-            )
+            SharedTransitionLayout transitionScope@{
+                AnimatedContent(0) { state ->
+                    println(state)
+
+                    StoriesList(
+                        stories = HistoryMocks().getMockStories(),
+                        navigateHistory = null,
+                        isLogged = showLogged.not(),
+                        sharedTransitionStuff = this@transitionScope to this@AnimatedContent,
+                        navigateDetail = {},
+                        navigateLogIn = { showLogged = false },
+                        navigateUserData = {},
+                        deleteHistory = {},
+                        createBasicHistory = { _, _ -> },
+                        onNewHistoryConsumed = {},
+                    )
+                }
+            }
         }
     }
 }

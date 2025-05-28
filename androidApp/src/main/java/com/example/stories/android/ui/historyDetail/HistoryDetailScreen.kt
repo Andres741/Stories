@@ -1,7 +1,10 @@
 package com.example.stories.android.ui.historyDetail
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,21 +36,27 @@ import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.historyDetail.components.AddElementFooter
 import com.example.stories.android.ui.components.ElementsListBody
 import com.example.stories.android.ui.components.TitleText
+import com.example.stories.android.ui.historyDateItemIdSharedTransition
+import com.example.stories.android.ui.historyFirstItemIdSharedTransition
+import com.example.stories.android.ui.historyTitleIdSharedTransition
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDatePopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTitlePopUp
 import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
+import com.example.stories.android.util.ui.SharedTransitionStuff
 import com.example.stories.android.util.ui.actionableFloatAnimation
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.HistoryMocks
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun HistoryDetailScreen(
-    viewModel: HistoryDetailViewModel
+    viewModel: HistoryDetailViewModel,
+    sharedTransitionStuff: SharedTransitionStuff,
 ) {
     val context = LocalContext.current
     val historyLoadStatus by viewModel.historyLoadStatus.collectAsStateWithLifecycle()
@@ -58,6 +67,7 @@ fun HistoryDetailScreen(
         HistoryDetail(
             history = editingItem ?: history,
             editMode = editMode,
+            sharedTransitionStuff = sharedTransitionStuff,
             editElement = { element, uri -> viewModel.editItem(context, element, uri) },
             editTitle = viewModel::editTitle,
             editDateRange = viewModel::editDates,
@@ -73,10 +83,12 @@ fun HistoryDetailScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun HistoryDetail(
     history: History,
     editMode: Boolean,
+    sharedTransitionStuff: SharedTransitionStuff,
     editElement: (HistoryElement, Uri?) -> Unit,
     editTitle: (newTitle: String) -> Unit,
     editDateRange: (newDateRange: LocalDateRange) -> Unit,
@@ -115,6 +127,7 @@ fun HistoryDetail(
                         },
                         onDismiss = { editingElement = null },
                     )
+
                     is HistoryElement.Image -> {
                         val (imageUri, onUriChange) = remember { mutableStateOf(null as Uri?) }
                         EditImageElementPopUp(
@@ -148,6 +161,10 @@ fun HistoryDetail(
                 TitleHeader(
                     title = history.title,
                     editMode = editMode,
+                    modifier = Modifier.historyTitleIdSharedTransition(
+                        sharedTransitionStuff = sharedTransitionStuff,
+                        historyId = history.id
+                    ),
                     rotation = rotation,
                     onEditTitle = editTitle,
                 )
@@ -155,6 +172,18 @@ fun HistoryDetail(
                 ElementsListBody(
                     history = history,
                     editMode = editMode,
+                    itemModifier = { index ->
+                        if (index != 0) Modifier else Modifier.historyFirstItemIdSharedTransition(
+                            sharedTransitionStuff = sharedTransitionStuff,
+                            historyId = history.id,
+                        )
+                    },
+                    itemDateModifier = {
+                        Modifier.historyDateItemIdSharedTransition(
+                            sharedTransitionStuff = sharedTransitionStuff,
+                            historyId = history.id,
+                        )
+                    },
                     rotation = rotation,
                     onClickElement = { editingElement = it },
                     onClickDate = { editingDateRange = it },
@@ -177,6 +206,7 @@ fun HistoryDetail(
 private fun TitleHeader(
     title: String,
     editMode: Boolean,
+    modifier: Modifier = Modifier,
     rotation: () -> Float,
     onEditTitle: (String) -> Unit,
 ) {
@@ -196,7 +226,7 @@ private fun TitleHeader(
 
     TitleText(
         text = title,
-        modifier = Modifier
+        modifier = modifier
             .graphicsLayer { rotationZ = rotation() }
             .clickable(enabled = editMode) { editingTitle = title }
     )
@@ -229,6 +259,7 @@ fun HistoryDetailFab(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun StoriesList_preview() {
@@ -238,19 +269,25 @@ fun StoriesList_preview() {
             color = MaterialTheme.colorScheme.background
         ) {
             var editMode by remember { mutableStateOf(false) }
-            HistoryDetail(
-                history = if (editMode) HistoryMocks().getMockStories()[2] else HistoryMocks().getMockStories()[1],
-                editMode = editMode,
-                editElement = { _, _ -> },
-                editTitle = {},
-                editDateRange = {},
-                inverseEditHistory = { editMode = !editMode },
-                saveEditingHistory = { editMode = false},
-                createTextElement = {},
-                createImageElement = {},
-                swapElements = { _, _ -> },
-                deleteElement = {},
-            )
+            SharedTransitionLayout transitionScope@{
+                AnimatedContent(0) { state ->
+                    println(state)
+                    HistoryDetail(
+                        history = if (editMode) HistoryMocks().getMockStories()[2] else HistoryMocks().getMockStories()[1],
+                        editMode = editMode,
+                        sharedTransitionStuff = this@transitionScope to this@AnimatedContent,
+                        editElement = { _, _ -> },
+                        editTitle = {},
+                        editDateRange = {},
+                        inverseEditHistory = { editMode = !editMode },
+                        saveEditingHistory = { editMode = false },
+                        createTextElement = {},
+                        createImageElement = {},
+                        swapElements = { _, _ -> },
+                        deleteElement = {},
+                    )
+                }
+            }
         }
     }
 }

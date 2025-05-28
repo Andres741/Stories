@@ -1,6 +1,5 @@
 package com.example.stories.android.ui.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -34,7 +33,6 @@ import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.HistoryMocks
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StoriesListBody(
     stories: List<History>,
@@ -42,6 +40,9 @@ fun StoriesListBody(
     emptyScreenTitle: String,
     emptyScreenText: String,
     modifier: Modifier = Modifier,
+    itemTextModifier: @Composable (History) -> Modifier = { Modifier },
+    itemFirstModifier: @Composable (History) -> Modifier = { Modifier },
+    itemDateModifier: @Composable (History) -> Modifier = { Modifier },
     listState: LazyListState = rememberLazyListState(),
     onClickDelete: ((String) -> Unit)? = null,
 ) {
@@ -60,7 +61,10 @@ fun StoriesListBody(
                 history = history,
                 onClickItem = navigateDetail,
                 onClickDelete = onClickDelete,
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItem(),
+                itemTextModifier = itemTextModifier,
+                itemFirstModifier = itemFirstModifier,
+                itemDateModifier = itemDateModifier,
             )
         }
         item { Spacer(modifier = Modifier.height(80.dp)) }
@@ -72,6 +76,9 @@ fun HistoryItem(
     history: History,
     onClickItem: (String) -> Unit,
     modifier: Modifier = Modifier,
+    itemTextModifier: @Composable (History) -> Modifier = { Modifier },
+    itemFirstModifier: @Composable (History) -> Modifier = { Modifier },
+    itemDateModifier: @Composable (History) -> Modifier = { Modifier },
     onClickDelete: ((String) -> Unit)? = null,
 ) {
     ItemCard(
@@ -83,10 +90,13 @@ fun HistoryItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .padding(horizontal = 6.dp),
+                .padding(horizontal = 6.dp)
+                .then(itemTextModifier(history)),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium
         )
+
+        val itemModifier = itemFirstModifier(history)
 
         Box(
             modifier = Modifier
@@ -95,8 +105,8 @@ fun HistoryItem(
                 .padding(horizontal = 6.dp)
         ) {
             when (val mainItem = history.mainElement) {
-                is HistoryElement.Image -> AsyncItemImage(mainItem.imageResource)
-                is HistoryElement.Text -> Text(text = mainItem.text)
+                is HistoryElement.Image -> AsyncItemImage(mainItem.imageResource, itemModifier)
+                is HistoryElement.Text -> Text(text = mainItem.text, itemModifier)
             }
         }
 
@@ -108,7 +118,8 @@ fun HistoryItem(
                 text = remember(history.dateRange.format()) {
                     history.dateRange.format()
                 },
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
+                modifier = itemDateModifier(history),
             )
 
             Spacer(modifier = Modifier.weight(1f))

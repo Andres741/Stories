@@ -25,8 +25,11 @@ import com.example.stories.model.domain.model.ImageResource
 import com.example.stories.model.domain.model.ImageUrl
 
 @Composable
-fun AsyncItemImage(imageResource: ImageResource) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+fun AsyncItemImage(
+    imageResource: ImageResource,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxWidth()) {
         var isLoading by remember { mutableStateOf(true) }
 
         if (isLoading) CircularProgressIndicator(
