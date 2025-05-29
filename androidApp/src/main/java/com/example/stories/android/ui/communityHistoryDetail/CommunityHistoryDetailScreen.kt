@@ -14,14 +14,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.stories.android.ui.HISTORY_DATE_ITEM
+import com.example.stories.android.ui.HISTORY_FIRST_ITEM
+import com.example.stories.android.ui.HISTORY_TITLE
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.ElementsListBody
 import com.example.stories.android.ui.components.TitleText
-import com.example.stories.android.ui.historyDateItemIdSharedTransition
-import com.example.stories.android.ui.historyFirstItemIdSharedTransition
-import com.example.stories.android.ui.historyTitleIdSharedTransition
 import com.example.stories.android.util.ui.RefreshLoadingDataScreen
 import com.example.stories.android.util.ui.SharedTransitionStuff
+import com.example.stories.android.util.ui.sharedTransition
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 
@@ -51,24 +52,21 @@ fun CommunityHistoryDetail(
 
             TitleText(
                 text = history.title,
-                modifier = Modifier.historyTitleIdSharedTransition(
-                    sharedTransitionStuff = sharedTransitionStuff,
-                    historyId = history.id
-                ),
+                modifier = Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_TITLE/${history.id}"),
             )
 
             ElementsListBody(
                 history = history,
                 editMode = false,
                 itemModifier = { index ->
-                    if (index != 0) Modifier else Modifier.historyFirstItemIdSharedTransition(
+                    if (index != 0) Modifier else Modifier.sharedTransition(
                         sharedTransitionStuff = sharedTransitionStuff,
-                        historyId = history.id,
+                        key = "$HISTORY_FIRST_ITEM/${history.id}",
                     )
                 },
-                itemDateModifier = Modifier.historyDateItemIdSharedTransition(
+                itemDateModifier = Modifier.sharedTransition(
                     sharedTransitionStuff = sharedTransitionStuff,
-                    historyId = history.id,
+                    key = "$HISTORY_DATE_ITEM/${history.id}",
                 ),
                 rotation = { 0f },
                 onClickElement = {  },

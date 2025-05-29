@@ -28,16 +28,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.stories.android.ui.HISTORY_DATE_ITEM
+import com.example.stories.android.ui.HISTORY_FIRST_ITEM
+import com.example.stories.android.ui.HISTORY_TITLE
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.Banner
 import com.example.stories.android.ui.components.StoriesListBody
 import com.example.stories.android.ui.components.TitleText
-import com.example.stories.android.ui.historyDateItemIdSharedTransition
-import com.example.stories.android.ui.historyFirstItemIdSharedTransition
-import com.example.stories.android.ui.historyTitleIdSharedTransition
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.android.util.ui.SharedTransitionStuff
+import com.example.stories.android.util.ui.sharedTransition
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 import kotlinx.coroutines.delay
@@ -147,13 +148,13 @@ fun StoriesList(
                 emptyScreenTitle = getStringResource { empty_history_list_title },
                 emptyScreenText = getStringResource { empty_history_list_text },
                 itemTextModifier = { history ->
-                    Modifier.historyTitleIdSharedTransition(sharedTransitionStuff, history.id)
+                    Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_TITLE/${history.id}")
                 },
                 itemFirstModifier = { history ->
-                    Modifier.historyFirstItemIdSharedTransition(sharedTransitionStuff, history.id)
+                    Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_FIRST_ITEM/${history.id}")
                 },
                 itemDateModifier = { history ->
-                    Modifier.historyDateItemIdSharedTransition(sharedTransitionStuff, history.id)
+                    Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_DATE_ITEM/${history.id}")
                 },
                 onClickDelete = { deletingHistoryId = it },
                 modifier = Modifier.padding(horizontal = 16.dp),

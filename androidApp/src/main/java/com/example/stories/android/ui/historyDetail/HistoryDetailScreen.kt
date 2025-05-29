@@ -32,13 +32,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.stories.android.ui.HISTORY_DATE_ITEM
+import com.example.stories.android.ui.HISTORY_FIRST_ITEM
+import com.example.stories.android.ui.HISTORY_TITLE
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.historyDetail.components.AddElementFooter
 import com.example.stories.android.ui.components.ElementsListBody
 import com.example.stories.android.ui.components.TitleText
-import com.example.stories.android.ui.historyDateItemIdSharedTransition
-import com.example.stories.android.ui.historyFirstItemIdSharedTransition
-import com.example.stories.android.ui.historyTitleIdSharedTransition
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditDatePopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditImageElementPopUp
 import com.example.stories.android.ui.historyDetail.components.editPopUp.EditTextElementPopUp
@@ -47,6 +47,7 @@ import com.example.stories.android.util.resources.getPainterResource
 import com.example.stories.android.util.ui.LoadingDataScreen
 import com.example.stories.android.util.ui.SharedTransitionStuff
 import com.example.stories.android.util.ui.actionableFloatAnimation
+import com.example.stories.android.util.ui.sharedTransition
 import com.example.stories.infrastructure.date.LocalDateRange
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
@@ -161,9 +162,9 @@ fun HistoryDetail(
                 TitleHeader(
                     title = history.title,
                     editMode = editMode,
-                    modifier = Modifier.historyTitleIdSharedTransition(
+                    modifier = Modifier.sharedTransition(
                         sharedTransitionStuff = sharedTransitionStuff,
-                        historyId = history.id
+                        key = "$HISTORY_TITLE/${history.id}"
                     ),
                     rotation = rotation,
                     onEditTitle = editTitle,
@@ -173,14 +174,14 @@ fun HistoryDetail(
                     history = history,
                     editMode = editMode,
                     itemModifier = { index ->
-                        if (index != 0) Modifier else Modifier.historyFirstItemIdSharedTransition(
+                        if (index != 0) Modifier else Modifier.sharedTransition(
                             sharedTransitionStuff = sharedTransitionStuff,
-                            historyId = history.id,
+                            key = "$HISTORY_FIRST_ITEM/${history.id}",
                         )
                     },
-                    itemDateModifier = Modifier.historyDateItemIdSharedTransition(
+                    itemDateModifier = Modifier.sharedTransition(
                         sharedTransitionStuff = sharedTransitionStuff,
-                        historyId = history.id,
+                        key = "$HISTORY_DATE_ITEM/${history.id}",
                     ),
                     rotation = rotation,
                     onClickElement = { editingElement = it },

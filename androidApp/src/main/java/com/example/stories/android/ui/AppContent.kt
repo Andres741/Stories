@@ -23,8 +23,6 @@ import com.example.stories.android.ui.home.CommunityScreen
 import com.example.stories.android.ui.logIn.LogInScreen
 import com.example.stories.android.ui.storiesList.StoriesListScreen
 import com.example.stories.android.ui.userData.UserDataScreen
-import com.example.stories.android.util.ui.SharedTransitionStuff
-import com.example.stories.android.util.ui.sharedTransition
 import com.example.stories.android.util.ui.test.TestImagePickerScreen
 import kotlinx.serialization.Serializable
 
@@ -37,13 +35,14 @@ fun AppContent() {
                 val navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = Routes.Community) {
-                    composable<Routes.Community> {
+                    composable<Routes.Community> animatedContentScope@{
                         CommunityScreen(
                             viewModel = viewModel(),
                             navigateToStories = { userId ->
                                 if (userId == null) navController.navigate(Routes.Stories)
                                 else navController.navigate(Routes.CommunityStories(userId))
                             },
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
                         )
                     }
                     composable<Routes.Stories> animatedContentScope@{
@@ -115,32 +114,13 @@ fun AppContent() {
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-fun Modifier.historyTitleIdSharedTransition(
-    sharedTransitionStuff: SharedTransitionStuff,
-    historyId: String,
-) : Modifier {
-    return sharedTransition(sharedTransitionStuff, "HISTORY_TITLE/$historyId")
-}
+const val HISTORY_TITLE = "HISTORY_TITLE"
+const val HISTORY_FIRST_ITEM = "HISTORY_FIRST_ITEM"
+const val HISTORY_DATE_ITEM = "HISTORY_DATE_ITEM"
 
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-fun Modifier.historyFirstItemIdSharedTransition(
-    sharedTransitionStuff: SharedTransitionStuff,
-    historyId: String,
-) : Modifier {
-    return sharedTransition(sharedTransitionStuff, "HISTORY_FIRST_ITEM/$historyId")
-}
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-fun Modifier.historyDateItemIdSharedTransition(
-    sharedTransitionStuff: SharedTransitionStuff,
-    historyId: String,
-) : Modifier {
-    return sharedTransition(sharedTransitionStuff, "HISTORY_DATE_ITEM/$historyId")
-}
+const val USER_NAME = "USER_NAME"
+const val USER_DESCRIPTION = "USER_DESCRIPTION"
+const val USER_IMAGE = "USER_IMAGE"
 
 sealed interface Routes {
     @Serializable
