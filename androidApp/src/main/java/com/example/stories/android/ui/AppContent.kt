@@ -62,7 +62,7 @@ fun AppContent() {
                             sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
                         )
                     }
-                    composable<Routes.CommunityStories> { backStackEntry ->
+                    composable<Routes.CommunityStories> animatedContentScope@{ backStackEntry ->
                         val communityRoute = backStackEntry.toRoute<Routes.CommunityStories>()
 
                         CommunityStoriesListScreen(
@@ -72,10 +72,11 @@ fun AppContent() {
                                     userId = communityRoute.userId,
                                     historyId = historyId,
                                 ))
-                            }
+                            },
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
                         )
                     }
-                    composable<Routes.CommunityHistoryDetail> { backStackEntry ->
+                    composable<Routes.CommunityHistoryDetail> animatedContentScope@{ backStackEntry ->
                         val communityHistoryDetailRoute = backStackEntry.toRoute<Routes.CommunityHistoryDetail>()
                         CommunityHistoryDetailScreen(
                             viewModel = viewModel(
@@ -83,7 +84,8 @@ fun AppContent() {
                                     historyId = communityHistoryDetailRoute.historyId,
                                     userId = communityHistoryDetailRoute.userId,
                                 )
-                            )
+                            ),
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
                         )
                     }
                     composable<Routes.Login> {

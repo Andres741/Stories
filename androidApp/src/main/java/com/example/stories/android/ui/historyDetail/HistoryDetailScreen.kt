@@ -178,12 +178,10 @@ fun HistoryDetail(
                             historyId = history.id,
                         )
                     },
-                    itemDateModifier = {
-                        Modifier.historyDateItemIdSharedTransition(
-                            sharedTransitionStuff = sharedTransitionStuff,
-                            historyId = history.id,
-                        )
-                    },
+                    itemDateModifier = Modifier.historyDateItemIdSharedTransition(
+                        sharedTransitionStuff = sharedTransitionStuff,
+                        historyId = history.id,
+                    ),
                     rotation = rotation,
                     onClickElement = { editingElement = it },
                     onClickDate = { editingDateRange = it },

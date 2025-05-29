@@ -1,5 +1,8 @@
 package com.example.stories.android.ui.communityStories
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,18 +30,24 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.stories.android.ui.StoriesTheme
 import com.example.stories.android.ui.components.StoriesListBody
+import com.example.stories.android.ui.historyDateItemIdSharedTransition
+import com.example.stories.android.ui.historyFirstItemIdSharedTransition
+import com.example.stories.android.ui.historyTitleIdSharedTransition
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.RefreshLoadingDataScreen
+import com.example.stories.android.util.ui.SharedTransitionStuff
 import com.example.stories.android.util.ui.collapsingToolbarLayout.CollapsingToolbarLayout
 import com.example.stories.android.util.ui.collapsingToolbarLayout.lerp
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CommunityStoriesListScreen(
     viewModel: CommunityStoriesListViewModel,
     navigateDetail: (String) -> Unit,
+    sharedTransitionStuff: SharedTransitionStuff,
 ) {
     val storiesLoadStatus by viewModel.userAndStoriesLoadStatus.collectAsStateWithLifecycle()
 
@@ -53,6 +62,7 @@ fun CommunityStoriesListScreen(
         CommunityStoriesList(
             user = user,
             stories = stories,
+            sharedTransitionStuff = sharedTransitionStuff,
             navigateDetail = navigateDetail,
         )
     }
@@ -61,14 +71,29 @@ fun CommunityStoriesListScreen(
 private val MinToolbarHeight = 112.dp
 private val MaxToolbarHeight = 248.dp
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CommunityStoriesList(
     user: User,
     stories: List<History>,
+    sharedTransitionStuff: SharedTransitionStuff,
     navigateDetail: (String) -> Unit,
 ) {
     Scaffold { padding ->
         val userImage = user.profileImage
+
+        val itemTextModifier = @Composable { history: History ->
+            Modifier.historyTitleIdSharedTransition(sharedTransitionStuff, history.id)
+        }
+
+        val itemFirstModifier = @Composable { history: History ->
+            Modifier.historyFirstItemIdSharedTransition(sharedTransitionStuff, history.id)
+        }
+
+        val itemDateModifier = @Composable { history: History ->
+            Modifier.historyDateItemIdSharedTransition(sharedTransitionStuff, history.id)
+        }
+
         if (userImage == null) {
             Column(
                 modifier = Modifier
@@ -82,6 +107,9 @@ fun CommunityStoriesList(
                     emptyScreenTitle = getStringResource { empty_history_list_title },
                     emptyScreenText = getStringResource { empty_community_history_list_text },
                     modifier = Modifier.padding(horizontal = 16.dp),
+                    itemTextModifier = itemTextModifier,
+                    itemFirstModifier = itemFirstModifier,
+                    itemDateModifier = itemDateModifier,
                 )
             }
         } else {
@@ -104,7 +132,7 @@ fun CommunityStoriesList(
                         modifier = toolbarModifier.padding(16.dp)
                     )
                 },
-                body = { bodyModifier, toolbarState, listState ->
+                body = { bodyModifier, _, listState ->
                     StoriesListBody(
                         stories = stories,
                         navigateDetail = navigateDetail,
@@ -112,6 +140,9 @@ fun CommunityStoriesList(
                         emptyScreenText = getStringResource { empty_community_history_list_text },
                         listState = listState,
                         modifier = bodyModifier.padding(horizontal = 16.dp),
+                        itemTextModifier = itemTextModifier,
+                        itemFirstModifier = itemFirstModifier,
+                        itemDateModifier = itemDateModifier,
                     )
                 },
             )
@@ -221,6 +252,7 @@ private fun CollapsingHeader(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun CommunityStoriesList_preview() {
@@ -229,11 +261,18 @@ fun CommunityStoriesList_preview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
-            CommunityStoriesList(
-                user = HistoryMocks().getMockUsers()[0],
-                stories = HistoryMocks().getMockStories(),
-                navigateDetail = {},
-            )
+            SharedTransitionLayout transitionScope@{
+                AnimatedContent(0) { state ->
+                    println(state)
+
+                    CommunityStoriesList(
+                        user = HistoryMocks().getMockUsers()[0],
+                        stories = HistoryMocks().getMockStories(),
+                        sharedTransitionStuff = this@transitionScope to this@AnimatedContent,
+                        navigateDetail = {},
+                    )
+                }
+            }
         }
     }
 }

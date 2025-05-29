@@ -39,8 +39,9 @@ import com.example.stories.model.domain.model.HistoryElement
 fun ElementsListBody(
     history: History,
     editMode: Boolean,
+    modifier: Modifier = Modifier,
     itemModifier: @Composable (index: Int) -> Modifier = { Modifier },
-    itemDateModifier: @Composable (History) -> Modifier = { Modifier },
+    itemDateModifier: Modifier = Modifier,
     rotation: () -> Float,
     onClickElement: (HistoryElement) -> Unit,
     onClickDate: (LocalDateRange) -> Unit,
@@ -51,7 +52,7 @@ fun ElementsListBody(
     val numElements = history.elements.size
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp)
     ) {
         item {
@@ -81,7 +82,7 @@ fun ElementsListBody(
             DateRangeFooter(
                 history = history,
                 editMode = editMode,
-                modifier = itemDateModifier(history),
+                modifier = itemDateModifier,
                 rotation = rotation,
                 onClickDate = onClickDate,
             )
