@@ -3,7 +3,6 @@ package com.example.stories.android.ui.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,11 +35,13 @@ import com.example.stories.infrastructure.date.format
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ElementsListBody(
     history: History,
     editMode: Boolean,
+    modifier: Modifier = Modifier,
+    itemModifier: @Composable (index: Int) -> Modifier = { Modifier },
+    itemDateModifier: Modifier = Modifier,
     rotation: () -> Float,
     onClickElement: (HistoryElement) -> Unit,
     onClickDate: (LocalDateRange) -> Unit,
@@ -51,7 +52,7 @@ fun ElementsListBody(
     val numElements = history.elements.size
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp)
     ) {
         item {
@@ -63,9 +64,10 @@ fun ElementsListBody(
                 historyElement = historyElement,
                 editMode = editMode,
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .clickable(enabled = editMode) { onClickElement(historyElement) }
-                    .graphicsLayer { rotationZ = rotation() },
+                    .graphicsLayer { rotationZ = rotation() }
+                    .then(itemModifier(index)),
                 moveElementUp = history.elements.getOrNull(index - 1)?.let { prevElement ->
                     { swapElements(historyElement.id, prevElement.id) }
                 },
@@ -80,6 +82,7 @@ fun ElementsListBody(
             DateRangeFooter(
                 history = history,
                 editMode = editMode,
+                modifier = itemDateModifier,
                 rotation = rotation,
                 onClickDate = onClickDate,
             )
@@ -142,6 +145,7 @@ fun ElementTextItem(text: HistoryElement.Text) {
 fun DateRangeFooter(
     history: History,
     editMode: Boolean,
+    modifier: Modifier = Modifier,
     rotation: () -> Float,
     onClickDate: (LocalDateRange) -> Unit,
 ) {
@@ -161,7 +165,7 @@ fun DateRangeFooter(
     val dateShape = MaterialTheme.shapes.small
 
     Box(
-        modifier = Modifier.height(100.dp)
+        modifier = modifier.height(100.dp)
     ) {
         Text(
             text = history.dateRange.format(),

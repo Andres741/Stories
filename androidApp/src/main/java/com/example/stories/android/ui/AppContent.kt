@@ -1,5 +1,7 @@
 package com.example.stories.android.ui
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,85 +26,101 @@ import com.example.stories.android.ui.userData.UserDataScreen
 import com.example.stories.android.util.ui.test.TestImagePickerScreen
 import kotlinx.serialization.Serializable
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AppContent() {
     StoriesTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            val navController = rememberNavController()
+            SharedTransitionLayout transitionScope@{
+                val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = Routes.Community) {
-                composable<Routes.Community> {
-                    CommunityScreen(
-                        viewModel = viewModel(),
-                        navigateToStories = { userId ->
-                            if (userId == null) navController.navigate(Routes.Stories)
-                            else navController.navigate(Routes.CommunityStories(userId))
-                        },
-                    )
-                }
-                composable<Routes.Stories> {
-                    StoriesListScreen(
-                        viewModel = viewModel(),
-                        navigateDetail = { navController.navigate(Routes.HistoryDetail(it)) },
-                        navigateLogIn = { navController.navigate(Routes.Login) },
-                        navigateUserData = { navController.navigate(Routes.UserData) }
-                    )
-                }
-                composable<Routes.CommunityStories> { backStackEntry ->
-                    val communityRoute = backStackEntry.toRoute<Routes.CommunityStories>()
-
-                    CommunityStoriesListScreen(
-                        viewModel = viewModel(factory = CommunityStoriesListViewModel.Factory(communityRoute.userId)),
-                        navigateDetail = { historyId ->
-                            navController.navigate(Routes.CommunityHistoryDetail(
-                                userId = communityRoute.userId,
-                                historyId = historyId,
-                            ))
-                        }
-                    )
-                }
-                composable<Routes.HistoryDetail> { backStackEntry ->
-                    val historyDetailRoute = backStackEntry.toRoute<Routes.HistoryDetail>()
-                    HistoryDetailScreen(
-                        viewModel = viewModel(factory = HistoryDetailViewModel.Factory(historyDetailRoute.historyId))
-                    )
-                }
-                composable<Routes.CommunityHistoryDetail> { backStackEntry ->
-                    val communityHistoryDetailRoute = backStackEntry.toRoute<Routes.CommunityHistoryDetail>()
-                    CommunityHistoryDetailScreen(
-                        viewModel = viewModel(
-                            factory = CommunityHistoryDetailViewModel.Factory(
-                                historyId = communityHistoryDetailRoute.historyId,
-                                userId = communityHistoryDetailRoute.userId,
-                            )
+                NavHost(navController = navController, startDestination = Routes.Community) {
+                    composable<Routes.Community> animatedContentScope@{
+                        CommunityScreen(
+                            viewModel = viewModel(),
+                            navigateToStories = { userId ->
+                                if (userId == null) navController.navigate(Routes.Stories)
+                                else navController.navigate(Routes.CommunityStories(userId))
+                            },
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
                         )
-                    )
-                }
-                composable<Routes.Login> {
-                    LogInScreen(
-                        viewModel = viewModel(),
-                        navigateBack = navController::popBackStack,
-                    )
-                }
-                composable<Routes.UserData> {
-                    UserDataScreen(
-                        viewModel = viewModel(),
-                        navigateEditUser = { navController.navigate(Routes.EditUserData) },
-                    )
-                }
-                composable<Routes.EditUserData> {
-                    EditUserDataScreen(
-                        viewModel = viewModel(),
-                        navigateBack = navController::popBackStack,
-                    )
-                }
-                composable<Routes.TestImages> {
-                    TestImagePickerScreen()
+                    }
+                    composable<Routes.Stories> animatedContentScope@{
+                        StoriesListScreen(
+                            viewModel = viewModel(),
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
+                            navigateDetail = { navController.navigate(Routes.HistoryDetail(it)) },
+                            navigateLogIn = { navController.navigate(Routes.Login) },
+                            navigateUserData = { navController.navigate(Routes.UserData) }
+                        )
+                    }
+                    composable<Routes.HistoryDetail> animatedContentScope@{ backStackEntry ->
+                        val historyDetailRoute = backStackEntry.toRoute<Routes.HistoryDetail>()
+                        HistoryDetailScreen(
+                            viewModel = viewModel(factory = HistoryDetailViewModel.Factory(historyDetailRoute.historyId)),
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
+                        )
+                    }
+                    composable<Routes.CommunityStories> animatedContentScope@{ backStackEntry ->
+                        val communityRoute = backStackEntry.toRoute<Routes.CommunityStories>()
+
+                        CommunityStoriesListScreen(
+                            viewModel = viewModel(factory = CommunityStoriesListViewModel.Factory(communityRoute.userId)),
+                            navigateDetail = { historyId ->
+                                navController.navigate(Routes.CommunityHistoryDetail(
+                                    userId = communityRoute.userId,
+                                    historyId = historyId,
+                                ))
+                            },
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
+                        )
+                    }
+                    composable<Routes.CommunityHistoryDetail> animatedContentScope@{ backStackEntry ->
+                        val communityHistoryDetailRoute = backStackEntry.toRoute<Routes.CommunityHistoryDetail>()
+                        CommunityHistoryDetailScreen(
+                            viewModel = viewModel(
+                                factory = CommunityHistoryDetailViewModel.Factory(
+                                    historyId = communityHistoryDetailRoute.historyId,
+                                    userId = communityHistoryDetailRoute.userId,
+                                )
+                            ),
+                            sharedTransitionStuff = this@transitionScope to this@animatedContentScope,
+                        )
+                    }
+                    composable<Routes.Login> {
+                        LogInScreen(
+                            viewModel = viewModel(),
+                            navigateBack = navController::popBackStack,
+                        )
+                    }
+                    composable<Routes.UserData> {
+                        UserDataScreen(
+                            viewModel = viewModel(),
+                            navigateEditUser = { navController.navigate(Routes.EditUserData) },
+                        )
+                    }
+                    composable<Routes.EditUserData> {
+                        EditUserDataScreen(
+                            viewModel = viewModel(),
+                            navigateBack = navController::popBackStack,
+                        )
+                    }
+                    composable<Routes.TestImages> {
+                        TestImagePickerScreen()
+                    }
                 }
             }
         }
     }
 }
+
+const val HISTORY_TITLE = "HISTORY_TITLE"
+const val HISTORY_FIRST_ITEM = "HISTORY_FIRST_ITEM"
+const val HISTORY_DATE_ITEM = "HISTORY_DATE_ITEM"
+
+const val USER_NAME = "USER_NAME"
+const val USER_DESCRIPTION = "USER_DESCRIPTION"
+const val USER_IMAGE = "USER_IMAGE"
 
 sealed interface Routes {
     @Serializable

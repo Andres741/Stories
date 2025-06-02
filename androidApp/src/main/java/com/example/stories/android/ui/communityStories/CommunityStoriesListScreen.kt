@@ -1,5 +1,8 @@
 package com.example.stories.android.ui.communityStories
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,20 +28,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.example.stories.android.ui.HISTORY_DATE_ITEM
+import com.example.stories.android.ui.HISTORY_FIRST_ITEM
+import com.example.stories.android.ui.HISTORY_TITLE
 import com.example.stories.android.ui.StoriesTheme
+import com.example.stories.android.ui.USER_DESCRIPTION
+import com.example.stories.android.ui.USER_IMAGE
+import com.example.stories.android.ui.USER_NAME
 import com.example.stories.android.ui.components.StoriesListBody
 import com.example.stories.android.util.resources.getStringResource
 import com.example.stories.android.util.ui.RefreshLoadingDataScreen
+import com.example.stories.android.util.ui.SharedTransitionStuff
 import com.example.stories.android.util.ui.collapsingToolbarLayout.CollapsingToolbarLayout
 import com.example.stories.android.util.ui.collapsingToolbarLayout.lerp
+import com.example.stories.android.util.ui.sharedTransition
 import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryMocks
 import com.example.stories.model.domain.model.User
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CommunityStoriesListScreen(
     viewModel: CommunityStoriesListViewModel,
     navigateDetail: (String) -> Unit,
+    sharedTransitionStuff: SharedTransitionStuff,
 ) {
     val storiesLoadStatus by viewModel.userAndStoriesLoadStatus.collectAsStateWithLifecycle()
 
@@ -53,6 +66,7 @@ fun CommunityStoriesListScreen(
         CommunityStoriesList(
             user = user,
             stories = stories,
+            sharedTransitionStuff = sharedTransitionStuff,
             navigateDetail = navigateDetail,
         )
     }
@@ -61,27 +75,45 @@ fun CommunityStoriesListScreen(
 private val MinToolbarHeight = 112.dp
 private val MaxToolbarHeight = 248.dp
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CommunityStoriesList(
     user: User,
     stories: List<History>,
+    sharedTransitionStuff: SharedTransitionStuff,
     navigateDetail: (String) -> Unit,
 ) {
     Scaffold { padding ->
         val userImage = user.profileImage
+
+        val itemTextModifier = @Composable { history: History ->
+            Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_TITLE/${history.id}")
+        }
+
+        val itemFirstModifier = @Composable { history: History ->
+            Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_FIRST_ITEM/${history.id}")
+        }
+
+        val itemDateModifier = @Composable { history: History ->
+            Modifier.sharedTransition(sharedTransitionStuff, "$HISTORY_DATE_ITEM/${history.id}")
+        }
+
         if (userImage == null) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                Header(user = user)
+                Header(user = user, sharedTransitionStuff = sharedTransitionStuff)
                 StoriesListBody(
                     stories = stories,
                     navigateDetail = navigateDetail,
                     emptyScreenTitle = getStringResource { empty_history_list_title },
                     emptyScreenText = getStringResource { empty_community_history_list_text },
                     modifier = Modifier.padding(horizontal = 16.dp),
+                    itemTextModifier = itemTextModifier,
+                    itemFirstModifier = itemFirstModifier,
+                    itemDateModifier = itemDateModifier,
                 )
             }
         } else {
@@ -97,14 +129,14 @@ fun CommunityStoriesList(
                     .padding(padding),
                 toolbar = { toolbarModifier, toolbarState ->
                     CollapsingHeader(
-                        userName = user.name,
-                        userDescription = user.description,
+                        user = user,
                         userImage = userImage.url,
                         progress = toolbarState.progress,
-                        modifier = toolbarModifier.padding(16.dp)
+                        modifier = toolbarModifier.padding(16.dp),
+                        sharedTransitionStuff = sharedTransitionStuff,
                     )
                 },
-                body = { bodyModifier, toolbarState, listState ->
+                body = { bodyModifier, _, listState ->
                     StoriesListBody(
                         stories = stories,
                         navigateDetail = navigateDetail,
@@ -112,6 +144,9 @@ fun CommunityStoriesList(
                         emptyScreenText = getStringResource { empty_community_history_list_text },
                         listState = listState,
                         modifier = bodyModifier.padding(horizontal = 16.dp),
+                        itemTextModifier = itemTextModifier,
+                        itemFirstModifier = itemFirstModifier,
+                        itemDateModifier = itemDateModifier,
                     )
                 },
             )
@@ -119,46 +154,68 @@ fun CommunityStoriesList(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun Header(user: User) {
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+private fun Header(user: User, sharedTransitionStuff: SharedTransitionStuff) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
         Text(
             text = user.name,
-            modifier = Modifier,
+            modifier = Modifier.sharedTransition(sharedTransitionStuff, "$USER_NAME/${user.id}"),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.displayMedium
+            style = MaterialTheme.typography.displaySmall,
         )
         if (user.description.isNotBlank()) {
-            Text(user.description)
+            Text(
+                text = user.description,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.sharedTransition(sharedTransitionStuff, "$USER_DESCRIPTION/${user.id}"),
+            )
         }
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun CollapsingHeader(
-    userName: String,
-    userDescription: String,
+    user: User,
     userImage: String,
     progress: Float,
     modifier: Modifier = Modifier,
+    sharedTransitionStuff: SharedTransitionStuff,
 ) {
     Box(modifier = modifier) {
         Layout(
             content = {
+                val scale = lerp(
+                    start = 1f,
+                    stop = 2f,
+                    fraction = progress,
+                )
+
                 AsyncImage(
                     model = userImage,
                     contentDescription = null,
-                    contentScale = ContentScale.FillHeight,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
+                        .sharedTransition(sharedTransitionStuff, "$USER_IMAGE/${user.id}")
+                        .size((70 * scale).dp)
+                        .clip(CircleShape),
                 )
                 Text(
-                    text = userName,
-                    modifier = Modifier.wrapContentSize(),
+                    text = user.name,
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .sharedTransition(sharedTransitionStuff, "$USER_NAME/${user.id}"),
                     style = MaterialTheme.typography.displaySmall,
                 )
-                Text(userDescription, modifier = Modifier.wrapContentSize())
+                Text(
+                    text = user.description,
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .sharedTransition(sharedTransitionStuff, "$USER_DESCRIPTION/${user.id}"),
+                )
             },
             measurePolicy = { measurable, constraints ->
                 val placeables = measurable.map {
@@ -180,17 +237,12 @@ private fun CollapsingHeader(
                             stop = horizontalGuideline - profileImage.width / 2,
                             fraction = progress
                         ),
-                        y = 0,
-                    ) {
-                        val scale = lerp(
-                            start = 1f,
-                            stop = 1.8f,
+                        y = lerp(
+                            start = 12.dp.roundToPx(),
+                            stop = 0,
                             fraction = progress,
-                        )
-                        translationY = (profileImage.height * (scale - 1)) / 2
-                        scaleY = scale
-                        scaleX = scale
-                    }
+                        ),
+                    )
 
                     val nameY = lerp(
                         start = 0,
@@ -221,6 +273,7 @@ private fun CollapsingHeader(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun CommunityStoriesList_preview() {
@@ -229,11 +282,17 @@ fun CommunityStoriesList_preview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
-            CommunityStoriesList(
-                user = HistoryMocks().getMockUsers()[0],
-                stories = HistoryMocks().getMockStories(),
-                navigateDetail = {},
-            )
+            SharedTransitionLayout transitionScope@{
+                AnimatedContent(0) { state ->
+                    println(state)
+                    CommunityStoriesList(
+                        user = HistoryMocks().getMockUsers()[0],
+                        stories = HistoryMocks().getMockStories(),
+                        sharedTransitionStuff = this@transitionScope to this@AnimatedContent,
+                        navigateDetail = {},
+                    )
+                }
+            }
         }
     }
 }

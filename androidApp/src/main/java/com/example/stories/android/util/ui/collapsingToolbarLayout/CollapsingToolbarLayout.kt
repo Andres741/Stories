@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -51,8 +52,7 @@ fun rememberToolbarNestedScrollConnection(
                         ) { value, velocity ->
                             toolbarState.scrollTopLimitReached =
                                 listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
-                            toolbarState.scrollOffset =
-                                toolbarState.scrollOffset - (value - (toolbarState.height + toolbarState.offset))
+                            toolbarState.scrollOffset -= (value - (toolbarState.height + toolbarState.offset))
                             if (toolbarState.scrollOffset == 0f) scope.coroutineContext.cancelChildren()
                         }
                     }
@@ -82,7 +82,8 @@ fun CollapsingToolbarLayout(
         body(
             Modifier
                 .fillMaxSize()
-                .graphicsLayer { translationY = toolbarState.height + toolbarState.offset }
+//                .graphicsLayer { translationY = toolbarState.height + toolbarState.offset } // Fix hero animation bug
+                .padding(top = with(LocalDensity.current) { (toolbarState.height + toolbarState.offset).toDp() })
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = { scope.coroutineContext.cancelChildren() }
