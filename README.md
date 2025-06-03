@@ -5,6 +5,7 @@
 ## App Demo
 
 [This video](https://drive.google.com/file/d/1ePAMIZB90lRYn7lkd_y7LdCbpPjguzKi/view?usp=sharing) demonstrates the Stories app in action.
+[This other video](https://drive.google.com/file/d/1LRCQUvSIrAMAjS9v6GBOMqdMf5yRT9WI/view?usp=sharing) shows the new hero animation implemented.
 
 ## Features
 
