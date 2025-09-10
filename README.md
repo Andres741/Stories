@@ -37,6 +37,9 @@ The project is structured into several key modules:
 5. **Dependency Injection:** The Koin dependency injection framework is used to make the code easier to test and maintain.
 6. **Kotlin Multiplatform:** Kotlin Multiplatform is used to make the common code shareable between platforms Android and iOS.
 
+## Testing
+The tests are created ussing the Gemity AI agent following specified rules.
+
 ## Future Improvements
 
 *   **User Authentication:** Add user login/registration.
