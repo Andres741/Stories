@@ -8,7 +8,6 @@ import com.example.stories.model.dataSource.local.history.model.HistoryRealm
 import com.example.stories.model.dataSource.local.history.model.ImageElementRealm
 import com.example.stories.model.dataSource.local.history.model.TextElementRealm
 import com.example.stories.model.dataSource.remote.history.model.HistoryResponse
-import com.example.stories.model.domain.model.History
 import com.example.stories.model.domain.model.HistoryElement
 import com.example.stories.model.domain.model.ImageResource
 import com.example.stories.model.domain.repository.DefaultFakeImageRepository
